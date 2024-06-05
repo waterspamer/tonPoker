@@ -30,7 +30,7 @@ const fragmentShader = `
 let cardObjects = [];
 let cardsIndexes = [];
 
-
+let balance = 1000;
 
 let scene, camera, renderer; 
         function bet() {
@@ -111,6 +111,9 @@ let scene, camera, renderer;
 
 
         function generateCardsInef(){
+            for (obj in cardObjects) scene.remove(obj);
+            cardObjects = [];
+            cardsIndexes = [];
             const textureLoader = new THREE.TextureLoader();
             const cardTexture = textureLoader.load('resources/texturePack.jpg');
 
@@ -233,11 +236,12 @@ let scene, camera, renderer;
 
         function firstBet(){
             
-
+            balance -= 100;
+            document.getElementById('balance').innerText = `БАЛАНС: ${balance}TON`;
             //dealTexasHoldEm(2);
 
             //console.log(findBestHandTexasHoldEm([1,5], [10, 15, 16, 17,18])[0].display );
-
+            document.getElementById('mult').style.display = '';
 
             //создали колоду
             generateCardsInef();
@@ -281,12 +285,38 @@ let scene, camera, renderer;
             
 
            document.getElementById('bet').style.display = "none";
-           document.getElementById('mult').addEventListener('click', ()=> secondBet());
+           //document.getElementById('mult').addEventListener('click', ()=> secondBet());
            document.getElementById('fold').style.display = '';
+
+        }
+
+        function reset(){
+            removeAllCards();
+            cardsIndexes = [];
+            document.getElementById('bet').style.display = "";
+            document.getElementById('mult').style.display = 'none';
+            document.getElementById('fold').style.display = 'none';
+        }
+
+        function removeAllCards() {
+            cardObjects.forEach(card => {
+                scene.remove(card);
+                card.traverse((child) => {
+                    if (child.isMesh) {
+                        child.geometry.dispose();
+                        child.material.dispose();
+                    }
+                });
+            });
+            cardObjects.length = 0; // Очистить массив
         }
 
 
         function secondBet(){
+            balance -= 200;
+            document.getElementById('balance').innerText = `БАЛАНС: ${balance}TON`;
+            document.getElementById('balance').innerText = `БАЛАНС: ${balance}TON`;
+
             setTimeout(()=> {
             gsap.to(cardObjects[cardsIndexes[44]].position, { duration: .3, x:  .7, y: -.45, z: 1, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 0 });
             gsap.to(cardObjects[cardsIndexes[44]].rotation, { duration: .3, z: -Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 0 });
@@ -333,7 +363,12 @@ let scene, camera, renderer;
                     var res = document.getElementById('gameresult');
                     res.innerText = "Залутал";
                     res.style.opacity = '1';
-                    setTimeout(()=>{res.style.opacity = '0'}, 2000)
+                    
+                    setTimeout(()=>{res.style.opacity = '0';
+                    balance+=400;
+                    document.getElementById('balance').innerText = `БАЛАНС: ${balance}TON`;
+                    reset();
+                    }, 2000)
                 };
     
                 if (playerHand[0].rankValue - dealerHand[0].rankValue === 0){
@@ -341,7 +376,9 @@ let scene, camera, renderer;
                     console.log(res);
                     res.innerText = "Ничья";
                     res.style.opacity = '1';
-                    setTimeout(()=>{res.style.opacity = '0'}, 2000)
+                    setTimeout(()=>{res.style.opacity = '0';
+                    reset();
+                    }, 2000)
                 }
     
                 if (playerHand[0].rankValue - dealerHand[0].rankValue < 0){
@@ -349,11 +386,11 @@ let scene, camera, renderer;
                     console.log(res);
                     res.innerText = "Проебал";
                     res.style.opacity = '1';
-                    setTimeout(()=>{res.style.opacity = '0'}, 2000)
+                    setTimeout(()=>{res.style.opacity = '0';
+                    reset();
+                    }, 2000)
                 }
             }, 1000);
-            
-
 
         }, 0) ;           
         }

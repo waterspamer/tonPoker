@@ -54,10 +54,17 @@
             border-radius: 30px;
             font-size: 40px;
         }
+
+        #balance{
+            right:20%;
+            position: absolute;
+            color:white;
+        }
     </style>
 </head>
 <body>
     <div id="user-name">user_name</div>
+    <div id="balance">БАЛАНС: 1000TON</div>
     <div id="gameresult">РЕЗУЛЬТАТ</div>
     <div id="stats">
         <div class ="header" id = "playercards">игрок</div>
@@ -67,8 +74,8 @@
     <div id="container"></div>
     <div class="buttons-contatiner">
     <button id ="bet" onclick="bet()">Поставить</button>
-    <button id ="mult" onclick="secondBet()">Удвоить</button>
-    <button id ="fold" style ="display:none" onclick="bet()">Фолд</button>
+    <button id ="mult" style ="display:none" onclick="secondBet()">Удвоить</button>
+    <button id ="fold" style ="display:none" onclick="reset()">Фолд</button>
     </div>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
