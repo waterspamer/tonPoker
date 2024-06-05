@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+  font-family: 'Inter', 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 400;
+}
+
+b,
+strong {
+  font-weight: bold;
+}
+
+$font-weights: (
+  1: 100,
+  2: 200,
+  3: 300,
+  4: 400,
+  5: 500,
+  6: 600,
+  7: 700,
+  8: 800,
+  9: 900,
+);
+
+@each $font-weight-name, $font-weight in $font-weights {
+  .f-w-#{$font-weight-name} {
+    font-weight: $font-weight;
+  }
+}

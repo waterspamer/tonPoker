@@ -1,0 +1,16 @@
+{
+  "printWidth": 120,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "arrowParens": "avoid",
+  "endOfLine": "lf",
+  "proseWrap": "preserve",
+  "overrides": [
+    {
+      "files": ["*.ts", "*.js", "*.scss"],
+      "options": {
+        "singleQuote": true
+      }
+    }
+  ]
+}
