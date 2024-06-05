@@ -16,19 +16,46 @@
         button {
             position: absolute;
             bottom: 10px;
-            left: 15%;
-            border-radius: 30px;
+            left:10%;
             transform: translateX(-50%);
+            border-radius: 30px;
             padding: 10px 20px;
-            font-size: 12px;
+            font-size: 18px;
+            background-color: aquamarine;
+        }
+        #user-name{
+            position:absolute;
+            color:white;
+            text-align: center;
+            left:50%;
+            transform: translateX(-50%);
         }
     </style>
 </head>
 <body>
+    <div id="user-name">user_name</div>
     <div id="container"></div>
-    <button onclick="simulate()">Симулировать раздачу</button>
+    <button onclick="simulate()">Раздать</button>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <script>
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
+
+        // Получение информации о пользователе
+        const user = Telegram.WebApp.initDataUnsafe.user;
+
+        // Проверка, есть ли информация о пользователе
+        if (user) {
+            document.addEventListener("DOMContentLoaded", function() {
+                // Отобразите имя пользователя в элементе с id user-name
+                document.getElementById('user-name').innerText = `Привет, ${user.first_name}!`;
+            });
+        }
+    </script>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fflate/umd/index.min.js"></script>
