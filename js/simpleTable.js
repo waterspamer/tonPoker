@@ -336,7 +336,7 @@ let scene, camera, renderer;
                     setTimeout(()=>{res.style.opacity = '0'}, 2000)
                 };
     
-                if (parseInt(playerHand[0].rankValue) === parseInt(dealerHand.rankValue)){
+                if (playerHand[0].rankValue - dealerHand[0].rankValue === 0){
                     var res = document.getElementById('gameresult');
                     console.log(res);
                     res.innerText = "Ничья";
@@ -344,7 +344,7 @@ let scene, camera, renderer;
                     setTimeout(()=>{res.style.opacity = '0'}, 2000)
                 }
     
-                if (parseInt(playerHand[0].rankValue) < parseInt(dealerHand.rankValue)){
+                if (playerHand[0].rankValue - dealerHand[0].rankValue < 0){
                     var res = document.getElementById('gameresult');
                     console.log(res);
                     res.innerText = "Проебал";
