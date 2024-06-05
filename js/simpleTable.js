@@ -375,6 +375,7 @@ let scene, camera, renderer;
                     var res = document.getElementById('gameresult');
                     console.log(res);
                     res.innerText = "Ничья";
+                    balance+=300;
                     res.style.opacity = '1';
                     setTimeout(()=>{res.style.opacity = '0';
                     reset();
