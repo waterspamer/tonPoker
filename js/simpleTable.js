@@ -220,8 +220,25 @@ let scene, camera, renderer;
             return result;
         }
 
+        
+
+        function convertCard(id){
+            var s = id;
+            if (s % 13 === 0) {s += 12}
+            else{
+                s-=1;
+            }
+            return s;
+        }
 
         function firstBet(){
+            
+
+            //dealTexasHoldEm(2);
+
+            //console.log(findBestHandTexasHoldEm([1,5], [10, 15, 16, 17,18])[0].display );
+
+
             //создали колоду
             generateCardsInef();
 
@@ -279,5 +296,64 @@ let scene, camera, renderer;
             gsap.to(cardObjects[cardsIndexes[48]].rotation, { duration: .2, x: 0, y: 0, z: -Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 1.5 });
             document.getElementById('tablecards').innerText = `стол: ${stringifyNominal (getCardNominal(47))}, ${stringifyNominal (getCardNominal(46))}, ${stringifyNominal (getCardNominal(45))}, ${stringifyNominal (getCardNominal(44))}, ${stringifyNominal (getCardNominal(43))}`;;
             document.getElementById('dealercards').innerText = `дилер: ${stringifyNominal (getCardNominal(49))}, ${stringifyNominal (getCardNominal(48))} `;
+
+
+            //собираем стол
+            var table = [ 
+                convertCard(cardsIndexes[47]),
+                convertCard(cardsIndexes[46]),
+                convertCard(cardsIndexes[45]),
+                convertCard(cardsIndexes[44]),
+                convertCard(cardsIndexes[43])];
+
+            //собираем карты игрока
+            var player = [
+                convertCard(cardsIndexes[51]),
+                convertCard(cardsIndexes[50])
+            ];
+
+            //собираем карты дилера
+            var dealer = [
+                convertCard(cardsIndexes[49]),
+                convertCard(cardsIndexes[48])
+            ];
+
+
+            var playerHand = findBestHandTexasHoldEm(player, table);
+
+            
+
+            var dealerHand = findBestHandTexasHoldEm(dealer, table);
+
+            console.log(playerHand[0].rankValue - dealerHand[0].rankValue);
+
+
+            setTimeout(()=>{
+                if (playerHand[0].rankValue - dealerHand[0].rankValue > 0){
+                    var res = document.getElementById('gameresult');
+                    res.innerText = "Залутал";
+                    res.style.opacity = '1';
+                    setTimeout(()=>{res.style.opacity = '0'}, 2000)
+                };
+    
+                if (parseInt(playerHand[0].rankValue) === parseInt(dealerHand.rankValue)){
+                    var res = document.getElementById('gameresult');
+                    console.log(res);
+                    res.innerText = "Ничья";
+                    res.style.opacity = '1';
+                    setTimeout(()=>{res.style.opacity = '0'}, 2000)
+                }
+    
+                if (parseInt(playerHand[0].rankValue) < parseInt(dealerHand.rankValue)){
+                    var res = document.getElementById('gameresult');
+                    console.log(res);
+                    res.innerText = "Проебал";
+                    res.style.opacity = '1';
+                    setTimeout(()=>{res.style.opacity = '0'}, 2000)
+                }
+            }, 1000);
+            
+
+
         }, 0) ;           
         }
