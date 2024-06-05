@@ -33,7 +33,7 @@ let cardsIndexes = [];
 
 
 let scene, camera, renderer; 
-        function simulate() {
+        function bet() {
             Telegram.WebApp.sendData(JSON.stringify({message: "Симулировали раздачу"}));
             
 
@@ -41,7 +41,7 @@ let scene, camera, renderer;
                 scene.remove(cardObjects[i]);
             cardObjects = [];
              cardsIndexes = [];
-            simulateGame();
+             firstBet();
 
 
 
@@ -90,10 +90,10 @@ let scene, camera, renderer;
         cube.scale.set(10,1,10);
         //scene.add(cube);
         
-        camera.position.z = 5;
+        camera.position.z = 3;
         camera.position.y = 2;
 
-        camera.rotation.set(-0.5,0,0);
+        camera.rotation.set(-0.9,0,0);
 
         function animate() {
             requestAnimationFrame(animate);
@@ -187,38 +187,97 @@ let scene, camera, renderer;
         }
 
 
-        function simulateGame(){
+        function getCardNominal(id){
+            
+            var cardIndex = cardsIndexes[id];
+            //пики-буби-черви-крести
+            var cardSuit = Math.floor((cardIndex) / 13);
+            var cardRank = (cardIndex) % 13;
+            return {suit: cardSuit, rank: cardRank};
+        }
+
+        function stringifyNominal(nominal){
+            var result = "";
+            if (nominal.rank === 0) result+="A";
+            if (nominal.rank === 1) result+="2";
+            if (nominal.rank === 2) result+="3";
+            if (nominal.rank === 3) result+="4";
+            if (nominal.rank === 4) result+="5";
+            if (nominal.rank === 5) result+="6";
+            if (nominal.rank === 6) result+="7";
+            if (nominal.rank === 7) result+="8";
+            if (nominal.rank === 8) result+="9";
+            if (nominal.rank === 9) result+="10";
+            if (nominal.rank === 10) result+="J";
+            if (nominal.rank === 11) result+="Q";
+            if (nominal.rank === 12) result+="K";
+
+            if (nominal.suit === 0) result+="♠";
+            if (nominal.suit === 1) result+="♦";
+            if (nominal.suit === 2) result+="♥";
+            if (nominal.suit === 3) result+="♣";
+
+            return result;
+        }
 
 
+        function firstBet(){
             //создали колоду
             generateCardsInef();
 
             //перемешали
             setTimeout(()=>shuffleCards(), 200);
-            //setTimeout(()=>{translateCard(cardObjects[cardsIndexes[0]], (-.5, -.45, 1), 0, 0)}, 1000);
+
             //раздаем две карты игроку
-            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[51]].position, { duration: .1, x: -.25, y: -.05, z: 4, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 0 })}, 2000) ;
-            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[50]].position, { duration: .1, x:  .25, y: -.05, z: 4.01, repeat: 0, yoyo: true, ease: "power2.inOut", delay: .5 })}, 2000) ;
+            setTimeout(()=> {
+                gsap.to(cardObjects[cardsIndexes[51]].position, { duration: .2, x: -.25, y: .15, z: 3, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 0 });
+                gsap.to(cardObjects[cardsIndexes[50]].position, { duration: .2, x:  .25, y: .15, z: 3.01, repeat: 0, yoyo: true, ease: "power2.inOut", delay: .5 });
+                gsap.to(cardObjects[cardsIndexes[51]].rotation, { duration: .2, x: Math.PI/4, y: Math.PI + .1, z: Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 0 });
+                gsap.to(cardObjects[cardsIndexes[50]].rotation, { duration: .2, x: Math.PI/4, y: Math.PI -.1, z: Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: .5 });
+                document.getElementById('playercards').innerText = `игрок: ${stringifyNominal (getCardNominal(51))}, ${stringifyNominal (getCardNominal(50))} `;
+            }, 2000) ;
+
+            //раздаем две карты дилеру
+            setTimeout(()=> {
+                gsap.to(cardObjects[cardsIndexes[49]].position, { duration: .2, x:  -0.35, y: -.45, z: -0.5, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 1 });
+                gsap.to(cardObjects[cardsIndexes[48]].position, { duration: .2, x:  0.35, y: -.45, z: -0.5, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 1.5 });
+                gsap.to(cardObjects[cardsIndexes[49]].rotation, { duration: .2, x: 0, y: 0, z: 0, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 1 });
+                gsap.to(cardObjects[cardsIndexes[48]].rotation, { duration: .2, x: 0, y: 0, z: 0, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 1.5 });
+                document.getElementById('dealercards').innerText = `дилер: *, * `;
+            }, 2000) ;
+        
 
 
-            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[51]].rotation, { duration: .1, x: Math.PI/3, y: Math.PI + .1, z: Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 0 })}, 2000) ;
-            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[50]].rotation, { duration: .1, x: Math.PI/3, y: Math.PI -.1, z: Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: .5 })}, 2000) ;
+
+            //раздаем 3 карты на стол
+            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[47]].position, { duration: .3, x: -1.4, y: -.45, z: 1, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 2 })}, 2000) ;
+            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[47]].rotation, { duration: .3, z: -Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 2 })}, 2000) ;
+
+            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[46]].position, { duration: .3, x:  -.7, y: -.45, z: 1, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 2.3 })}, 2000) ;           
+            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[46]].rotation, { duration: .3, z: -Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 2.3 })}, 2000) ;
+
+            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[45]].position, { duration: .3, x:  0, y: -.45, z: 1, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 2.6 })}, 2000) ;           
+            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[45]].rotation, { duration: .3, z: -Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 2.6 });
+            document.getElementById('tablecards').innerText = `стол: ${stringifyNominal (getCardNominal(47))}, ${stringifyNominal (getCardNominal(46))}, ${stringifyNominal (getCardNominal(45))}`;;
+        }, 2000) ;
+
+            
+
+           document.getElementById('bet').style.display = "none";
+           document.getElementById('mult').addEventListener('click', ()=> secondBet());
+           document.getElementById('fold').style.display = '';
+        }
 
 
-
-            //раздаем 5 карт на стол
-            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[49]].position, { duration: .1, x: -1.4, y: -.45, z: 1, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 1 })}, 2000) ;
-            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[49]].rotation, { duration: .1, z: -Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 1 })}, 2000) ;
-
-            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[48]].position, { duration: .1, x:  -.7, y: -.45, z: 1, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 1.5 })}, 2000) ;           
-            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[48]].rotation, { duration: .1, z: -Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 1.5 })}, 2000) ;
-
-            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[47]].position, { duration: .1, x:  0, y: -.45, z: 1, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 2 })}, 2000) ;           
-            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[47]].rotation, { duration: .1, z: -Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 2 })}, 2000) ;
-
-            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[46]].position, { duration: .1, x:  .7, y: -.45, z: 1, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 2.5 })}, 2000) ;           
-            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[46]].rotation, { duration: .1, z: -Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 2.5 })}, 2000) ;
-
-            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[44]].position, { duration: .1, x:  1.4, y: -.45, z: 1, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 3 })}, 2000) ;           
-            setTimeout(()=> {gsap.to(cardObjects[cardsIndexes[44]].rotation, { duration: .1, z: -Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 3 })}, 2000) ;
+        function secondBet(){
+            setTimeout(()=> {
+            gsap.to(cardObjects[cardsIndexes[44]].position, { duration: .3, x:  .7, y: -.45, z: 1, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 0 });
+            gsap.to(cardObjects[cardsIndexes[44]].rotation, { duration: .3, z: -Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 0 });
+            gsap.to(cardObjects[cardsIndexes[43]].position, { duration: .3, x:  1.4, y: -.45, z: 1, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 0.3 });
+            gsap.to(cardObjects[cardsIndexes[43]].rotation, { duration: .3, z: -Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 0.3 });
+            gsap.to(cardObjects[cardsIndexes[49]].rotation, { duration: .2, x: 0, y: 0, z: -Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 1 });
+            gsap.to(cardObjects[cardsIndexes[48]].rotation, { duration: .2, x: 0, y: 0, z: -Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 1.5 });
+            document.getElementById('tablecards').innerText = `стол: ${stringifyNominal (getCardNominal(47))}, ${stringifyNominal (getCardNominal(46))}, ${stringifyNominal (getCardNominal(45))}, ${stringifyNominal (getCardNominal(44))}, ${stringifyNominal (getCardNominal(43))}`;;
+            document.getElementById('dealercards').innerText = `дилер: ${stringifyNominal (getCardNominal(49))}, ${stringifyNominal (getCardNominal(48))} `;
+        }, 0) ;           
         }

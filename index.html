@@ -13,9 +13,16 @@
             width: 100%;
             height: 100vh;
         }
+        .buttons-contatiner{
+            display:flex;
+        }
+        .header{
+            position: relative;
+            left:10px;
+        }
         button {
-            position: absolute;
-            bottom: 10px;
+            position: relative;
+            bottom:50px;
             left:10%;
             transform: translateX(-50%);
             border-radius: 30px;
@@ -30,13 +37,25 @@
             left:50%;
             transform: translateX(-50%);
         }
+        #stats{
+            position:absolute;
+            color:white;
+        }
     </style>
 </head>
 <body>
     <div id="user-name">user_name</div>
+    <div id="stats">
+        <div class ="header" id = "playercards">игрок</div>
+        <div class ="header" id = "dealercards">дилер</div>
+        <div class ="header" id = "tablecards">стол</div>
+    </div>
     <div id="container"></div>
-    <button onclick="simulate()">Раздать</button>
-
+    <div class="buttons-contatiner">
+    <button id ="bet" onclick="bet()">Поставить</button>
+    <button id ="mult" onclick="secondBet()">Удвоить</button>
+    <button id ="fold" style ="display:none" onclick="bet()">Фолд</button>
+    </div>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <script>
