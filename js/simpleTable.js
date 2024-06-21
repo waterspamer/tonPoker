@@ -1,6 +1,40 @@
 Telegram.WebApp.ready();
 
 
+
+
+
+async function fetchDataFromJSON(url) {
+    const request = require('request');
+    const options = {
+        url: url,
+        headers: {
+            'ngrok-skip-browser-warning': 'true'
+        }
+    };
+
+    request(options, (error, response, body) => {
+        if (!error && response.statusCode === 200) {
+            const data = JSON.parse(body);
+            console.log('Data:', data.data);
+            console.log('Board:', data.board);
+            return { data: data.data, board: data.board };
+        } else {
+            console.error('Error:', error);
+            console.error('Status Code:', response && response.statusCode);
+        }
+    });
+}
+
+// Пример использования функции
+const url = 'https://1be7-176-231-182-34.ngrok-free.app/deal_texas_hold_em_solo';
+fetchDataFromJSON(url).then(result => {
+    if (result) {
+        console.log('Fetched Data:', result.data);
+        console.log('Fetched Board:', result.board);
+    }
+});
+
 const vertexShader = `
     varying vec2 vUv;
     void main() {
@@ -31,6 +65,12 @@ let cardObjects = [];
 let cardsIndexes = [];
 
 let balance = 1000;
+
+let flopEndPoint = 'https://1be7-176-231-182-34.ngrok-free.app/deal_texas_hold_em_solo';
+
+let turnEndPoint = 'https://1be7-176-231-182-34.ngrok-free.app/deal_texas_hold_em_solo_turn';
+
+let riverEndPoint = 'https://1be7-176-231-182-34.ngrok-free.app/deal_texas_hold_em_solo_river';
 
 let scene, camera, renderer; 
         function bet() {
@@ -110,7 +150,7 @@ let scene, camera, renderer;
         
 
 
-        function generateCardsInef(){
+        async function generateCardsInef(){
             for (obj in cardObjects) scene.remove(obj);
             cardObjects = [];
             cardsIndexes = [];
@@ -143,9 +183,10 @@ let scene, camera, renderer;
             
                         card.traverse((child) => {
                             if (child.isMesh) {
-                                child.scale.set(10, 10, 10);
+                                child.scale.set(6, 6, 6);
                                 child.rotation.set(Math.PI/2, 0, 0);
                                 child.material = material;
+                                child.morphTargetInfluences[0] = 1;
                             }
                         });
             
@@ -247,14 +288,18 @@ let scene, camera, renderer;
             generateCardsInef();
 
             //перемешали
-            setTimeout(()=>shuffleCards(), 200);
+            //setTimeout(()=>shuffleCards(), 200);
+            var flop = fetchDataFromJSON(flopEndPoint);
+            console.log(flop);
+
+             
 
             //раздаем две карты игроку
             setTimeout(()=> {
-                gsap.to(cardObjects[cardsIndexes[51]].position, { duration: .2, x: -.25, y: .15, z: 3, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 0 });
-                gsap.to(cardObjects[cardsIndexes[50]].position, { duration: .2, x:  .25, y: .15, z: 3.01, repeat: 0, yoyo: true, ease: "power2.inOut", delay: .5 });
-                gsap.to(cardObjects[cardsIndexes[51]].rotation, { duration: .2, x: Math.PI/4, y: Math.PI + .1, z: Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 0 });
-                gsap.to(cardObjects[cardsIndexes[50]].rotation, { duration: .2, x: Math.PI/4, y: Math.PI -.1, z: Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: .5 });
+                gsap.to(cardObjects[cardsIndexes[flop.table[0]]].position, { duration: .2, x: -.25, y: .15, z: 3, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 0 });
+                gsap.to(cardObjects[cardsIndexes[flop.table[1]]].position, { duration: .2, x:  .25, y: .15, z: 3.01, repeat: 0, yoyo: true, ease: "power2.inOut", delay: .5 });
+                gsap.to(cardObjects[cardsIndexes[flop.table[0]]].rotation, { duration: .2, x: Math.PI/4, y: Math.PI + .1, z: Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: 0 });
+                gsap.to(cardObjects[cardsIndexes[flop.table[1]]].rotation, { duration: .2, x: Math.PI/4, y: Math.PI -.1, z: Math.PI, repeat: 0, yoyo: true, ease: "power2.inOut", delay: .5 });
                 document.getElementById('playercards').innerText = `игрок: ${stringifyNominal (getCardNominal(51))}, ${stringifyNominal (getCardNominal(50))} `;
             }, 2000) ;
 

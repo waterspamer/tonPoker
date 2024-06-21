@@ -13,6 +13,18 @@
             width: 100%;
             height: 100vh;
         }
+
+        canvas {
+            position: absolute;
+            display:block;
+        }
+
+        .menu {
+            position:absolute;
+            width:100%;
+            height:100%;
+        }
+
         .buttons-contatiner{
             display:flex;
         }
@@ -30,6 +42,33 @@
             font-size: 18px;
             background-color: aquamarine;
         }
+        #main-menu-bg{
+            background-color:black;
+            position: absolute;
+            width:100%;
+            height:100%;
+            z-index: 1;
+        }
+        #logo{
+            position: relative;
+            filter: invert();
+            opacity:1;
+            background-image: url("/resources/logo.png");
+            width: 512px;
+            max-width: 80%;
+            height:256px;
+            left:50%;
+            top:50%;
+            transform: translate(-50%, -50%);
+            animation: none;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+
         #user-name{
             position:absolute;
             color:white;
@@ -60,9 +99,75 @@
             position: absolute;
             color:white;
         }
+
+        .pokerchip {
+            cursor: pointer;
+  margin: 1em;
+  position: relative;
+  display: inline-block;
+  width: 151px;
+  height: 151px;
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.5), 0 0 3px 0 rgba(0, 0, 0, 0.4) inset;
+  border-radius: 50%;
+  left:48.5%;
+  top:30%;
+  transform: translateX(-50%);
+  background-size: 151px 151px;
+  background-position: center center;
+}
+.pokerchip:before {
+  position: absolute;
+  content: "";
+  z-index: 1;
+  width: 117px;
+  height: 117px;
+  border-radius: 50%;
+  top: 9px;
+  left: 9px;
+  background-size: 151px 151px;
+  background-position: center center;
+}
+.pokerchip:after {
+  z-index: 2;
+  position: absolute;
+  content: "25";
+  text-align: center;
+  font: bold 50px/111px Arial;
+  white-space: pre;
+  width: 111px;
+  height: 111px;
+  border-radius: 50%;
+  top: 20px;
+  left: 20px;
+  transition: scale 0.5s;
+  text-shadow: -1px -1px 0px rgba(0, 0, 0, 0.3), 1px 1px 0px rgba(255, 255, 255, 0.2);
+}
+
+.pokerchip:hover{
+    scale: 1.1;
+}
+.red {
+  background-image: linear-gradient(0deg, transparent 0, transparent 67.5px, #fff 67.5px, #fff 83.5px, transparent 83.5px, transparent 151px), linear-gradient(60deg, transparent 0, transparent 97.4304px, #fff 97.4304px, #fff 113.4304px, transparent 113.4304px, transparent 151px), linear-gradient(120deg, #cea945 0, #cea945 97.4304px, #fff 97.4304px, #fff 113.4304px, #cea945 113.4304px, #cea945 151px);
+}
+.red:before {
+  border: 8px solid #cea945;
+  background-image: linear-gradient(0deg, transparent 0, transparent 69.5px, #EBEBEB 69.5px, #EBEBEB 81.5px, transparent 81.5px, transparent 151px), linear-gradient(30deg, transparent 0, transparent 98.7104px, #EBEBEB 98.7104px, #EBEBEB 110.7104px, transparent 110.7104px, transparent 151px), linear-gradient(60deg, transparent 0, transparent 98.7104px, #EBEBEB 98.7104px, #EBEBEB 110.7104px, transparent 110.7104px, transparent 151px), linear-gradient(90deg, transparent 0, transparent 69.5px, #EBEBEB 69.5px, #EBEBEB 81.5px, transparent 81.5px, transparent 151px), linear-gradient(120deg, transparent 0, transparent 98.7104px, #EBEBEB 98.7104px, #EBEBEB 110.7104px, transparent 110.7104px, transparent 151px), linear-gradient(150deg, #6C0000 0, #6C0000 98.7104px, #EBEBEB 98.7104px, #EBEBEB 110.7104px, #6C0000 110.7104px, #6C0000 151px);
+}
+.red:after {
+  content: "GO!";
+  background: #cea945;
+  color: #f1d5d5;
+}
     </style>
 </head>
 <body>
+    <canvas id="c"></canvas>
+    <div id = "main-menu-bg">
+        <div id = "logo">
+        </div>
+        <div button class="pokerchip red">
+        </div>
+    </div>
     <div id="user-name">user_name</div>
     <div id="balance">БАЛАНС: 1000TON</div>
     <div id="gameresult">РЕЗУЛЬТАТ</div>
@@ -104,6 +209,7 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r147/examples/js/loaders/FBXLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
+    <script src = "js/matrix.js">        </script>
     <script src = "js/pokerSolver.js">        </script>
     <script src = "js/simpleTable.js">        </script>
 </body>
