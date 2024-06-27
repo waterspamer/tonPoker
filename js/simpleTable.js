@@ -2,38 +2,12 @@ Telegram.WebApp.ready();
 
 
 
+let userState = 0;
 
 
-async function fetchDataFromJSON(url) {
-    const request = require('request');
-    const options = {
-        url: url,
-        headers: {
-            'ngrok-skip-browser-warning': 'true'
-        }
-    };
 
-    request(options, (error, response, body) => {
-        if (!error && response.statusCode === 200) {
-            const data = JSON.parse(body);
-            console.log('Data:', data.data);
-            console.log('Board:', data.board);
-            return { data: data.data, board: data.board };
-        } else {
-            console.error('Error:', error);
-            console.error('Status Code:', response && response.statusCode);
-        }
-    });
-}
 
-// Пример использования функции
-const url = 'https://1be7-176-231-182-34.ngrok-free.app/deal_texas_hold_em_solo';
-fetchDataFromJSON(url).then(result => {
-    if (result) {
-        console.log('Fetched Data:', result.data);
-        console.log('Fetched Board:', result.board);
-    }
-});
+
 
 
 const GrainShader = {

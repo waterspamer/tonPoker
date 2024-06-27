@@ -252,11 +252,14 @@
 
         // Функция для обновления виджета профиля
         function updateProfileWidget(user) {
-            const profileImageUrl = user.photo_url || 'https://via.placeholder.com/100'; // URL изображения профиля пользователя
+            const profileImageUrl = user.photo_url ? user.photo_url : 'asdas'; // URL изображения профиля пользователя
             const profileName = user.first_name + ' ' + (user.last_name || ''); // Имя пользователя
 
-            document.getElementById('profileImage').src = profileImageUrl;
-            document.getElementById('profileName').textContent = profileName;
+            const profileImageElement = document.getElementById('profileImage');
+            profileImageElement.src = profileImageUrl;
+
+            const profileNameElement = document.getElementById('profileName');
+            profileNameElement.textContent = profileName;
         }
 
         // Получение информации о пользователе и обновление виджета
@@ -277,6 +280,9 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+</head>
+<body>
     <script src = "js/matrix.js">        </script>
     <script src = "js/pokerSolver.js">        </script>
     <script src = "js/simpleTable.js">        </script>
