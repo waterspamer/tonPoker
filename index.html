@@ -178,16 +178,15 @@
             position: absolute;
             z-index: 20;
             text-align: center;
-            background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            padding: 10px;
         }
         .profile-image {
-            width: 100px;
-            height: 100px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            border: 5px solid #f5b53f;
+            border: 5px solid #9b9b9b;
             overflow: hidden;
             margin: 0 auto 10px;
         }
@@ -196,9 +195,9 @@
             height: auto;
         }
         .profile-name {
-            font-size: 18px;
+            font-size: 12px;
             font-weight: bold;
-            color: #333;
+            color: #969696;
 
 .pokerchip:hover{
     scale: 1.1;
@@ -222,11 +221,11 @@
         <div class="profile-image">
             <img src="https://via.placeholder.com/100" alt="Profile Image" id="profileImage">
         </div>
-        <div class="profile-name" id="profileName">Harris Carney</div>
+        <div class="profile-name" id="profileName">LUDOMAN228</div>
     </div>
     <canvas id="c"></canvas>
     <div id = "main-menu">
-        <div id = "play-button">PLAY</div>
+        <button id = "play-button" onclick ="goToPokerTable()">POKER</button>
     </div>
     <div id="balance">БАЛАНС: 1000TON</div>
     <div id="gameresult">РЕЗУЛЬТАТ</div>
@@ -252,7 +251,7 @@
 
         // Функция для обновления виджета профиля
         function updateProfileWidget(user) {
-            const profileImageUrl = user.photo_url ? user.photo_url : 'asdas'; // URL изображения профиля пользователя
+            const profileImageUrl = user.photo_url;
             const profileName = user.first_name + ' ' + (user.last_name || ''); // Имя пользователя
 
             const profileImageElement = document.getElementById('profileImage');

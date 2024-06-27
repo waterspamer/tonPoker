@@ -4,10 +4,20 @@ Telegram.WebApp.ready();
 
 let userState = 0;
 
+let pokerTableModel;
+
+let rotationAnim;
 
 
+function goToPokerTable(){
+    document.getElementById("play-button").style.display = 'none';
+    rotationAnim.kill();
+    gsap.to(pokerTableModel.rotation, { y: pokerTableModel.rotation.y + .3, duration: 1, repeat: 0, ease: "power2.Out" });
 
-
+    gsap.to(pokerTableModel.position, { z: -1, y: -4, duration: .5, repeat: 0, ease: "power2.inOut" });
+    gsap.to(pokerTableModel.rotation, { x: 0, duration: .5, repeat: 0, ease: "power2.inOut" });
+    //gsap.to(pokerTableModel.position, { z: -1, duration: 1, repeat: 0, ease: "power2.inOut" });
+}
 
 
 const GrainShader = {
@@ -179,9 +189,9 @@ let scene, camera, renderer;
          object.position.y = -5;
          object.position.z = -3;
          object.position.x = 0;
-         
-        scene.add(object);
-        gsap.to(object.rotation, { y: object.rotation.y + Math.PI * 2, duration: 20, repeat: -1, ease: "linear" });
+         pokerTableModel = object;
+        scene.add(pokerTableModel);
+        rotationAnim = gsap.to(pokerTableModel.rotation, { y: pokerTableModel.rotation.y + Math.PI * 2, duration: 20, repeat: -1, ease: "linear" });
     },
     (xhr) => {
         console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
