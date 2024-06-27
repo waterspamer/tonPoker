@@ -29,7 +29,7 @@
   font-weight: 400;
 }
 .range {
-  width: 400px;
+  width: 300px;
   height: 15px;
   -webkit-appearance: none;
   background: #111;
@@ -285,7 +285,7 @@ overflow: visible;
     </div>
     <div id = "betslidercontainer">
         <span id="rangeValue">0</span>
-        <Input class="range" type="range" name "" value="1" min="1" max="100" onChange="rangeSlide(this.value)" onmousemove="rangeSlide(this.value)"></Input>
+        <Input class="range" type="range" name "" value="1" min="1" max="100" onChange="rangeSlide(this.value)" onmousemove="rangeSlide(this.value) "></Input>
     </div>
     
     <div id="container"></div>
@@ -343,6 +343,19 @@ overflow: visible;
     <script src = "js/pokerSolver.js">        </script>
     <script src = "js/simpleTable.js">        </script>
     <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            const slider = document.getElementsByClassName("range")[0];
+            const output = document.getElementById("rangeValue");
+
+            // Обновление значения при изменении слайдера
+            slider.addEventListener("input", function() {
+                rangeSlide(slider.value);
+            });
+
+            // Включение отображения слайдера для демонстрации
+            //document.getElementById("betslidercontainer").style.display = 'block';
+        });
+
         function rangeSlide(value) {
             document.getElementById('rangeValue').innerHTML = value + '$';
             placeChips(value);
