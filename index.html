@@ -5,9 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Mini App</title>
     <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+
+
+        #betslidercontainer{
+            display: none;
+            position: absolute;
+            z-index: 21;
+            left:50%;
+            bottom:35%;
+            
+            transform: translate(-50%, 50%) rotateX(20deg);
+        }
+
+#rangeValue {
+  position: relative;
+  display: block;
+  text-align: center;
+  font-size: 6em;
+  color: #ffa600;
+  font-weight: 400;
+}
+.range {
+  width: 400px;
+  height: 15px;
+  -webkit-appearance: none;
+  background: #111;
+  outline: none;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 1);
+}
+.range::-webkit-slider-thumb {
+overflow: visible;
+  -webkit-appearance: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: #f3c90b;
+  cursor: pointer;
+  border: 4px solid #333;
+  z-index: 30;
+  box-shadow: -407px 0 0 400px #d38b07;
+}
+
+
+
         body {
             margin: 0;
             overflow: hidden;
+            perspective: 300px;;
         }
         #container {
             width: 100%;
@@ -234,6 +283,11 @@
         <div class ="header" id = "dealercards">дилер</div>
         <div class ="header" id = "tablecards">стол</div>
     </div>
+    <div id = "betslidercontainer">
+        <span id="rangeValue">0</span>
+        <Input class="range" type="range" name "" value="1" min="1" max="100" onChange="rangeSlide(this.value)" onmousemove="rangeSlide(this.value)"></Input>
+    </div>
+    
     <div id="container"></div>
     <div class="buttons-contatiner">
     <button id ="bet" onclick="bet()">Поставить</button>
@@ -272,7 +326,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fflate/umd/index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/imaya/zlib.js/bin/fflate.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/FontLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/geometries/TextGeometry.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r147/examples/js/loaders/FBXLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
@@ -280,10 +335,18 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+
+
 </head>
 <body>
     <script src = "js/matrix.js">        </script>
     <script src = "js/pokerSolver.js">        </script>
     <script src = "js/simpleTable.js">        </script>
+    <script type="text/javascript">
+        function rangeSlide(value) {
+            document.getElementById('rangeValue').innerHTML = value + '$';
+            placeChips(value);
+        }
+    </script>
 </body>
 </html>

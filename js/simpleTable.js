@@ -1,3 +1,4 @@
+
 Telegram.WebApp.ready();
 
 
@@ -8,15 +9,114 @@ let pokerTableModel;
 
 let rotationAnim;
 
+let twentyFChips;
+let decChips;
+let fiveChips;
+let oneChips;
+let chipsArray = [];
+
+
+function createChips(chips) {
+    const colors = {
+        25: 0x0000aa, // Синий для 25
+        10: 0x00aa00, // Зеленый для 10
+        5: 0xff0000, // Красный для 5
+        1: 0xffffff // Белый для 1
+    };
+
+    // Начальная позиция для фишек
+    let xPos = -.3;
+    clearChips();
+    // Создание фишек
+    for (let value in chips) {
+        for (let i = 0; i < chips[value]; i++) {
+            const geometry = new THREE.CylinderGeometry(.1, .1, 0.01, 32);
+            const material = new THREE.MeshBasicMaterial({ color: colors[value] });
+            const chip = new THREE.Mesh(geometry, material);
+            chip.position.set(xPos, i* 0.1, 2);
+            scene.add(chip);
+            chipsArray.push(chip);
+            
+        }
+        xPos += .2;
+    }
+}
+
+// Функция для удаления всех фишек
+function clearChips() {
+    for (let chip of chipsArray) {
+        scene.remove(chip);
+        chip.geometry.dispose();
+        chip.material.dispose();
+    }
+    chipsArray = [];
+}
+
 
 function goToPokerTable(){
     document.getElementById("play-button").style.display = 'none';
+    document.getElementById("betslidercontainer").style.display = 'block';
     rotationAnim.kill();
     gsap.to(pokerTableModel.rotation, { y: pokerTableModel.rotation.y + .3, duration: 1, repeat: 0, ease: "power2.Out" });
 
     gsap.to(pokerTableModel.position, { z: -1, y: -4, duration: .5, repeat: 0, ease: "power2.inOut" });
     gsap.to(pokerTableModel.rotation, { x: 0, duration: .5, repeat: 0, ease: "power2.inOut" });
+    
     //gsap.to(pokerTableModel.position, { z: -1, duration: 1, repeat: 0, ease: "power2.inOut" });
+}
+
+
+function placeChips(bet){
+    let ch =  breakBetIntoChips(bet);
+    createChips(ch);
+
+}
+
+
+function breakBetIntoChips(bet) {
+    if (bet < 1 || bet > 100) {
+        throw new Error("Bet must be between 1 and 100 inclusive.");
+    }
+
+    const chipValues = [25, 10, 5, 1];
+    const chips = { 25: 0, 10: 0, 5: 0, 1: 0 };
+
+    for (let value of chipValues) {
+        chips[value] = Math.floor(bet / value);
+        bet %= value;
+    }
+
+    return chips;
+}
+
+
+
+function makeBet(){
+
+}
+
+function betOnTurn(){
+
+}
+
+function betOnReaver(){
+
+}
+
+function getFlop(){
+
+}
+
+function fold(){
+
+}
+
+function getTurn(){
+
+}
+
+function getReaver(){
+
 }
 
 
