@@ -75,6 +75,7 @@
             text-align: center;
             left:50%;
             transform: translateX(-50%);
+            z-index: 20;;
         }
         #stats{
             position:absolute;
@@ -102,46 +103,102 @@
 
         .pokerchip {
             cursor: pointer;
-  margin: 1em;
-  position: relative;
-  display: inline-block;
-  width: 151px;
-  height: 151px;
-  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.5), 0 0 3px 0 rgba(0, 0, 0, 0.4) inset;
-  border-radius: 50%;
-  left:48.5%;
-  top:30%;
-  transform: translateX(-50%);
-  background-size: 151px 151px;
-  background-position: center center;
-}
-.pokerchip:before {
-  position: absolute;
-  content: "";
-  z-index: 1;
-  width: 117px;
-  height: 117px;
-  border-radius: 50%;
-  top: 9px;
-  left: 9px;
-  background-size: 151px 151px;
-  background-position: center center;
-}
-.pokerchip:after {
-  z-index: 2;
-  position: absolute;
-  content: "25";
-  text-align: center;
-  font: bold 50px/111px Arial;
-  white-space: pre;
-  width: 111px;
-  height: 111px;
-  border-radius: 50%;
-  top: 20px;
-  left: 20px;
-  transition: scale 0.5s;
-  text-shadow: -1px -1px 0px rgba(0, 0, 0, 0.3), 1px 1px 0px rgba(255, 255, 255, 0.2);
-}
+            margin: 1em;
+            position: relative;
+            display: inline-block;
+            width: 151px;
+            height: 151px;
+            box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.5), 0 0 3px 0 rgba(0, 0, 0, 0.4) inset;
+            border-radius: 50%;
+            left:48.5%;
+            top:30%;
+            transform: translateX(-50%);
+            background-size: 151px 151px;
+            background-position: center center;
+        }
+        .pokerchip:before {
+            position: absolute;
+            content: "";
+            z-index: 1;
+            width: 117px;
+            height: 117px;
+            border-radius: 50%;
+            top: 9px;
+            left: 9px;
+            background-size: 151px 151px;
+            background-position: center center;
+        }
+        .pokerchip:after {
+            z-index: 2;
+            position: absolute;
+            content: "25";
+            text-align: center;
+            font: bold 50px/111px Arial;
+            white-space: pre;
+            width: 111px;
+            height: 111px;
+            border-radius: 50%;
+            top: 20px;
+            left: 20px;
+            transition: scale 0.5s;
+            text-shadow: -1px -1px 0px rgba(0, 0, 0, 0.3), 1px 1px 0px rgba(255, 255, 255, 0.2);
+        }
+        #main-menu{
+            width:100%;
+            height:100%;
+        }
+
+        #play-button{
+            cursor: pointer;
+            position:absolute;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            text-align: center;
+            align-items: center;
+            align-self: center;
+            font-size: 40px;
+            display: flex;
+            justify-content: space-around;
+            left:50%;
+            top:80%;
+            border-radius: 200px;
+            transform:translate(-50%, -50%);
+            z-index:20;
+            width:25%;
+            height: 100px;
+            background: linear-gradient(45deg, rgb(231, 13, 195), rgb(165, 25, 230));
+            transition: all .2s;
+            box-shadow: 0px 0px 20px 20px rgba(212, 0, 255, 0.2);
+            color:#f1d5d5;
+        }
+        #play-button:hover{
+            background-color: #1d8375;
+            box-shadow: 0px 0px 20px 20px rgba(0, 255, 255, .2);
+        }
+        .profile-container {
+            position: absolute;
+            z-index: 20;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 5px solid #f5b53f;
+            overflow: hidden;
+            margin: 0 auto 10px;
+        }
+        .profile-image img {
+            width: 100%;
+            height: auto;
+        }
+        .profile-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
 
 .pokerchip:hover{
     scale: 1.1;
@@ -161,14 +218,16 @@
     </style>
 </head>
 <body>
-    <canvas id="c"></canvas>
-    <div id = "main-menu-bg">
-        <div id = "logo">
+    <div class="profile-container">
+        <div class="profile-image">
+            <img src="https://via.placeholder.com/100" alt="Profile Image" id="profileImage">
         </div>
-        <div button class="pokerchip red">
-        </div>
+        <div class="profile-name" id="profileName">Harris Carney</div>
     </div>
-    <div id="user-name">user_name</div>
+    <canvas id="c"></canvas>
+    <div id = "main-menu">
+        <div id = "play-button">PLAY</div>
+    </div>
     <div id="balance">БАЛАНС: 1000TON</div>
     <div id="gameresult">РЕЗУЛЬТАТ</div>
     <div id="stats">
@@ -189,14 +248,20 @@
         Telegram.WebApp.expand();
 
         // Получение информации о пользователе
-        const user = Telegram.WebApp.initDataUnsafe.user;
+        const tg = window.Telegram.WebApp;
 
-        // Проверка, есть ли информация о пользователе
-        if (user) {
-            document.addEventListener("DOMContentLoaded", function() {
-                // Отобразите имя пользователя в элементе с id user-name
-                document.getElementById('user-name').innerText = `Привет, ${user.first_name}!`;
-            });
+        // Функция для обновления виджета профиля
+        function updateProfileWidget(user) {
+            const profileImageUrl = user.photo_url || 'https://via.placeholder.com/100'; // URL изображения профиля пользователя
+            const profileName = user.first_name + ' ' + (user.last_name || ''); // Имя пользователя
+
+            document.getElementById('profileImage').src = profileImageUrl;
+            document.getElementById('profileName').textContent = profileName;
+        }
+
+        // Получение информации о пользователе и обновление виджета
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            updateProfileWidget(tg.initDataUnsafe.user);
         }
     </script>
 
@@ -209,6 +274,9 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r147/examples/js/loaders/FBXLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
     <script src = "js/matrix.js">        </script>
     <script src = "js/pokerSolver.js">        </script>
     <script src = "js/simpleTable.js">        </script>

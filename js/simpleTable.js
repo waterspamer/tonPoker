@@ -35,6 +35,73 @@ fetchDataFromJSON(url).then(result => {
     }
 });
 
+
+const GrainShader = {
+    uniforms: {
+        'tDiffuse': { value: null },
+        'amount': { value: 10000.05 },
+        'time': { value: 0 }
+    },
+    vertexShader: `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `,
+    fragmentShader: `
+        uniform sampler2D tDiffuse;
+        uniform float amount;
+        uniform float time;
+        varying vec2 vUv;
+
+        float rand(vec2 co) {
+            return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+        }
+
+        void main() {
+            vec4 color = texture2D(tDiffuse, vUv);
+            vec2 uvRandom = vUv;
+            uvRandom.y *= rand(vec2(uvRandom.y, time));
+            color.rgb += rand(uvRandom) * amount;
+            gl_FragColor = color;
+        }
+    `
+};
+
+const ColorDistortionShader = {
+    uniforms: {
+        'tDiffuse': { value: null },
+        'amount': { value: 0.05 }
+    },
+    vertexShader: `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `,
+    fragmentShader: `
+        uniform sampler2D tDiffuse;
+        uniform float amount;
+        varying vec2 vUv;
+
+        void main() {
+            vec2 uv = vUv;
+            vec4 color = texture2D(tDiffuse, uv);
+            float r = texture2D(tDiffuse, uv + vec2(amount, 0.0)).r;
+            float g = texture2D(tDiffuse, uv + vec2(-amount, 0.0)).g;
+            float b = texture2D(tDiffuse, uv + vec2(0.0, amount)).b;
+            gl_FragColor = vec4(r, g, b, color.a);
+        }
+    `
+};
+
+
+
+
+
+
 const vertexShader = `
     varying vec2 vUv;
     void main() {
@@ -91,29 +158,56 @@ let scene, camera, renderer;
         camera = new THREE.PerspectiveCamera(95, window.innerWidth / window.innerHeight, 0.1, 1000);
         renderer = new THREE.WebGLRenderer({antialias: true});
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
+        //renderer.setPixelRatio(window.devicePixelRatio);
         document.getElementById('container').appendChild(renderer.domElement);
 
+
+
+
+
+        const composer = new THREE.EffectComposer(renderer);
+        const renderPass = new THREE.RenderPass(scene, camera);
+        composer.addPass(renderPass);
+
+        const grainPass = new THREE.ShaderPass(GrainShader);
+        grainPass.uniforms['amount'].value = 0.05;
+        composer.addPass(grainPass);
+
+        const colorDistortionPass = new THREE.ShaderPass(ColorDistortionShader);
+        colorDistortionPass.uniforms['amount'].value = 0.00015;
+        composer.addPass(colorDistortionPass);
+
+
+
         const textureLoader = new THREE.TextureLoader();
-            const tableTexture = textureLoader.load('resources/tableTex.png');
+            const tableTexture = textureLoader.load('resources/TableTex.jpg');
 
         const fbxLoader = new THREE.FBXLoader();
         fbxLoader.load(
-        'resources/table.fbx',
+        'resources/tableLow.fbx',
         (object) => {
          object.traverse(function (child) {
              if ((child).isMesh) {
-                  (child).material = material
+                  (child).material = material;
+                  console.log(child.geometry.attributes);
+                  const uvSetIndex = 2; // Номер UV-набора, который вы хотите использовать
+            const uvAttribute = `uv${uvSetIndex}`;
+            if (child.geometry.attributes[uvAttribute]) {
+                child.geometry.attributes.uv = child.geometry.attributes[uvAttribute];
+            }
                  if ((child).material) {
                      ((child).material).transparent = false
                  }
              }
          })
-         object.scale.set(.1, .1, .1);
-         object.rotation.set (0, Math.PI/2, 0);
-         object.position.y = -2;
+         object.scale.set(.06, .06, .06);
+         object.rotation.set (-.2, Math.PI/2, 0);
+         object.position.y = -5;
          object.position.z = -3;
-        scene.add(object)
+         object.position.x = 0;
+         
+        scene.add(object);
+        gsap.to(object.rotation, { y: object.rotation.y + Math.PI * 2, duration: 20, repeat: -1, ease: "linear" });
     },
     (xhr) => {
         console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
@@ -137,7 +231,8 @@ let scene, camera, renderer;
 
         function animate() {
             requestAnimationFrame(animate);
-            renderer.render(scene, camera);
+            composer.render(scene, camera);
+            grainPass.uniforms['time'].value += 0.01;
         }
 
         animate();
