@@ -261,6 +261,11 @@ let scene, camera, renderer;
         colorDistortionPass.uniforms['amount'].value = 0.00015;
         composer.addPass(colorDistortionPass);
 
+        // Настройка FXAA
+        const fxaaPass = new THREE.ShaderPass(THREE.FXAAShader);
+        fxaaPass.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight);
+        composer.addPass(fxaaPass);
+
 
 
         const textureLoader = new THREE.TextureLoader();
