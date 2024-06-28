@@ -36,7 +36,7 @@ function createChips(chips) {
             chip.position.set(xPos, i* 0.1, 2);
             scene.add(chip);
             chipsArray.push(chip);
-            tg.HapticFeedback.impactOccurred('light');
+            tg.HapticFeedback.impactOccurred('medium');
         }
         xPos += .2;
     }
