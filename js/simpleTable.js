@@ -254,9 +254,10 @@ let scene, camera, renderer;
         composer.addPass(renderPass);
 
         // Настройка FXAA
-        const fxaaPass = new THREE.ShaderPass(THREE.FXAAShader);
-        fxaaPass.uniforms['resolution'].value.set(.01 / window.innerWidth, .01 / window.innerHeight);
-        composer.addPass(fxaaPass);
+        effectFXAA = new THREE.ShaderPass( THREE.FXAAShader );
+effectFXAA.uniforms[ 'resolution' ].value.x = 1 / ( window.innerWidth * window.devicePixelRatio );
+effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.devicePixelRatio );
+composer.addPass( effectFXAA ); 
 
         const grainPass = new THREE.ShaderPass(GrainShader);
         grainPass.uniforms['amount'].value = 0.05;
