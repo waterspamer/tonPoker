@@ -261,7 +261,7 @@ composer.addPass( effectFXAA );
         composer.addPass(grainPass);
 
         const colorDistortionPass = new THREE.ShaderPass(ColorDistortionShader);
-        colorDistortionPass.uniforms['amount'].value = 0.00015;
+        colorDistortionPass.uniforms['amount'].value = 0.00035;
         composer.addPass(colorDistortionPass);
 
         
