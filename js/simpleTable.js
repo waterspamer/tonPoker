@@ -36,9 +36,7 @@ function createChips(chips) {
             chip.position.set(xPos, i* 0.1, 2);
             scene.add(chip);
             chipsArray.push(chip);
-            if (navigator.vibrate) {
-                navigator.vibrate([20]);
-            }
+            tg.HapticFeedback.impactOccurred('light');
         }
         xPos += .2;
     }
