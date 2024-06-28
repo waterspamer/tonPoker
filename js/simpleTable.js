@@ -242,11 +242,8 @@ let scene, camera, renderer;
         camera = new THREE.PerspectiveCamera(95, window.innerWidth / window.innerHeight, 0.1, 1000);
         renderer = new THREE.WebGLRenderer({antialias: true});
         renderer.setSize(window.innerWidth, window.innerHeight);
-        //renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setPixelRatio(window.devicePixelRatio*2);
         document.getElementById('container').appendChild(renderer.domElement);
-
-
-
 
 
         const composer = new THREE.EffectComposer(renderer);
