@@ -38,6 +38,7 @@ function createChips(chips) {
             chipsArray.push(chip);
             if (navigator.vibrate) {
                 navigator.vibrate([20]);
+            }
         }
         xPos += .2;
     }
