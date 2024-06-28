@@ -13,7 +13,29 @@ let twentyFChips;
 let decChips;
 let fiveChips;
 let oneChips;
+
+let loadedFBX;
 let chipsArray = [];
+
+// Load the texture
+const chipTextureLoader = new THREE.TextureLoader();
+const chipTexture = chipTextureLoader.load('resources/ChipTex.jpg', function (texture) {
+    console.log(chipTexture);
+    chipTexture.wrapS = chipTexture.wrapT = THREE.RepeatWrapping;
+});
+
+
+const chipLoader = new THREE.FBXLoader();
+chipLoader.load('resources/chip.fbx', function (object) {
+    loadedFBX = object;
+    loadedFBX.traverse(function (child) {
+        if (child.isMesh) {
+            child.material.map = chipTexture;
+            console.log(chipTexture);
+            child.material.needsUpdate = true;
+        }
+    });
+});
 
 
 function createChips(chips) {
@@ -25,20 +47,36 @@ function createChips(chips) {
     };
 
     // Начальная позиция для фишек
-    let xPos = -.3;
+    let xPos = -0.3;
     clearChips();
+
+    // Ensure the FBX model is loaded
+    if (!loadedFBX) {
+        console.error("FBX model not loaded yet.");
+        return;
+    }
+
     // Создание фишек
     for (let value in chips) {
         for (let i = 0; i < chips[value]; i++) {
-            const geometry = new THREE.CylinderGeometry(.1, .1, 0.01, 32);
-            const material = new THREE.MeshBasicMaterial({ color: colors[value] });
-            const chip = new THREE.Mesh(geometry, material);
-            chip.position.set(xPos, i* 0.1, 2);
+            const chip = loadedFBX.clone();
+            chip.traverse(function (child) {
+                if (child.isMesh) {
+                    child.material = new THREE.MeshBasicMaterial({
+                        color: colors[value],
+                        map: chipTexture,
+                        specular: 0x555555,
+                        shininess: 30
+                    });
+                }
+            });
+            chip.scale.set(.03,.03,.03);
+            chip.position.set(xPos, i * 0.1, 2);
             scene.add(chip);
             chipsArray.push(chip);
             tg.HapticFeedback.impactOccurred('soft');
         }
-        xPos += .2;
+        xPos += 0.2;
     }
 }
 
@@ -46,8 +84,12 @@ function createChips(chips) {
 function clearChips() {
     for (let chip of chipsArray) {
         scene.remove(chip);
-        chip.geometry.dispose();
-        chip.material.dispose();
+        chip.traverse(function (child) {
+            if (child.isMesh) {
+                child.geometry.dispose();
+                child.material.dispose();
+            }
+        });
     }
     chipsArray = [];
 }
