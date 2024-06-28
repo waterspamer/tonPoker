@@ -36,7 +36,8 @@ function createChips(chips) {
             chip.position.set(xPos, i* 0.1, 2);
             scene.add(chip);
             chipsArray.push(chip);
-            
+            if (navigator.vibrate) {
+                navigator.vibrate([20]);
         }
         xPos += .2;
     }
@@ -253,6 +254,11 @@ let scene, camera, renderer;
         const renderPass = new THREE.RenderPass(scene, camera);
         composer.addPass(renderPass);
 
+        // Настройка FXAA
+        const fxaaPass = new THREE.ShaderPass(THREE.FXAAShader);
+        fxaaPass.uniforms['resolution'].value.set(.01 / window.innerWidth, .01 / window.innerHeight);
+        composer.addPass(fxaaPass);
+
         const grainPass = new THREE.ShaderPass(GrainShader);
         grainPass.uniforms['amount'].value = 0.05;
         composer.addPass(grainPass);
@@ -261,10 +267,7 @@ let scene, camera, renderer;
         colorDistortionPass.uniforms['amount'].value = 0.00015;
         composer.addPass(colorDistortionPass);
 
-        // Настройка FXAA
-        const fxaaPass = new THREE.ShaderPass(THREE.FXAAShader);
-        fxaaPass.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight);
-        composer.addPass(fxaaPass);
+        
 
 
 
