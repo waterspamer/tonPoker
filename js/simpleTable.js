@@ -89,10 +89,26 @@ function breakBetIntoChips(bet) {
     return chips;
 }
 
+const flopUrl = 'http://pokerjack.space/deal_texas_hold_em_solo';
 
+async function makeBet(){
 
-function makeBet(){
+    try {
+        const response = await fetch(flopUrl);
+        const data = await response.json();
 
+        // Extract 'table' and 'board' from the JSON data
+        const table = data.table;
+        const board = data.board;
+        console.log(table);
+        console.log(board);
+        // Update the DOM with the fetched data
+        //document.getElementById('tableData').textContent = `Table: ${JSON.stringify(table)}`;
+        //document.getElementById('boardData').textContent = `Board: ${JSON.stringify(board)}`;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        
+    }
 }
 
 function betOnTurn(){
