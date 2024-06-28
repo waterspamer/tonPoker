@@ -259,7 +259,7 @@ let scene, camera, renderer;
         renderer = new THREE.WebGLRenderer({antialias: true});
 
         renderer.setPixelRatio(window.devicePixelRatio*1);
-        renderer.setSize(window.innerWidth, window.innerHeight, false);
+        renderer.setSize(window.innerWidth, window.innerHeight, true);
         
         document.getElementById('container').appendChild(renderer.domElement);
 
@@ -272,7 +272,7 @@ let scene, camera, renderer;
         effectFXAA = new THREE.ShaderPass( THREE.FXAAShader );
 effectFXAA.uniforms[ 'resolution' ].value.x = 1 / ( window.innerWidth * window.devicePixelRatio );
 effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.devicePixelRatio );
-composer.addPass( effectFXAA ); 
+//composer.addPass( effectFXAA ); 
 
         const grainPass = new THREE.ShaderPass(GrainShader);
         grainPass.uniforms['amount'].value = 0.05;
@@ -280,7 +280,7 @@ composer.addPass( effectFXAA );
 
         const colorDistortionPass = new THREE.ShaderPass(ColorDistortionShader);
         colorDistortionPass.uniforms['amount'].value = 0.00035;
-        composer.addPass(colorDistortionPass);
+  //      composer.addPass(colorDistortionPass);
 
         
 
@@ -338,7 +338,8 @@ composer.addPass( effectFXAA );
 
         function animate() {
             requestAnimationFrame(animate);
-            composer.render(scene, camera);
+            //composer.render(scene, camera);
+            renderer.render(scene,camera);
             grainPass.uniforms['time'].value += 0.01;
         }
 
