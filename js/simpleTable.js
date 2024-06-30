@@ -17,6 +17,8 @@ let oneChips;
 let loadedFBX;
 let chipsArray = [];
 
+let chipShadowsArray = [];
+
 let currentVolume = 0.5;
 const audioPath = 'resources/pokerChipSFX.mp3';
 
@@ -56,6 +58,19 @@ const chipTexture = chipTextureLoader.load('resources/ChipTex.jpg', function (te
 });
 
 
+const chipShadowTexture = chipTextureLoader.load('resources/shadowTex.png', function (texture) {
+    console.log(chipTexture);
+    chipTexture.wrapS = chipTexture.wrapT = THREE.RepeatWrapping;
+});
+
+const shadowMaterial = new THREE.MeshBasicMaterial({
+    map: chipShadowTexture,
+    transparent: true,
+    color: 0x001100,
+    opacity: .8, // Set the desired opacity
+});
+
+
 const chipLoader = new THREE.FBXLoader();
 chipLoader.load('resources/chip.fbx', function (object) {
     loadedFBX = object;
@@ -69,20 +84,23 @@ chipLoader.load('resources/chip.fbx', function (object) {
 });
 
 let prevCount = 0;
+let prevArrayState = chipsArray;
+
+const colors = {
+    10: 0x0088aa, // Синий для 25
+    5: 0x00aa00, // Зеленый для 10
+    2: 0xaa2222, // Красный для 5
+    1: 0xbbbbbb // Белый для 1
+};
 
 function createChips(chips) {
 
     
     
-    const colors = {
-        10: 0x0088aa, // Синий для 25
-        5: 0x00aa00, // Зеленый для 10
-        2: 0xaa2222, // Красный для 5
-        1: 0xbbbbbb // Белый для 1
-    };
+    
 
     // Начальная позиция для фишек
-    let xPos = -0.3;
+    let xPos = -0.34;
     clearChips();
 
     // Ensure the FBX model is loaded
@@ -90,10 +108,12 @@ function createChips(chips) {
         console.error("FBX model not loaded yet.");
         return;
     }
-
+    
     // Создание фишек
     for (let value in chips) {
-        
+        if (chips[value] >= 1){
+            
+        }
         for (let i = 0; i < chips[value]; i++) {
             
             const chip = loadedFBX.clone();
@@ -107,26 +127,52 @@ function createChips(chips) {
                     });
                 }
             });
-            chip.scale.set(.03,.03,.03);
-            chip.position.set(xPos + Math.random()*0.01, i * 0.05, 2+ Math.random()*0.01);
 
+            const geometry = new THREE.PlaneGeometry(5, 5);
+            const plane = new THREE.Mesh(geometry, shadowMaterial);
+            plane.scale.set(.05,.05,.05);
+            plane.rotation.x = -1.5;
+            //plane.rotation.set(1,0,0);
+            
+            scene.add(plane);
+            var ranX =Math.random()*0.01;
+            var ranZ =Math.random()*0.01;
+            chipShadowsArray.push(plane);
+
+
+            chip.scale.set(.03,.03,.03);
+
+            chip.position.set(xPos + ranX, i * 0.05, 2 + ranZ);
+            chip.rotation.y = (0.5 - Math.random()) * 0.25;
+            plane.position.set(xPos + ranX, i * 0.05, 2 + ranZ);
             //gsap.to(chip.position, {y: i * 0.05, duration: .1, repeat: 0, delay: ease: "power2.inOut" });
             scene.add(chip);
             chipsArray.push(chip);
             tg.HapticFeedback.impactOccurred('soft');
         }
-        xPos += 0.2;
+        xPos += 0.22;
     }
 
 
-    if (prevCount != chipsArray.length){
+    if ( prevArrayState != chipsArray){
                 playChipSound();
         prevCount = chipsArray.length;
+        prevArrayState = chipsArray;
+
     }
 }
 
 // Функция для удаления всех фишек
 function clearChips() {
+    for (let chipShadow of chipShadowsArray){
+        scene.remove(chipShadow);
+        chipShadow.traverse(function (child) {
+            if (child.isMesh) {
+                child.geometry.dispose();
+                child.material.dispose();
+            }
+        });
+    }
     for (let chip of chipsArray) {
         scene.remove(chip);
         chip.traverse(function (child) {
@@ -137,6 +183,7 @@ function clearChips() {
         });
     }
     chipsArray = [];
+    chipShadowsArray = [];
 }
 
 
@@ -144,6 +191,7 @@ function goToPokerTable(){
     document.getElementById("play-button").style.display = 'none';
     document.getElementById("betslidercontainer").style.display = 'block';
     rotationAnim.kill();
+    setTimeout(()=>placeChips(10), 400);
     gsap.to(pokerTableModel.rotation, { y: pokerTableModel.rotation.y + .3, duration: 1, repeat: 0, ease: "power2.Out" });
 
     gsap.to(pokerTableModel.position, { z: -1, y: -4, duration: .5, repeat: 0, ease: "power2.inOut" });
@@ -158,6 +206,8 @@ function placeChips(bet){
     createChips(ch);
 
 }
+
+
 
 
 function breakBetIntoChips(bet) {
