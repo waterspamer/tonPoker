@@ -17,6 +17,9 @@ let oneChips;
 let loadedFBX;
 let chipsArray = [];
 
+const audioPath = 'resources/pokerChipSFX.wav';
+
+
 // Load the texture
 const chipTextureLoader = new THREE.TextureLoader();
 const chipTexture = chipTextureLoader.load('resources/ChipTex.jpg', function (texture) {
@@ -37,13 +40,17 @@ chipLoader.load('resources/chip.fbx', function (object) {
     });
 });
 
+let prevCount = 0;
 
 function createChips(chips) {
+
+    
+    
     const colors = {
-        25: 0x0000aa, // Синий для 25
+        25: 0x0088aa, // Синий для 25
         10: 0x00aa00, // Зеленый для 10
-        5: 0xff0000, // Красный для 5
-        1: 0xffffff // Белый для 1
+        5: 0xaa2222, // Красный для 5
+        1: 0xbbbbbb // Белый для 1
     };
 
     // Начальная позиция для фишек
@@ -58,14 +65,16 @@ function createChips(chips) {
 
     // Создание фишек
     for (let value in chips) {
+        
         for (let i = 0; i < chips[value]; i++) {
+            
             const chip = loadedFBX.clone();
             chip.traverse(function (child) {
                 if (child.isMesh) {
                     child.material = new THREE.MeshBasicMaterial({
                         color: colors[value],
                         map: chipTexture,
-                        specular: 0x555555,
+                        specular: 0x005555,
                         shininess: 30
                     });
                 }
@@ -77,6 +86,14 @@ function createChips(chips) {
             tg.HapticFeedback.impactOccurred('soft');
         }
         xPos += 0.2;
+    }
+
+
+    if (prevCount != chipsArray.length){
+        const audio = new Audio(audioPath);
+        audio.volume = .5;
+        audio.play();
+        prevCount = chipsArray.length;
     }
 }
 
