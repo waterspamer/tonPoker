@@ -17,16 +17,36 @@ let oneChips;
 let loadedFBX;
 let chipsArray = [];
 
+let currentVolume = 0.5;
 const audioPath = 'resources/pokerChipSFX.mp3';
- // Create an audio pool
- const audioPoolSize = 10; // Number of audio elements in the pool
- const audioPool = [];
- for (let i = 0; i < audioPoolSize; i++) {
-     const audio = new Audio(audioPath);
-     audio.volume = .5;
-     audioPool.push(audio);
- }
 
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let audioBuffer;
+
+        fetch(audioPath)
+        .then(response => response.arrayBuffer())
+        .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+        .then(buffer => {
+            audioBuffer = buffer;
+        })
+        .catch(error => console.error('Error loading audio:', error));
+
+
+
+        function playChipSound() {
+            if (!audioBuffer) return;
+
+            const source = audioContext.createBufferSource();
+            source.buffer = audioBuffer;
+
+            const gainNode = audioContext.createGain();
+            gainNode.gain.value = currentVolume;
+
+            source.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            source.start(0);
+        }
 
 // Load the texture
 const chipTextureLoader = new THREE.TextureLoader();
@@ -98,11 +118,7 @@ function createChips(chips) {
 
 
     if (prevCount != chipsArray.length){
-        const audio = audioPool.find(a => a.paused || a.ended);
-            if (audio) {
-                audio.currentTime = 0; // Reset to start
-                audio.play();
-            }
+                playChipSound();
         prevCount = chipsArray.length;
     }
 }
