@@ -100,7 +100,7 @@ function createChips(chips) {
     
 
     // Начальная позиция для фишек
-    let xPos = -0.34;
+    let xPos = -0.44;
     clearChips();
 
     // Ensure the FBX model is loaded
@@ -130,7 +130,7 @@ function createChips(chips) {
 
             const geometry = new THREE.PlaneGeometry(5, 5);
             const plane = new THREE.Mesh(geometry, shadowMaterial);
-            plane.scale.set(.05,.05,.05);
+            plane.scale.set(.07,.07,.07);
             plane.rotation.x = -1.5;
             //plane.rotation.set(1,0,0);
             
@@ -140,17 +140,17 @@ function createChips(chips) {
             chipShadowsArray.push(plane);
 
 
-            chip.scale.set(.03,.03,.03);
+            chip.scale.set(.04,.04,.04);
 
-            chip.position.set(xPos + ranX, i * 0.05, 2 + ranZ);
+            chip.position.set(xPos + ranX, i * 0.05, 2.2 + ranZ);
             chip.rotation.y = (0.5 - Math.random()) * 0.25;
-            plane.position.set(xPos + ranX, i * 0.05, 2 + ranZ);
+            plane.position.set(xPos + ranX, i * 0.05, 2.2 + ranZ);
             //gsap.to(chip.position, {y: i * 0.05, duration: .1, repeat: 0, delay: ease: "power2.inOut" });
             scene.add(chip);
             chipsArray.push(chip);
             tg.HapticFeedback.impactOccurred('soft');
         }
-        xPos += 0.22;
+        xPos += 0.28;
     }
 
 
