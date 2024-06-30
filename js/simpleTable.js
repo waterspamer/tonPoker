@@ -17,7 +17,15 @@ let oneChips;
 let loadedFBX;
 let chipsArray = [];
 
-const audioPath = 'resources/pokerChipSFX.wav';
+const audioPath = 'resources/pokerChipSFX.mp3';
+ // Create an audio pool
+ const audioPoolSize = 10; // Number of audio elements in the pool
+ const audioPool = [];
+ for (let i = 0; i < audioPoolSize; i++) {
+     const audio = new Audio(audioPath);
+     audio.volume = currentVolume;
+     audioPool.push(audio);
+ }
 
 
 // Load the texture
@@ -90,9 +98,11 @@ function createChips(chips) {
 
 
     if (prevCount != chipsArray.length){
-        const audio = new Audio(audioPath);
         audio.volume = .5;
-        audio.play();
+        const audio = audioPool.find(a => a.paused || a.ended);
+            if (audio) {
+                audio.currentTime = 0; // Reset to start
+                audio.play();
         prevCount = chipsArray.length;
     }
 }
