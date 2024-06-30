@@ -23,7 +23,7 @@ const audioPath = 'resources/pokerChipSFX.mp3';
  const audioPool = [];
  for (let i = 0; i < audioPoolSize; i++) {
      const audio = new Audio(audioPath);
-     audio.volume = currentVolume;
+     audio.volume = .5;
      audioPool.push(audio);
  }
 
@@ -98,11 +98,11 @@ function createChips(chips) {
 
 
     if (prevCount != chipsArray.length){
-        audio.volume = .5;
         const audio = audioPool.find(a => a.paused || a.ended);
             if (audio) {
                 audio.currentTime = 0; // Reset to start
                 audio.play();
+            }
         prevCount = chipsArray.length;
     }
 }
