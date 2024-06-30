@@ -75,9 +75,9 @@ function createChips(chips) {
     
     
     const colors = {
-        25: 0x0088aa, // Синий для 25
-        10: 0x00aa00, // Зеленый для 10
-        5: 0xaa2222, // Красный для 5
+        10: 0x0088aa, // Синий для 25
+        5: 0x00aa00, // Зеленый для 10
+        2: 0xaa2222, // Красный для 5
         1: 0xbbbbbb // Белый для 1
     };
 
@@ -108,7 +108,9 @@ function createChips(chips) {
                 }
             });
             chip.scale.set(.03,.03,.03);
-            chip.position.set(xPos, i * 0.1, 2);
+            chip.position.set(xPos + Math.random()*0.01, i * 0.05, 2+ Math.random()*0.01);
+
+            //gsap.to(chip.position, {y: i * 0.05, duration: .1, repeat: 0, delay: ease: "power2.inOut" });
             scene.add(chip);
             chipsArray.push(chip);
             tg.HapticFeedback.impactOccurred('soft');
@@ -163,8 +165,8 @@ function breakBetIntoChips(bet) {
         throw new Error("Bet must be between 1 and 100 inclusive.");
     }
 
-    const chipValues = [25, 10, 5, 1];
-    const chips = { 25: 0, 10: 0, 5: 0, 1: 0 };
+    const chipValues = [10, 5, 2, 1];
+    const chips = { 10: 0, 5: 0, 2: 0, 1: 0 };
 
     for (let value of chipValues) {
         chips[value] = Math.floor(bet / value);

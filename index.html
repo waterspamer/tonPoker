@@ -17,16 +17,18 @@
             left:50%;
             bottom:35%;
             
-            transform: translate(-50%, 50%) rotateX(20deg);
+            transform: translate(-50%, 50%) rotateX(35deg);
         }
 
 #rangeValue {
   position: relative;
   display: block;
   text-align: center;
-  font-size: 6em;
-  color: #ffa600;
+  font-size: 8em;
+  color: #00a2ff;
   font-weight: 400;
+  bottom: 20vh;
+  text-shadow: -2px -2px 0px rgba(0, 0, 0, 0.3), 2px 2px 0px rgba(255, 255, 255, 0.2);
 }
 .range {
   width: 300px;
@@ -292,7 +294,7 @@ overflow: visible;
     
     <div id="container"></div>
     <div class="buttons-contatiner">
-    <button id ="bet" onclick="makeBet()">Поставить</button>
+    <button id ="bet" style ="display:none" onclick="makeBet()">Поставить</button>
     <button id ="mult" style ="display:none" onclick="secondBet()">Удвоить</button>
     <button id ="fold" style ="display:none" onclick="reset()">Фолд</button>
     </div>
