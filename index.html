@@ -8,7 +8,280 @@
 
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
 
+        .slider,
+.slidervertical {
+    cursor: pointer;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  overflow: visible;
+  z-index: 100;
+}
 
+
+/* slidershell exists only
+to provide a positioning context for the range input and other elements.*/
+
+.slidershell {
+    cursor: pointer;
+  border: 0 none;
+  position: relative;
+  left: 0px;
+  top: 80px;
+  overflow: visible;
+/*   paading-left: 40px; */
+}
+
+
+/* .slidertrack is the visible track on which the user drags the thumb button. */
+
+.slidertrack {
+  border: 2px outset #7a0035;
+  border-radius: 4px;
+  position: absolute;
+}
+
+
+/* .sliderfill adds color (or a gradient as seen here) to the track as the user 
+	drags the thumb. */
+
+.sliderfill {
+  border: 2px solid #7a0035;
+  border-radius: 4px;
+  position: absolute;
+  opacity: 1;
+  pointer-events: none;
+  background: #7a0035;
+/*   background: linear-gradient(90deg, #005555, #006699); */
+}
+
+
+/* .sliderthumb can be any css you like including an image. 
+	The dimensions must match those found in the rule for 
+	input[type=range]::-webkit-slider-thumb. */
+
+.sliderthumb {
+    
+    display: flex;
+    transform: translateY(-15px);
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background: #7a0035;
+  position: relative;
+  left: 0px;
+  justify-content: space-between;
+  border: 0 none;
+  padding: 0px;
+  margin: 0px;
+  text-align: center;
+  pointer-events: none;
+}
+
+
+/* .slidervalue can be styled as you see fit */
+
+.slidervalue {
+    -webkit-user-select: none; /* Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+/Edge */
+user-select: none; /* Standard */
+    cursor: pointer;
+    display: flex;
+    justify-content: space-around;
+    vertical-align: middle;
+    text-align: center;
+  width: 60px;
+  height: 60px;
+  line-height: 25px;
+  color: #fff;
+  font-family: helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 24px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  bottom: -30px;
+  border: 0 none;
+  padding: 0px;
+  margin: 0px;
+  pointer-events: none;
+}
+
+
+/* First we have to make transparent all the default elements of the range input.
+	We use color:transparent to eliminate the default tick marks in IE. */
+
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 100%;
+  -webkit-appearance: none;
+  margin: 0px;
+  padding: 0px;
+  border: 0 none;
+  background: transparent;
+  color: transparent;
+  overflow: visible;
+}
+
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 100%;
+  -moz-appearance: none;
+  margin: 0px;
+  padding: 0px;
+  border: 0 none;
+  background: transparent;
+  color: transparent;
+  overflow: visible;
+}
+
+input[type=range] {
+  width: 100%;
+  height: 100%;
+  -webkit-appearance: none;
+  margin: 0px;
+  padding: 0px;
+  border: 0 none;
+  background: transparent;
+  color: transparent;
+  overflow: visible;
+}
+
+
+/* we need a separate rule for when the range input is to be vertical */
+
+input[type=range].slidervertical {
+  -webkit-appearance: slider-vertical;
+  writing-mode: bt-lr;
+  /* IE */
+  opacity: 0.01;
+  /* needed to hide the default slider-vertical appearance */
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: transparent;
+  border: transparent;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+
+/* Make the thumbs the same size as your custom sliderthumb. 
+	they will not be visible but they will be draggable. 	*/
+
+input[type=range]::-ms-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 0px;
+  border: 0 none;
+  background: transparent;
+}
+
+input[type=range]::-moz-range-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 0px;
+  border: 0 none;
+  background: transparent;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 0px;
+  border: 0 none;
+  background: transparent;
+  -webkit-appearance: none;
+}
+
+
+/* microsoft IE10+ and Edge - eliminates default fills before and after thumb */
+
+input[type=range]::-ms-fill-lower {
+  background: transparent;
+  border: 0 none;
+}
+
+input[type=range]::-ms-fill-upper {
+  background: transparent;
+  border: 0 none;
+}
+
+input[type=range]::-ms-tooltip {
+  display: none;
+}
+
+
+/* other rules you may need for page styling */
+
+
+
+.slider2column,
+td,
+tr,
+th {
+  width: 400px;
+  border: 0 none !important;
+}
+
+.btn-spin-round {
+    text-decoration: none;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    vertical-align: middle;
+	width: 60px;
+	height: 30px;
+	padding-top: 10px;
+	border-radius: 35px;
+	border: 0;
+    top:100px;
+/* 	margin-top: 5px; */
+	display: inline-block;
+	position: relative;
+	font-family: inherit;
+	line-height: normal;
+	font-weight: bold;
+	background: gray;
+	color: #fff;
+	cursor: pointer;
+}
+
+.btn-spin-round:focus, .btn-spin-round:hover {
+	text-decoration: none;
+	background-color: #7a0035;
+}
+
+.btn-spin-round.disabled, .btn-spin-round[disabled] {
+	background-color: fade(#000, 50%);
+	cursor: pointer;
+}
+
+.btn-spin-round.uppercase {
+	text-transform: uppercase;
+}
+
+.btn-left {
+	float: left;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.btn-right {
+	float: right;
+	display: table-cell;
+	vertical-align: middle;
+}
+.text-center {
+  text-align: center;
+  -webkit-user-select: none; /* Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+/Edge */
+user-select: none; /* Standard */
+}
 
         #betslidercontainer{
             display: none;
@@ -18,6 +291,78 @@
             bottom:35%;
             transform: translate(-50%, 50%) rotateX(45deg);
         }
+
+#bet-but{
+    -webkit-user-select: none; /* Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+/Edge */
+user-select: none; /* Standard */
+    background-color: #00a2ff;
+    position: absolute;
+    width:100px;
+    height:50px;
+    border-radius: 60px;
+    display: flex;
+    justify-content: space-around;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    align-items: center;
+    cursor: pointer;
+    left:50%;
+    top:200%;
+    text-align: center;
+    vertical-align: middle;
+    color:wheat;
+    transform: translate(-50%, -50%);
+}
+
+#call-but{
+    -webkit-user-select: none; /* Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+/Edge */
+user-select: none; /* Standard */
+    background-color: #21ce3d;
+    position: absolute;
+    width:100px;
+    height:50px;
+    border-radius: 60px;
+    z-index: 30;
+    display: flex;
+    justify-content: space-around;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    align-items: center;
+    cursor: pointer;
+    left:40%;
+    bottom:0%;
+    text-align: center;
+    vertical-align: middle;
+    color:wheat;
+    transform: translate(-50%, -10%);
+}
+
+#fold-but{
+    -webkit-user-select: none; /* Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+/Edge */
+user-select: none; /* Standard */
+    background-color: #922222;
+    position: absolute;
+    width:100px;
+    height:50px;
+    border-radius: 60px;
+    z-index: 30;
+    display: flex;
+    justify-content: space-around;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    align-items: center;
+    cursor: pointer;
+    left:40%;
+    bottom:0%;
+    text-align: center;
+    vertical-align: middle;
+    color:wheat;
+    transform: translate(50%, -10%);
+}
+
 
 #rangeValue {
   position: relative;
@@ -281,6 +626,9 @@ overflow: visible;
     <canvas id="c"></canvas>
     <div id = "main-menu">
         <button id = "play-button" onclick ="goToPokerTable()">POKER</button>
+        
+        <div id = "call-but" style = "display:none">CALL</div>
+        <div id = "fold-but" style = "display:none">FOLD</div>
     </div>
     <div id="balance">БАЛАНС: 1000TON</div>
     <div id="gameresult">РЕЗУЛЬТАТ</div>
@@ -289,11 +637,25 @@ overflow: visible;
         <div class ="header" id = "dealercards">дилер</div>
         <div class ="header" id = "tablecards">стол</div>
     </div>
-    <div id = "betslidercontainer">
-        <span id="rangeValue">10$</span>
-        <Input class="range" type="range" name "" value="10" min="1" max="50" onChange="rangeSlide(this.value)" ></Input>
-    </div>
+
     
+    <div id = "betslidercontainer">
+        <td>
+            <div class="slidershell" id="slidershell1">
+              <div class="sliderfill" id="sliderfill1"></div>
+              <div class="slidertrack" id="slidertrack1"></div>
+              <div class="sliderthumb" id="sliderthumb1"></div>
+              <div class="slidervalue" id="slidervalue1">2</div>
+              <input class="slider" id="slider1" type="range" min="1" max="50" value="0" oninput="showValue(value,1,false);" onchange="showValue(value,1,false);" />
+            </div>
+            <span class="btn-spin-round btn-left text-center" id="minus" value="-" />-</span>
+            <span class="btn-spin-round btn-right text-center" id="plus" value="+" />+</span>
+          </td>
+          <div id = "bet-but">ANTE</div>
+        <!-- <span id="rangeValue">10$</span>
+        <Input class="range" type="range" name "" value="10" min="1" max="50" onChange="rangeSlide(this.value)"></Input> -->
+        </div>
+        
     <div id="container"></div>
     <div class="buttons-contatiner">
     <button id ="bet" style ="display:none" onclick="makeBet()">Поставить</button>
@@ -349,29 +711,85 @@ overflow: visible;
     <script src = "js/simpleTable.js">        </script>
     <script type="text/javascript">
         
-        document.addEventListener("DOMContentLoaded", function() {
-            
-            const slider = document.getElementsByClassName("range")[0];
-            const output = document.getElementById("rangeValue");
-            let value = 1;
-            
-            // Обновление значения при изменении слайдера
-            slider.addEventListener("input", function() {
+        function showValue(val, slidernum, vertical) {
+  /* setup variables for the elements of our slider */
+  var thumb = document.getElementById("sliderthumb" + slidernum);
+  var shell = document.getElementById("slidershell" + slidernum);
+  var track = document.getElementById("slidertrack" + slidernum);
+  var fill = document.getElementById("sliderfill" + slidernum);
+  var rangevalue = document.getElementById("slidervalue" + slidernum);
+  var slider = document.getElementById("slider" + slidernum);
 
+  var pc = val / (slider.max - slider.min); /* the percentage slider value */
+  var thumbsize = 60; /* must match the thumb size in your css */
+  var bigval = 320; /* widest or tallest value depending on orientation */
+  var smallval = 40; /* narrowest or shortest value depending on orientation */
+  var tracksize = bigval - thumbsize;
+  var fillsize = 5;
+  var filloffset = 7;
+  var bordersize = 2;
+  var loc = vertical ? (1 - pc) * tracksize : pc * tracksize;
+ 
+  rangevalue.innerHTML = val + '$';
 
-                if (value != slider.value){
-                    rangeSlide(slider.value);
-                    value = slider.value;
-                }
-                    
-            });
+  rangevalue.style.top = (vertical ? loc : 0) + "px";
+  rangevalue.style.left = (vertical ? 0 : loc) + "px";
+  thumb.style.top = (vertical ? loc : 0) + "px";
+  thumb.style.left = (vertical ? 0 : loc) + "px";
+  fill.style.top = (vertical ? loc + (thumbsize / 2) : filloffset + bordersize) + "px";
+  fill.style.left = (vertical ? filloffset + bordersize : 0) + "px";
+  fill.style.width = (vertical ? fillsize : loc + (thumbsize / 2)) + "px";
+  fill.style.height = (vertical ? bigval - filloffset - fillsize - loc : fillsize) + "px";
+  shell.style.height = (vertical ? bigval : smallval) + "px";
+  shell.style.width = (vertical ? smallval : bigval) + "px";
+  track.style.height = (vertical ? bigval - 4 : fillsize) + "px"; /* adjust for border */
+  track.style.width = (vertical ? fillsize : bigval - 4) + "px"; /* adjust for border */
+  track.style.left = (vertical ? filloffset + bordersize : 0) + "px";
+  track.style.top = (vertical ? 0 : filloffset + bordersize) + "px";
 
-            // Включение отображения слайдера для демонстрации
-            //document.getElementById("betslidercontainer").style.display = 'block';
-        });
+  rangeSlide(val);
+
+}
+/* we often need a function to set the slider values on page load */
+function setValue(val, num, vertical) {
+  document.getElementById("slider" + num).value = val;
+  showValue(val, num, vertical);
+  rangeSlide(val);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  setValue(10, 1, false);
+});
+
+$("#bet-but").click(function() {makeBet()});
+
+$("#plus").click(function() {
+
+  var newValuePlus = parseInt($("#slider1").val()) + 1;
+  if (newValuePlus > 49) return;
+
+  $("#slider1").val(newValuePlus);
+  // console.log('plus');
+  // console.log(newValuePlus);
+  setValue(newValuePlus, 1, false);
+  rangeSlide(newValuePlus);
+});
+
+$("#minus").click(function() {
+
+  var newValueMinus = parseInt($("#slider1").val()) - 1;
+  if (newValueMinus < 1) return;
+
+  $("#slider1").val(newValueMinus);
+  // console.log('minus');
+  // console.log(newValueMinus);
+  setValue(newValueMinus, 1, false);
+  rangeSlide(newValueMinus);
+
+});
 
         function rangeSlide(value) {
-            document.getElementById('rangeValue').innerHTML = value + '$';
+            //document.getElementById('rangeValue').innerHTML = value + '$';
             placeChips(value);
         }
     </script>

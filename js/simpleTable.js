@@ -19,21 +19,36 @@ let chipsArray = [];
 
 let chipShadowsArray = [];
 
+
+
 let currentVolume = 0.5;
 const audioPath = 'resources/pokerChipSFX.mp3';
+        const cardAudioPath = 'resources/cardDis.mp3';
 
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Audio context and buffer for poker chip sound
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         let audioBuffer;
 
         fetch(audioPath)
-        .then(response => response.arrayBuffer())
-        .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-        .then(buffer => {
-            audioBuffer = buffer;
-        })
-        .catch(error => console.error('Error loading audio:', error));
+            .then(response => response.arrayBuffer())
+            .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+            .then(buffer => {
+                audioBuffer = buffer;
+            })
+            .catch(error => console.error('Error loading audio:', error));
 
+        // Audio context and buffer for card sound
+        const audioCardContext = new (window.AudioContext || window.webkitAudioContext)();
+        let audioCardBuffer;
 
+        fetch(cardAudioPath)
+            .then(response => response.arrayBuffer())
+            .then(arrayBuffer => audioCardContext.decodeAudioData(arrayBuffer))
+            .then(buffer => {
+                audioCardBuffer = buffer;
+            })
+            .catch(error => console.error('Error loading audio:', error));
 
         function playChipSound() {
             if (!audioBuffer) return;
@@ -46,6 +61,21 @@ const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
             source.connect(gainNode);
             gainNode.connect(audioContext.destination);
+
+            source.start(0);
+        }
+
+        function playCardSound() {
+            if (!audioCardBuffer) return;
+
+            const source = audioCardContext.createBufferSource();
+            source.buffer = audioCardBuffer;
+
+            const gainNode = audioCardContext.createGain();
+            gainNode.gain.value = currentVolume;
+
+            source.connect(gainNode);
+            gainNode.connect(audioCardContext.destination);
 
             source.start(0);
         }
@@ -69,6 +99,36 @@ const shadowMaterial = new THREE.MeshBasicMaterial({
     color: 0x001100,
     opacity: .8, // Set the desired opacity
 });
+
+
+
+const cardTexture = chipTextureLoader.load('resources/texturePack.jpg', function (texture) {
+    cardTexture.wrapS = cardTexture.wrapT = THREE.RepeatWrapping;
+});
+
+
+let cardMeshes = [];
+let loadedCard;
+const cardLoader = new THREE.FBXLoader();
+
+
+
+cardLoader.load('resources/card.fbx', function (object) {
+    loadedCard = object;
+    loadedCard.traverse(function (child) {
+        if (child.isMesh) {
+            const blendShapeCount = child.morphTargetInfluences.length;
+            for (let i = 0; i < blendShapeCount; i++) {
+                gsap.to(child.morphTargetInfluences, { duration: 0.5, [i]: 1 });
+            }
+            //child.material.map = cardTexture;
+            //child.material.needsUpdate = true;
+        }
+    });
+});
+
+
+
 
 
 const chipLoader = new THREE.FBXLoader();
@@ -142,9 +202,9 @@ function createChips(chips) {
 
             chip.scale.set(.04,.04,.04);
 
-            chip.position.set(xPos + ranX, i * 0.05, 2.2 + ranZ);
+            chip.position.set(xPos + ranX, i * 0.05 -.5, 1.1 + ranZ);
             chip.rotation.y = (0.5 - Math.random()) * 0.25;
-            plane.position.set(xPos + ranX, i * 0.05, 2.2 + ranZ);
+            plane.position.set(xPos + ranX, i * 0.05 -.5, 1.1 + ranZ);
             //gsap.to(chip.position, {y: i * 0.05, duration: .1, repeat: 0, delay: ease: "power2.inOut" });
             scene.add(chip);
             chipsArray.push(chip);
@@ -228,24 +288,216 @@ function breakBetIntoChips(bet) {
 
 const flopUrl = 'http://pokerjack.space/deal_texas_hold_em_solo';
 
-async function makeBet(){
 
-    try {
-        const response = await fetch(flopUrl);
-        const data = await response.json();
 
-        // Extract 'table' and 'board' from the JSON data
-        const table = data.table;
-        const board = data.board;
-        console.log(table);
-        console.log(board);
-        // Update the DOM with the fetched data
-        //document.getElementById('tableData').textContent = `Table: ${JSON.stringify(table)}`;
-        //document.getElementById('boardData').textContent = `Board: ${JSON.stringify(board)}`;
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        
-    }
+function getCardSuitRank(id){
+            
+    //пики-буби-черви-крести
+    var cardSuit = Math.floor((id) / 13);
+    var cardRank = (id) % 13;
+    return {suit: cardSuit, rank: cardRank};
+}
+
+
+let cardsIndexes = [];
+for(let i =0; i < 52; i++){
+    cardsIndexes.push(i);
+}
+
+function animateBlendShapes(mesh) {
+    mesh.traverse(function (child) {
+        if (child.isMesh && child.morphTargetInfluences) {
+            const blendShapeCount = child.morphTargetInfluences.length;
+            for (let i = 0; i < blendShapeCount; i++) {
+                gsap.to(child.morphTargetInfluences, { duration: 0.5, [i]: 1 });
+            }
+        }
+    });
+}
+
+function makeBet(){
+
+
+    setTimeout(()=>{playCardSound()}, 500);
+    setTimeout(()=>{playCardSound()}, 1000);
+    setTimeout(()=>{playCardSound()}, 1500);
+    setTimeout(()=>{playCardSound()}, 2000);
+    setTimeout(()=>{playCardSound()}, 2500);
+    console.log('flop bet');
+    document.getElementById("bet-but").style.display = 'none';
+    document.getElementById("call-but").style.display = '';
+    document.getElementById("call-but").addEventListener('click', ()=> getTurn());
+    document.getElementById("fold-but").style.display = '';
+    document.getElementById("plus").style.display = 'none';
+    document.getElementById("minus").style.display = 'none';
+    document.getElementsByClassName("slidershell")[0].style.display = 'none';
+    gsap.to(camera.position, { x: 0, y: 1.5, z: 1.19, duration: .3, repeat: 0, ease: "power2.inOut", delay: 0 });
+    gsap.to(camera.rotation, { x: -1.3, duration: .3, repeat: 0, ease: "power2.inOut", delay: 0 });
+    //переделать на бэк
+    
+    shuffleArray(cardsIndexes);
+
+
+    //#region card player 1
+    var rank = getCardSuitRank(cardsIndexes[0]).rank;
+    var suit = getCardSuitRank(cardsIndexes[0]).suit;
+    console.log(rank);
+    
+    var cardP1 = loadedCard.clone();
+    
+    cardP1.scale.set(.045, .045, .045);
+    cardP1.rotation.set (Math.PI, 0, 0);
+    cardP1.position.set (3, -.85, 0);
+    gsap.to(cardP1.position, { x: -.3, z: 1.79, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
+    gsap.to(cardP1.rotation, { x: 0, y: (0.5 - Math.random()) *.1,  duration: .3, repeat: 0, ease: "power2.inOut" , delay: .5 });
+    
+    const uvYOffset = 0.1365;
+    const uvXOffset = 0.07225;
+    cardP1.traverse(function (child) {
+                    if (child.isMesh) {
+                        
+                        child.material = new THREE.ShaderMaterial({
+                            uniforms: {
+                                cardTexture: { value: cardTexture },
+                                offsetX: { value: uvXOffset * rank },
+                                offsetY: { value: -uvYOffset * suit }
+                            },
+                            vertexShader: vertexShader,
+                            fragmentShader: fragmentShader,
+                            side: THREE.DoubleSide
+                        });
+                    }
+                    });
+    scene.add(cardP1);    
+    //#endregion 
+
+    //#region card player 2
+    rank = getCardSuitRank(cardsIndexes[1]).rank;
+    suit = getCardSuitRank(cardsIndexes[1]).suit;
+    console.log(rank);
+    
+    var cardP2 = loadedCard.clone();
+    
+    cardP2.scale.set(.045, .045, .045);
+    cardP2.rotation.set (Math.PI, 0, 0);
+    cardP2.position.set (3, -.85, 0);
+    gsap.to(cardP2.position, { x: .3,  z: 1.8, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1 });
+    gsap.to(cardP2.rotation, { x: 0, y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1 });
+
+    cardP2.traverse(function (child) {
+                    if (child.isMesh) {
+                        
+                        child.material = new THREE.ShaderMaterial({
+                            uniforms: {
+                                cardTexture: { value: cardTexture },
+                                offsetX: { value: uvXOffset * rank },
+                                offsetY: { value: -uvYOffset * suit }
+                            },
+                            vertexShader: vertexShader,
+                            fragmentShader: fragmentShader,
+                            side: THREE.DoubleSide
+                        });
+                    }
+                    });
+    scene.add(cardP2);    
+    //#endregion 
+
+
+
+
+    //#region table 1
+    rank = getCardSuitRank(cardsIndexes[2]).rank;
+    suit = getCardSuitRank(cardsIndexes[2]).suit;
+    console.log(rank);
+    
+    var cardT1 = loadedCard.clone();
+    
+    cardT1.scale.set(.045, .045, .045);
+    cardT1.rotation.set (Math.PI, 0, 0);
+    cardT1.position.set (3, -.85, 0);
+    gsap.to(cardT1.position, { x: -1.2, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1.5 });
+    gsap.to(cardT1.rotation, { x: 0, y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1.5 });
+
+    cardT1.traverse(function (child) {
+                    if (child.isMesh) {
+                        
+                        child.material = new THREE.ShaderMaterial({
+                            uniforms: {
+                                cardTexture: { value: cardTexture },
+                                offsetX: { value: uvXOffset * rank },
+                                offsetY: { value: -uvYOffset * suit }
+                            },
+                            vertexShader: vertexShader,
+                            fragmentShader: fragmentShader,
+                            side: THREE.DoubleSide
+                        });
+                    }
+                    });
+    scene.add(cardT1);    
+    //#endregion 
+    
+    //#region table 2
+    rank = getCardSuitRank(cardsIndexes[3]).rank;
+    suit = getCardSuitRank(cardsIndexes[3]).suit;
+    console.log(rank);
+    
+    var cardT2 = loadedCard.clone();
+    
+    cardT2.scale.set(.045, .045, .045);
+    cardT2.rotation.set (Math.PI, 0, 0);
+    cardT2.position.set (3, -.85, 0);
+    gsap.to(cardT2.position, { x: -.6, duration: .3, repeat: 0, ease: "power2.inOut", delay: 2 });
+    gsap.to(cardT2.rotation, { x: 0,y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: 2 });
+
+    cardT2.traverse(function (child) {
+                    if (child.isMesh) {
+                        
+                        child.material = new THREE.ShaderMaterial({
+                            uniforms: {
+                                cardTexture: { value: cardTexture },
+                                offsetX: { value: uvXOffset * rank },
+                                offsetY: { value: -uvYOffset * suit }
+                            },
+                            vertexShader: vertexShader,
+                            fragmentShader: fragmentShader,
+                            side: THREE.DoubleSide
+                        });
+                    }
+                    });
+    scene.add(cardT2);    
+    //#endregion 
+
+    //#region table 3
+    rank = getCardSuitRank(cardsIndexes[4]).rank;
+    suit = getCardSuitRank(cardsIndexes[4]).suit;
+    console.log(rank);
+    
+    var cardT3 = loadedCard.clone();
+    
+    cardT3.scale.set(.045, .045, .045);
+    cardT3.rotation.set (Math.PI, 0, 0);
+    cardT3.position.set (3, -.85, 0);
+    gsap.to(cardT3.position, { x: 0, duration: .3, repeat: 0, ease: "power2.inOut", delay: 2.5 });
+    gsap.to(cardT3.rotation, { x: 0,y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: 2.5 });
+
+    cardT3.traverse(function (child) {
+                    if (child.isMesh) {
+                        
+                        child.material = new THREE.ShaderMaterial({
+                            uniforms: {
+                                cardTexture: { value: cardTexture },
+                                offsetX: { value: uvXOffset * rank },
+                                offsetY: { value: -uvYOffset * suit }
+                            },
+                            vertexShader: vertexShader,
+                            fragmentShader: fragmentShader,
+                            side: THREE.DoubleSide
+                        });
+                    }
+                    });
+    scene.add(cardT3);    
+    //#endregion 
+    
 }
 
 function betOnTurn(){
@@ -265,7 +517,39 @@ function fold(){
 }
 
 function getTurn(){
+    setTimeout(()=>{playCardSound()}, 500);
+//#region table 4
+const uvYOffset = 0.1365;
+    const uvXOffset = 0.07225;
+    var rank = getCardSuitRank(cardsIndexes[5]).rank;
+    var suit = getCardSuitRank(cardsIndexes[5]).suit;
+    console.log(rank);
+    
+    var cardT4 = loadedCard.clone();
+    
+    cardT4.scale.set(.045, .045, .045);
+    cardT4.rotation.set (Math.PI, 0, 0);
+    cardT4.position.set (3, -.85, 0);
+    gsap.to(cardT4.position, { x: 0.6, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
+    gsap.to(cardT4.rotation, { x: 0,y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
 
+    cardT4.traverse(function (child) {
+                    if (child.isMesh) {
+                        
+                        child.material = new THREE.ShaderMaterial({
+                            uniforms: {
+                                cardTexture: { value: cardTexture },
+                                offsetX: { value: uvXOffset * rank },
+                                offsetY: { value: -uvYOffset * suit }
+                            },
+                            vertexShader: vertexShader,
+                            fragmentShader: fragmentShader,
+                            side: THREE.DoubleSide
+                        });
+                    }
+                    });
+    scene.add(cardT4);    
+    //#endregion 
 }
 
 function getReaver(){
@@ -366,7 +650,7 @@ const fragmentShader = `
 `;
 
 let cardObjects = [];
-let cardsIndexes = [];
+
 
 let balance = 1000;
 
