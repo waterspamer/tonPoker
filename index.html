@@ -8,6 +8,9 @@
 
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
 
+
+
+
         .slider,
 .slidervertical {
     cursor: pointer;
@@ -614,29 +617,287 @@ overflow: visible;
   background: #cea945;
   color: #f1d5d5;
 }
+
+
+
+
+
     </style>
+
+    <style>
+
+
+#header{
+z-index: 35;
+padding-top: 50px;
+position: absolute;
+width:100%;
+background-color: #131217;
+display:flex;
+justify-content: space-around;
+}
+
+.header-element{
+    width:20%;
+    min-width:120px;
+    height:6vh;
+    display: flex;
+    
+    gap:5px;
+    text-align: center;
+    align-items: center;
+    vertical-align: middle;
+    background-color: #18171c;
+    border-radius: 30px;
+    text-align: center;
+}
+.circle-container {
+    margin-left: .5vh;
+    width: 5vh; /* Adjust the size as needed */
+    height: 5vh; /* Adjust the size as needed */
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff; /* Optional: Background color for the circle */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Shadow for better visibility */
+}
+
+.vertical-property-value-container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.property-header{
+    font-size: 1vh;
+    font-family: Evolventa, LastResort;
+    color:#808080;
+}
+
+.property-value{
+    font-size: 1.5vh;
+    font-weight: 600;
+    color:white;
+    font-family: Evolventa, LastResort;
+}
+
+#main-nav{
+    position: absolute;
+    bottom: 8vh;
+    width:100%;
+    height:42vh;
+    z-index: 35;
+    background-color: #131217;
+}
+
+
+.header-icon{
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the container while maintaining aspect ratio */
+    object-position: center;
+}
+
+#games-container{
+    padding-left: 6vh;
+    padding-right: 6vh;
+    display: flex;
+    height:50%;
+    gap: 5%;
+    
+}
+
+.game-variant{
+    cursor: pointer;
+    transition: all .2s;
+    padding-left: 1vh;
+    padding-top: 2vh;
+    background: linear-gradient(135deg, #24242d, #17171b);
+    width:50%;
+    border-radius: 2vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.game-variant:hover{
+    box-shadow: 0px 0px 10px #ce21ce;
+}
+
+.game-info-container{
+
+}
+
+.game-name{
+    font-family: Evolventa, LastResort;;
+    color: white;
+}
+
+.game-min-bet{
+    color: #6d6d6d;
+    font-family: Evolventa, LastResort;;
+}
+
+.game-online{
+    position:relative;
+    color: #8a8a8a;
+    bottom: 1vh;
+    background-color: #111;
+    width:fit-content;
+    padding: 8px;
+    padding-right: 1.5vh;
+    font-size: 1.3vh;
+    font-family: Evolventa, LastResort;;
+    border-radius: 20px;
+    
+}
+
+.online-circle{
+    background: radial-gradient(#96d61e, #111);
+    width: .5vh;
+    height: .5vh;
+    top:0.7vh;
+    right:1vh;
+    position: absolute;
+}
+
+.game-vis-container{
+    display: flex;
+}
+
+.game-bj-icon{
+    filter: contrast(.1);
+ position: fixed;
+ width:6rem;
+bottom: 18.5rem;
+right:4rem;
+}
+.game-poker-icon{
+    filter: contrast(.1);
+ position: fixed;
+ width:6rem;
+bottom: 18.5rem;
+left:6rem;
+}
+
+
+#course-container{
+    text-align: center;
+    height:16vh;
+    padding-top: 1vh;;
+    margin-top:2vh;
+    margin-left: 6vh;
+    margin-right: 6vh;
+    border-radius: 2vh;
+    border: 2px solid rgb(63, 63, 63);
+}
+
+#course-header{
+    color:rgb(122, 122, 122);
+    font-family: Evolventa, LastResort;;
+}
+
+#course-variants-container{
+    display: flex;
+    width:100%;
+    height:100px;
+}
+
+.course-variant{
+    width:22%;
+    height:22%;
+    background-color: #17171b;
+
+}
+
+#deposit{
+
+}
+
+#footer-menu{
+    position: absolute;
+    width: 100%;
+    z-index: 35;
+    height:8vh;
+    bottom:0;
+    border-radius: 2vh 2vh 0px 0px;
+    background-color: #18171c;
+}
+        </style>
+
+
 </head>
 <body>
-    <div class="profile-container">
+    <!-- <div class="profile-container">
         <div class="profile-image">
             <img src="https://via.placeholder.com/100" alt="Profile Image" id="profileImage">
         </div>
         <div class="profile-name" id="profileName">LUDOMAN228</div>
+    </div> -->
+    <div id = "header">
+        <div class = "header-element">
+            <div class="circle-container">
+            <img src = "resources/stars-logo.jpg" class = "header-icon">
+            
+            </img>
+        </div>
+        <div class = "vertical-property-value-container">
+            <div class = "property-header"> STARS:</div>
+            <div class="property-value">1488</div>
+        </div>
+        </div>
+        <div class = "header-element">уровень</div>
     </div>
+    <div id = "main-nav">
+        <div id = "games-container" >
+            <div class ="game-variant"  id = "play-poker-button" onclick ="goToPokerTable()">
+                <div class = "game-info-container">
+                    <div class ="game-name" >casino hold-em</div>
+                    <div class ="game-min-bet">1 stars</div>
+                </div>
+                <div class="game-vis-container">
+                    <img class = "game-poker-icon" src="/resources/poker.png" alt="">
+                    <div class ="game-online">3221 online<div class ="online-circle"></div></div>
+                </div>
+               
+            </div>
+            <div class ="game-variant">
+                
+                <div class = "game-info-container">
+                    <div class ="game-name">blackjack</div>
+                    <div class ="game-min-bet">10 stars</div>
+                </div>
+                <div class = "game-vis-container">
+                    <img class = "game-bj-icon" src="/resources/bj.png" alt="">
+                    <div class ="game-online">2318 online<div class ="online-circle"></div></div>
+                </div>
+                
+            </div>
+        </div>
+        <div id = "course-container">
+            <div id = 'course-header'>STARS course</div>
+                <div class="#course-variants-container">
+                    <div class="course-variant"></div>
+                    <div class="course-variant"></div>
+                    <div class="course-variant"></div>
+                    <div class="course-variant"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id = "footer-menu"></div>
+    
     <canvas id="c"></canvas>
     <div id = "main-menu">
-        <button id = "play-button" onclick ="goToPokerTable()">POKER</button>
+        <!-- <button id = "play-button" onclick ="goToPokerTable()">POKER</button> -->
         
         <div id = "call-but" style = "display:none">CALL</div>
         <div id = "fold-but" style = "display:none">FOLD</div>
     </div>
-    <div id="balance">БАЛАНС: 1000TON</div>
-    <div id="gameresult">РЕЗУЛЬТАТ</div>
-    <div id="stats">
-        <div class ="header" id = "playercards">игрок</div>
-        <div class ="header" id = "dealercards">дилер</div>
-        <div class ="header" id = "tablecards">стол</div>
-    </div>
+
 
     
     <div id = "betslidercontainer">

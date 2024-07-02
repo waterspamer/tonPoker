@@ -17,7 +17,12 @@ let oneChips;
 let loadedFBX;
 let chipsArray = [];
 
+let playerBalance = 1000; //сосать с бэка
+
 let chipShadowsArray = [];
+
+const uvYOffset = 0.1365;
+const uvXOffset = 0.07225;
 
 
 
@@ -128,6 +133,79 @@ cardLoader.load('resources/card.fbx', function (object) {
 });
 
 
+
+
+
+
+function createParticles() {
+    setInterval(() => {
+        if (loadedCard) {
+            const particle = createParticle();
+            scene.add(particle);
+            animateParticle(particle);
+        }
+    }, 100); // Adjust interval as needed
+}
+
+// Function to create a single particle
+function createParticle() {
+    const particle = loadedCard.clone();
+    particle.traverse(function (child) {
+        if (child.isMesh) {
+            child.scale.set(3,3,3);
+            child.material = new THREE.ShaderMaterial({
+                uniforms: {
+                    cardTexture: { value: cardTexture },
+                    offsetX: { value: uvXOffset * Math.floor(Math.random() * 13) },
+                    offsetY: { value: -uvYOffset * Math.floor(Math.random() * 4) }
+                },
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader,
+                side: THREE.DoubleSide,
+                transparent: true
+            });
+        }
+    });
+    return particle;
+}
+
+// Animate the particle using GSAP
+function animateParticle(particle) {
+    const timeline = gsap.timeline({
+        onComplete: () => {
+            scene.remove(particle);
+        }
+    });
+
+    const spiralFactor = Math.random()*5;
+
+    timeline.to(particle.position, {
+        duration: 3,
+        x: `+=${5}`,
+        z: `+=${Math.cos(Math.PI * 2 * spiralFactor) * 2}`,
+        y: 1,
+        ease: "power1.inOut"
+    });
+
+    timeline.to(particle.rotation, {
+        duration: 3,
+        x: `+=${5}`,
+        z: `+=${Math.cos(Math.PI * 2 * spiralFactor) * 2}`,
+        y: 1,
+        ease: "power1.inOut"
+    });
+
+    timeline.to(particle.material, {
+        duration: 1,
+        opacity: 0,
+        ease: "power1.inOut"
+    }, "-=1");
+}
+
+
+
+
+//createParticles();
 
 
 
@@ -248,7 +326,7 @@ function clearChips() {
 
 
 function goToPokerTable(){
-    document.getElementById("play-button").style.display = 'none';
+    //document.getElementById("play-poker-button").style.display = 'none';
     document.getElementById("betslidercontainer").style.display = 'block';
     rotationAnim.kill();
     setTimeout(()=>placeChips(10), 400);
@@ -351,8 +429,7 @@ function makeBet(){
     gsap.to(cardP1.position, { x: -.3, z: 1.79, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
     gsap.to(cardP1.rotation, { x: 0, y: (0.5 - Math.random()) *.1,  duration: .3, repeat: 0, ease: "power2.inOut" , delay: .5 });
     
-    const uvYOffset = 0.1365;
-    const uvXOffset = 0.07225;
+
     cardP1.traverse(function (child) {
                     if (child.isMesh) {
                         
@@ -676,6 +753,7 @@ let scene, camera, renderer;
         }
 
         scene = new THREE.Scene();
+        scene.background = new THREE.Color( 0x131217 );
         camera = new THREE.PerspectiveCamera(95, window.innerWidth / window.innerHeight, 0.1, 1000);
         renderer = new THREE.WebGLRenderer({antialias: true});
 
@@ -728,7 +806,7 @@ effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.
                  }
              }
          })
-         object.scale.set(.06, .06, .06);
+         object.scale.set(.05, .05, .05);
          object.rotation.set (-.2, Math.PI/2, 0);
          object.position.y = -5;
          object.position.z = -3;
@@ -753,9 +831,9 @@ effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.
         //scene.add(cube);
         
         camera.position.z = 3;
-        camera.position.y = 2;
+        camera.position.y = 4;
 
-        camera.rotation.set(-0.9,0,0);
+        camera.rotation.set(-1.2,0,0);
 
         function animate() {
             requestAnimationFrame(animate);
