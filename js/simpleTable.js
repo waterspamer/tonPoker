@@ -257,11 +257,15 @@ function createChips(chips) {
             const chip = loadedFBX.clone();
             chip.traverse(function (child) {
                 if (child.isMesh) {
-                    child.material = new THREE.MeshBasicMaterial({
-                        color: colors[value],
-                        map: chipTexture,
-                        specular: 0x005555,
-                        shininess: 30
+                    child.material = new THREE.ShaderMaterial({
+                        uniforms: {
+                            cardTexture: { value: chipTexture },
+                            offsetX: { value: 0 },
+                            offsetY: { value: 0 }
+                        },
+                        vertexShader: vertexShader,
+                        fragmentShader: fragmentShader,
+                        side: THREE.DoubleSide
                     });
                 }
             });
@@ -799,7 +803,7 @@ effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.
                   (child).material = new THREE.ShaderMaterial({
                     uniforms: {
                         cardTexture: { value: tableTexture },
-                        offsetX: { value: .1 },
+                        offsetX: { value: 0 },
                         offsetY: { value: 0 }
                     },
                     vertexShader: vertexShader,
