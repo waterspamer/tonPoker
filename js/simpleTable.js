@@ -326,6 +326,8 @@ function clearChips() {
 
 
 function goToPokerTable(){
+    document.getElementById('main-nav').classList.add('hidden');
+    rangeSlide(10);
     //document.getElementById("play-poker-button").style.display = 'none';
     document.getElementById("betslidercontainer").style.display = 'block';
     rotationAnim.kill();
