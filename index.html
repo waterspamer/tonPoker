@@ -408,6 +408,7 @@ overflow: visible;
 
         body {
             margin: 0;
+            height: 100vh;
             overflow: hidden;
             perspective: 600px;;
         }
@@ -932,9 +933,11 @@ left:6rem;
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <script>
-        Telegram.WebApp.ready();
+        
         Telegram.WebApp.expand();
-
+        window.addEventListener("touchmove", (e) => e.preventDefault(), { passive: false });
+        window.scrollTo(0, 100);
+        Telegram.WebApp.ready();
         // Получение информации о пользователе
         const tg = window.Telegram.WebApp;
 
