@@ -21,9 +21,9 @@ let playerBalance = 1000; //сосать с бэка
 
 let chipShadowsArray = [];
 
-const uvYOffset = 0.1365;
-const uvXOffset = 0.07225;
 
+const uvYOffset = 0.1186;
+const uvXOffset = 0.07655;
 
 
 let currentVolume = 0.5;
@@ -107,7 +107,7 @@ const shadowMaterial = new THREE.MeshBasicMaterial({
 
 
 
-const cardTexture = chipTextureLoader.load('resources/texturePack.jpg', function (texture) {
+const cardTexture = chipTextureLoader.load('resources/customCards.jpg', function (texture) {
     cardTexture.wrapS = cardTexture.wrapT = THREE.RepeatWrapping;
 });
 
@@ -226,9 +226,9 @@ let prevCount = 0;
 let prevArrayState = chipsArray;
 
 const colors = {
-    10: new THREE.Vector3(.1, 1, .1), // Синий для 25
+    10: new THREE.Vector3(.8, .1, .8), // Синий для 25
     5: new THREE.Vector3(.1, .8, .8), // Зеленый для 10
-    2: new THREE.Vector3(.9, .05, .1), // Красный для 5
+    2: new THREE.Vector3(.2, .35, .7), // Красный для 5
     1: new THREE.Vector3(.8, .8, .8) // Белый для 1
 };
 
@@ -239,7 +239,7 @@ function createChips(chips) {
     
 
     // Начальная позиция для фишек
-    let xPos = -0.44;
+    let xPos = -0.65;
     clearChips();
 
     // Ensure the FBX model is loaded
@@ -274,7 +274,7 @@ function createChips(chips) {
 
             const geometry = new THREE.PlaneGeometry(5, 5);
             const plane = new THREE.Mesh(geometry, shadowMaterial);
-            plane.scale.set(.07,.07,.07);
+            plane.scale.set(.1,.1,.1);
             plane.rotation.x = -1.5;
             //plane.rotation.set(1,0,0);
             
@@ -284,17 +284,17 @@ function createChips(chips) {
             chipShadowsArray.push(plane);
 
 
-            chip.scale.set(.04,.04,.04);
+            chip.scale.set(.055,.055,.055);
 
-            chip.position.set(xPos + ranX, i * 0.05 -.5, 1.1 + ranZ);
-            chip.rotation.y = (0.5 - Math.random()) * 0.25;
-            plane.position.set(xPos + ranX, i * 0.05 -.5, 1.1 + ranZ);
+            chip.position.set(xPos + ranX, i * 0.05 -1.2, 1.47 + ranZ);
+            chip.rotation.y = (0.5 - Math.random()) * 0.45;
+            plane.position.set(xPos + ranX, i * 0.05 -1.2, 1.47 + ranZ);
             //gsap.to(chip.position, {y: i * 0.05, duration: .1, repeat: 0, delay: ease: "power2.inOut" });
             scene.add(chip);
             chipsArray.push(chip);
             tg.HapticFeedback.impactOccurred('soft');
         }
-        xPos += 0.28;
+        xPos += 0.43;
     }
 
 
@@ -338,10 +338,10 @@ function goToPokerTable(){
     document.getElementById("betslidercontainer").style.display = 'block';
     rotationAnim.kill();
     setTimeout(()=>placeChips(10), 400);
-    gsap.to(pokerTableModel.rotation, { y: pokerTableModel.rotation.y + .3, duration: 1, repeat: 0, ease: "power2.Out" });
-
+    //gsap.to(pokerTableModel.rotation, { y: pokerTableModel.rotation.y + .3, duration: 1, repeat: 0, ease: "power2.Out" });
+    gsap.to(pokerTableModel.rotation, {x: 0, y: -Math.PI/2, duration: 1, repeat: 0, ease: "power2.Out" });
     gsap.to(pokerTableModel.position, { z: -1, y: -4, duration: .5, repeat: 0, ease: "power2.inOut" });
-    gsap.to(pokerTableModel.rotation, { x: 0, duration: .5, repeat: 0, ease: "power2.inOut" });
+    //gsap.to(pokerTableModel.rotation, { x: 0, duration: .5, repeat: 0, ease: "power2.inOut" });
     
     //gsap.to(pokerTableModel.position, { z: -1, duration: 1, repeat: 0, ease: "power2.inOut" });
 }
@@ -417,7 +417,7 @@ function makeBet(){
     document.getElementById("plus").style.display = 'none';
     document.getElementById("minus").style.display = 'none';
     document.getElementsByClassName("slidershell")[0].style.display = 'none';
-    gsap.to(camera.position, { x: 0, y: 1.5, z: 1.19, duration: .3, repeat: 0, ease: "power2.inOut", delay: 0 });
+    gsap.to(camera.position, { x: 0, y: 2.5, z: 1.09, duration: .3, repeat: 0, ease: "power2.inOut", delay: 0 });
     gsap.to(camera.rotation, { x: -1.3, duration: .3, repeat: 0, ease: "power2.inOut", delay: 0 });
     //переделать на бэк
     
@@ -434,7 +434,7 @@ function makeBet(){
     cardP1.scale.set(.045, .045, .045);
     cardP1.rotation.set (Math.PI, 0, 0);
     cardP1.position.set (3, -.85, 0);
-    gsap.to(cardP1.position, { x: -.3, z: 1.79, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
+    gsap.to(cardP1.position, { x: -.3, z: .78, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
     gsap.to(cardP1.rotation, { x: 0, y: (0.5 - Math.random()) *.1,  duration: .3, repeat: 0, ease: "power2.inOut" , delay: .5 });
     
 
@@ -467,7 +467,7 @@ function makeBet(){
     cardP2.scale.set(.045, .045, .045);
     cardP2.rotation.set (Math.PI, 0, 0);
     cardP2.position.set (3, -.85, 0);
-    gsap.to(cardP2.position, { x: .3,  z: 1.8, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1 });
+    gsap.to(cardP2.position, { x: .3,  z: .78, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1 });
     gsap.to(cardP2.rotation, { x: 0, y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1 });
 
     cardP2.traverse(function (child) {
@@ -501,7 +501,7 @@ function makeBet(){
     
     cardT1.scale.set(.045, .045, .045);
     cardT1.rotation.set (Math.PI, 0, 0);
-    cardT1.position.set (3, -.85, 0);
+    cardT1.position.set (3, -.85, -.74);
     gsap.to(cardT1.position, { x: -1.2, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1.5 });
     gsap.to(cardT1.rotation, { x: 0, y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1.5 });
 
@@ -533,7 +533,7 @@ function makeBet(){
     
     cardT2.scale.set(.045, .045, .045);
     cardT2.rotation.set (Math.PI, 0, 0);
-    cardT2.position.set (3, -.85, 0);
+    cardT2.position.set (3, -.85, -.74);
     gsap.to(cardT2.position, { x: -.6, duration: .3, repeat: 0, ease: "power2.inOut", delay: 2 });
     gsap.to(cardT2.rotation, { x: 0,y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: 2 });
 
@@ -565,7 +565,7 @@ function makeBet(){
     
     cardT3.scale.set(.045, .045, .045);
     cardT3.rotation.set (Math.PI, 0, 0);
-    cardT3.position.set (3, -.85, 0);
+    cardT3.position.set (3, -.85, -.74);
     gsap.to(cardT3.position, { x: 0, duration: .3, repeat: 0, ease: "power2.inOut", delay: 2.5 });
     gsap.to(cardT3.rotation, { x: 0,y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: 2.5 });
 
@@ -619,7 +619,7 @@ const uvYOffset = 0.1365;
     
     cardT4.scale.set(.045, .045, .045);
     cardT4.rotation.set (Math.PI, 0, 0);
-    cardT4.position.set (3, -.85, 0);
+    cardT4.position.set (3, -.85, -.76);
     gsap.to(cardT4.position, { x: 0.6, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
     gsap.to(cardT4.rotation, { x: 0,y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
 
@@ -731,8 +731,8 @@ const fragmentShader = `
     void main() {
         vec2 uv = vUv;
         if (!gl_FrontFacing) {
-            uv.x = vUv.x + 0.3825;
-            uv.y = vUv.y - 0.543;
+            //uv.x = vUv.x + 0.3825;
+            uv.y = vUv.y - 0.47;
         } else {
             uv.x = vUv.x + offsetX;
             uv.y = vUv.y + offsetY;
@@ -797,11 +797,12 @@ effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.
   //      composer.addPass(colorDistortionPass);
 
         
-
+        let gameStarted = false;
 
 
         const textureLoader = new THREE.TextureLoader();
             const tableTexture = textureLoader.load('resources/TableTex.jpg');
+            const tableTopTexture = textureLoader.load('resources/violetTable.jpg');
 
         const fbxLoader = new THREE.FBXLoader();
         fbxLoader.load(
@@ -836,7 +837,52 @@ effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.
          object.position.z = -3;
          object.position.x = 0;
          pokerTableModel = object;
+
+
+
+         fbxLoader.load(
+            'resources/tableTop.fbx',
+            (object) => {
+             object.traverse(function (child) {
+                 if ((child).isMesh) {
+                      (child).material = new THREE.ShaderMaterial({
+                        uniforms: {
+                            cardTexture: { value: tableTopTexture },
+                            offsetX: { value: 0 },
+                            offsetY: { value: 0 },
+                            colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
+                        },
+                        vertexShader: vertexShader,
+                        fragmentShader: fragmentShader,
+                        side: THREE.DoubleSide
+                    });
+                 }
+             })
+             object.scale.set(.18, .18, .18);
+             object.rotation.set (0, Math.PI/2, 0);
+             object.position.y = 53;
+             object.position.z = 0;
+             object.position.x = 0;
+             //gsap.to(object.position, { y: 55, duration: 1, repeat: -1, ease: "linear" });
+            pokerTableModel.add(object);
+        
+             
+        
+            //rotationAnim = gsap.to(pokerTableModel.rotation, { y: pokerTableModel.rotation.y + Math.PI * 2, duration: 20, repeat: -1, ease: "linear" });
+        },
+        (xhr) => {
+            console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+        },
+        (error) => {
+            console.log(error)
+        }
+        )
+
+
         scene.add(pokerTableModel);
+
+
+
         rotationAnim = gsap.to(pokerTableModel.rotation, { y: pokerTableModel.rotation.y + Math.PI * 2, duration: 20, repeat: -1, ease: "linear" });
     },
     (xhr) => {
@@ -846,6 +892,14 @@ effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.
         console.log(error)
     }
 )
+
+
+
+
+
+
+
+
 
         const geometry = new THREE.BoxGeometry();
         const material = new THREE.MeshBasicMaterial({ map: tableTexture });
@@ -889,8 +943,8 @@ effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.
                 const cardHeight = 1.04;
                 const suits = 4;
                 const ranks = 13;
-                const uvYOffset = 0.1365;
-                const uvXOffset = 0.07225;
+                const uvYOffset = 0.1186;
+                const uvXOffset = 0.07655;
                 let i = 0;
                 for (let suit = 0; suit < suits; suit++) {
                     for (let rank = 0; rank < ranks; rank++) {
