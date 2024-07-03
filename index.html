@@ -934,7 +934,23 @@ left:6rem;
     <script>
         Telegram.WebApp.ready();
         Telegram.WebApp.expand();
-        window.addEventListener("touchmove", (e) => e.preventDefault(), { passive: false });
+        let startX, startY, moveX, moveY;
+
+        window.addEventListener("touchstart", (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+
+        window.addEventListener("touchmove", (e) => {
+            moveX = e.touches[0].clientX;
+            moveY = e.touches[0].clientY;
+            let diffX = Math.abs(moveX - startX);
+            let diffY = Math.abs(moveY - startY);
+
+            if (diffY > diffX) {
+                e.preventDefault();
+            }
+        }, { passive: false });
         window.scrollTo(0, 100);
         
         // Получение информации о пользователе
