@@ -12,9 +12,8 @@
 
 
 
-        .slider,
-.slidervertical {
-    cursor: pointer;
+        .slider, .slidervertical {
+cursor: pointer;
   position: absolute;
   left: 0px;
   top: 0px;
@@ -408,7 +407,7 @@ overflow: visible;
 
         body {
             margin: 0;
-            height: 100vh;
+            height: 100%;
             overflow: hidden;
             perspective: 600px;;
         }
@@ -933,11 +932,11 @@ left:6rem;
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <script>
-        
+        Telegram.WebApp.ready();
         Telegram.WebApp.expand();
         window.addEventListener("touchmove", (e) => e.preventDefault(), { passive: false });
         window.scrollTo(0, 100);
-        Telegram.WebApp.ready();
+        
         // Получение информации о пользователе
         const tg = window.Telegram.WebApp;
 
