@@ -157,7 +157,8 @@ function createParticle() {
                 uniforms: {
                     cardTexture: { value: cardTexture },
                     offsetX: { value: uvXOffset * Math.floor(Math.random() * 13) },
-                    offsetY: { value: -uvYOffset * Math.floor(Math.random() * 4) }
+                    offsetY: { value: -uvYOffset * Math.floor(Math.random() * 4) },
+                    
                 },
                 vertexShader: vertexShader,
                 fragmentShader: fragmentShader,
@@ -225,10 +226,10 @@ let prevCount = 0;
 let prevArrayState = chipsArray;
 
 const colors = {
-    10: 0x0088aa, // Синий для 25
-    5: 0x00aa00, // Зеленый для 10
-    2: 0xaa2222, // Красный для 5
-    1: 0xbbbbbb // Белый для 1
+    10: new THREE.Vector3(.1, 1, .1), // Синий для 25
+    5: new THREE.Vector3(.1, .8, .8), // Зеленый для 10
+    2: new THREE.Vector3(.9, .05, .1), // Красный для 5
+    1: new THREE.Vector3(.8, .8, .8) // Белый для 1
 };
 
 function createChips(chips) {
@@ -261,7 +262,8 @@ function createChips(chips) {
                         uniforms: {
                             cardTexture: { value: chipTexture },
                             offsetX: { value: 0 },
-                            offsetY: { value: 0 }
+                            offsetY: { value: 0 },
+                            colorMultiplier: {value: colors[value]}
                         },
                         vertexShader: vertexShader,
                         fragmentShader: fragmentShader,
@@ -443,7 +445,8 @@ function makeBet(){
                             uniforms: {
                                 cardTexture: { value: cardTexture },
                                 offsetX: { value: uvXOffset * rank },
-                                offsetY: { value: -uvYOffset * suit }
+                                offsetY: { value: -uvYOffset * suit },
+                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
                             },
                             vertexShader: vertexShader,
                             fragmentShader: fragmentShader,
@@ -474,7 +477,8 @@ function makeBet(){
                             uniforms: {
                                 cardTexture: { value: cardTexture },
                                 offsetX: { value: uvXOffset * rank },
-                                offsetY: { value: -uvYOffset * suit }
+                                offsetY: { value: -uvYOffset * suit },
+                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
                             },
                             vertexShader: vertexShader,
                             fragmentShader: fragmentShader,
@@ -508,7 +512,8 @@ function makeBet(){
                             uniforms: {
                                 cardTexture: { value: cardTexture },
                                 offsetX: { value: uvXOffset * rank },
-                                offsetY: { value: -uvYOffset * suit }
+                                offsetY: { value: -uvYOffset * suit },
+                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
                             },
                             vertexShader: vertexShader,
                             fragmentShader: fragmentShader,
@@ -539,7 +544,8 @@ function makeBet(){
                             uniforms: {
                                 cardTexture: { value: cardTexture },
                                 offsetX: { value: uvXOffset * rank },
-                                offsetY: { value: -uvYOffset * suit }
+                                offsetY: { value: -uvYOffset * suit },
+                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
                             },
                             vertexShader: vertexShader,
                             fragmentShader: fragmentShader,
@@ -570,7 +576,8 @@ function makeBet(){
                             uniforms: {
                                 cardTexture: { value: cardTexture },
                                 offsetX: { value: uvXOffset * rank },
-                                offsetY: { value: -uvYOffset * suit }
+                                offsetY: { value: -uvYOffset * suit },
+                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
                             },
                             vertexShader: vertexShader,
                             fragmentShader: fragmentShader,
@@ -623,7 +630,8 @@ const uvYOffset = 0.1365;
                             uniforms: {
                                 cardTexture: { value: cardTexture },
                                 offsetX: { value: uvXOffset * rank },
-                                offsetY: { value: -uvYOffset * suit }
+                                offsetY: { value: -uvYOffset * suit },
+                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
                             },
                             vertexShader: vertexShader,
                             fragmentShader: fragmentShader,
@@ -718,6 +726,7 @@ const fragmentShader = `
     uniform sampler2D cardTexture;
     uniform float offsetX;
     uniform float offsetY;
+    uniform vec3 colorMultiplier;
     varying vec2 vUv;
     void main() {
         vec2 uv = vUv;
@@ -728,7 +737,7 @@ const fragmentShader = `
             uv.x = vUv.x + offsetX;
             uv.y = vUv.y + offsetY;
         }
-        gl_FragColor = texture2D(cardTexture, uv);
+        gl_FragColor = texture2D(cardTexture, uv) * vec4(colorMultiplier, 1.0);;
     }
 `;
 
@@ -804,7 +813,8 @@ effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.
                     uniforms: {
                         cardTexture: { value: tableTexture },
                         offsetX: { value: 0 },
-                        offsetY: { value: 0 }
+                        offsetY: { value: 0 },
+                        colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
                     },
                     vertexShader: vertexShader,
                     fragmentShader: fragmentShader,
@@ -890,7 +900,8 @@ effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.
                             uniforms: {
                                 cardTexture: { value: cardTexture },
                                 offsetX: { value: uvXOffset * rank },
-                                offsetY: { value: -uvYOffset * suit }
+                                offsetY: { value: -uvYOffset * suit },
+                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
                             },
                             vertexShader: vertexShader,
                             fragmentShader: fragmentShader,
