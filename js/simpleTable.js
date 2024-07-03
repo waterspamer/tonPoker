@@ -799,7 +799,7 @@ effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.
                   (child).material = new THREE.ShaderMaterial({
                     uniforms: {
                         cardTexture: { value: tableTexture },
-                        offsetX: { value: 0 },
+                        offsetX: { value: .1 },
                         offsetY: { value: 0 }
                     },
                     vertexShader: vertexShader,
