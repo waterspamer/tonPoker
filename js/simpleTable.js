@@ -796,15 +796,23 @@ effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.
         (object) => {
          object.traverse(function (child) {
              if ((child).isMesh) {
-                  (child).material = material;
-                  console.log(child.geometry.attributes);
+                  (child).material = new THREE.ShaderMaterial({
+                    uniforms: {
+                        cardTexture: { value: tableTexture },
+                        offsetX: { value: 0 },
+                        offsetY: { value: 0 }
+                    },
+                    vertexShader: vertexShader,
+                    fragmentShader: fragmentShader,
+                    side: THREE.DoubleSide
+                });;
                   const uvSetIndex = 2; // Номер UV-набора, который вы хотите использовать
             const uvAttribute = `uv${uvSetIndex}`;
             if (child.geometry.attributes[uvAttribute]) {
                 child.geometry.attributes.uv = child.geometry.attributes[uvAttribute];
             }
                  if ((child).material) {
-                     ((child).material).transparent = false
+                     //((child).material).transparent = false
                  }
              }
          })
