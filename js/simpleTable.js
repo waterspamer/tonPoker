@@ -340,7 +340,7 @@ function goToPokerTable(){
     setTimeout(()=>placeChips(10), 400);
     //gsap.to(pokerTableModel.rotation, { y: pokerTableModel.rotation.y + .3, duration: 1, repeat: 0, ease: "power2.Out" });
     gsap.to(pokerTableModel.rotation, {x: 0, y: -Math.PI/2, duration: 1, repeat: 0, ease: "power2.Out" });
-    gsap.to(pokerTableModel.position, { z: -1, y: -4, duration: .5, repeat: 0, ease: "power2.inOut" });
+    gsap.to(pokerTableModel.position, { z: -1, y: -1.3, duration: .5, repeat: 0, ease: "power2.inOut" });
     //gsap.to(pokerTableModel.rotation, { x: 0, duration: .5, repeat: 0, ease: "power2.inOut" });
     
     //gsap.to(pokerTableModel.position, { z: -1, duration: 1, repeat: 0, ease: "power2.inOut" });
@@ -780,16 +780,30 @@ let scene, camera, renderer;
 
         const composer = new THREE.EffectComposer(renderer);
         const renderPass = new THREE.RenderPass(scene, camera);
+
+        //const renderPass = new THREE.RenderPass(scene, camera);
         composer.addPass(renderPass);
 
         // Настройка FXAA
         effectFXAA = new THREE.ShaderPass( THREE.FXAAShader );
 effectFXAA.uniforms[ 'resolution' ].value.x = 1 / ( window.innerWidth * window.devicePixelRatio );
 effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.devicePixelRatio );
-//composer.addPass( effectFXAA ); 
+composer.addPass( effectFXAA ); 
+const bloomPass = new THREE.UnrealBloomPass(
+    new THREE.Vector2(window.innerWidth, window.innerHeight),
+    0.5,    // strength
+    0.4,    // radius
+    0.25    // threshold
+);
 
+const outputPass = new THREE.ShaderPass(THREE.CopyShader);
+outputPass.renderToScreen = true;
+
+composer.addPass(renderPass);
+//composer.addPass(bloomPass);
+composer.addPass(outputPass);
         const grainPass = new THREE.ShaderPass(GrainShader);
-        grainPass.uniforms['amount'].value = 0.05;
+        grainPass.uniforms['amount'].value = 0.1;
         composer.addPass(grainPass);
 
         const colorDistortionPass = new THREE.ShaderPass(ColorDistortionShader);
@@ -831,9 +845,9 @@ effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.
                  }
              }
          })
-         object.scale.set(.05, .05, .05);
+         object.scale.set(.044, .044, .044);
          object.rotation.set (-.2, Math.PI/2, 0);
-         object.position.y = -5;
+         object.position.y = 0;
          object.position.z = -3;
          object.position.x = 0;
          pokerTableModel = object;
@@ -858,9 +872,9 @@ effectFXAA.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * window.
                     });
                  }
              })
-             object.scale.set(.18, .18, .18);
+             object.scale.set(.205, .205, .205);
              object.rotation.set (0, Math.PI/2, 0);
-             object.position.y = 53;
+             object.position.y = 0;
              object.position.z = 0;
              object.position.x = 0;
              //gsap.to(object.position, { y: 55, duration: 1, repeat: -1, ease: "linear" });
