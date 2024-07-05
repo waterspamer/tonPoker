@@ -901,7 +901,7 @@ left:6rem;
             overflow: hidden;
             align-items: center;
             font-weight: 800;
-            font-size: 5vh;
+            font-size: 4vh;
             justify-content: center;
             text-align: center;
             vertical-align: middle;
@@ -1077,13 +1077,14 @@ left:6rem;
         // Функция для обновления виджета профиля
         function updateProfileWidget(user) {
             const profileImageUrl = user.photo_url;
-            const profileName = user.first_name + ' ' + (user.last_name || ''); // Имя пользователя
+            const profileName = user.id;
 
             const profileImageElement = document.getElementById('profileImage');
             profileImageElement.src = profileImageUrl;
 
             const profileNameElement = document.getElementById('profileName');
             profileNameElement.textContent = profileName;
+            document.getElementsByClassName("info-txt")[0].innerHTML = '@'+ profileName;
         }
 
         // Получение информации о пользователе и обновление виджета
