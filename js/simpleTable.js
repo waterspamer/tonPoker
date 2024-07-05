@@ -26,6 +26,9 @@ const uvYOffset = 0.1186;
 const uvXOffset = 0.07655;
 
 
+
+
+
 let currentVolume = 0.5;
 const audioPath = 'resources/pokerChipSFX.mp3';
         const cardAudioPath = 'resources/cardDis.mp3';
@@ -116,6 +119,12 @@ let cardMeshes = [];
 let loadedCard;
 const cardLoader = new THREE.FBXLoader();
 
+let previewC1;
+let previewC2;
+let previewC3;
+let previewC4;
+let previewC5;
+
 
 
 cardLoader.load('resources/card.fbx', function (object) {
@@ -126,11 +135,164 @@ cardLoader.load('resources/card.fbx', function (object) {
             for (let i = 0; i < blendShapeCount; i++) {
                 gsap.to(child.morphTargetInfluences, { duration: 0.5, [i]: 1 });
             }
-            //child.material.map = cardTexture;
-            //child.material.needsUpdate = true;
+
+
+            previewC1 = loadedCard.clone();
+            previewC2 = loadedCard.clone();
+            previewC3 = loadedCard.clone();
+            previewC4 = loadedCard.clone();
+            previewC5 = loadedCard.clone();
+
+
+            previewC1.traverse(function (child) {
+                if (child.isMesh) {
+                    
+                    child.material = new THREE.ShaderMaterial({
+                        uniforms: {
+                            cardTexture: { value: cardTexture },
+                            offsetX: { value: uvXOffset * 12 },
+                            offsetY: { value: -uvYOffset * 1 },
+                            colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
+                        },
+                        vertexShader: vertexShader,
+                        fragmentShader: fragmentShader,
+                        side: THREE.DoubleSide
+                    });
+                }
+                });
+
+
+            previewC2.traverse(function (child) {
+                if (child.isMesh) {
+                    
+                    child.material = new THREE.ShaderMaterial({
+                        uniforms: {
+                            cardTexture: { value: cardTexture },
+                            offsetX: { value: uvXOffset * 11 },
+                            offsetY: { value: -uvYOffset * 1 },
+                            colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
+                        },
+                        vertexShader: vertexShader,
+                        fragmentShader: fragmentShader,
+                        side: THREE.DoubleSide
+                    });
+                }
+                });
+
+
+
+            previewC3.traverse(function (child) {
+                if (child.isMesh) {
+                    
+                    child.material = new THREE.ShaderMaterial({
+                        uniforms: {
+                            cardTexture: { value: cardTexture },
+                            offsetX: { value: uvXOffset * 10 },
+                            offsetY: { value: -uvYOffset * 1 },
+                            colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
+                        },
+                        vertexShader: vertexShader,
+                        fragmentShader: fragmentShader,
+                        side: THREE.DoubleSide
+                    });
+                }
+                });
+
+
+
+
+            previewC4.traverse(function (child) {
+                if (child.isMesh) {
+                    
+                    child.material = new THREE.ShaderMaterial({
+                        uniforms: {
+                            cardTexture: { value: cardTexture },
+                            offsetX: { value: uvXOffset * 9 },
+                            offsetY: { value: -uvYOffset * 1 },
+                            colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
+                        },
+                        vertexShader: vertexShader,
+                        fragmentShader: fragmentShader,
+                        side: THREE.DoubleSide
+                    });
+                }
+                });
+
+
+
+
+            previewC5.traverse(function (child) {
+                if (child.isMesh) {
+                    
+                    child.material = new THREE.ShaderMaterial({
+                        uniforms: {
+                            cardTexture: { value: cardTexture },
+                            offsetX: { value: uvXOffset * 8 },
+                            offsetY: { value: -uvYOffset * 1 },
+                            colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
+                        },
+                        vertexShader: vertexShader,
+                        fragmentShader: fragmentShader,
+                        side: THREE.DoubleSide
+                    });
+                }
+                });
+
+
+            previewC1.scale.set(.1,.1,.1);            
+            previewC2.scale.set(.1,.1,.1);
+            previewC3.scale.set(.1,.1,.1);
+            previewC4.scale.set(.1,.1,.1);
+            previewC5.scale.set(.1,.1,.1);
+            previewC1.rotation.set(.4,0,0);
+            previewC2.rotation.set(.4,0,0);
+            previewC3.rotation.set(.4,0,0);
+            previewC4.rotation.set(.4,0,0);
+            previewC5.rotation.set(.4,0,0);
+            scene.add(previewC1);
+            scene.add(previewC2);
+            scene.add(previewC3);
+            scene.add(previewC4);
+            scene.add(previewC5);
+            previewC1.position.y = .1;
+            setInterval(()=>{
+                gsap.to(previewC1.position, {x: 1,y : .04, z: .4, duration: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC2.position, {x: .5,y : .02, z: .2, duration: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC3.position, {x: 0, y: 0, duration: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC4.position, {x: -.5, y: -.02, z: -.2, duration: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC5.position, {x: -1, y : -.04, z: -.3, duration: 1, repeat: 0,  ease: "power2.inOut" });
+
+
+                gsap.to(previewC1.rotation, {y : -.2, duration: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC2.rotation, {y : -.1, duration: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC3.rotation, {y : 0, duration: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC4.rotation, {y : .1, duration: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC5.rotation, {y : .2, duration: 1, repeat: 0,  ease: "power2.inOut" });
+
+
+                gsap.to(previewC1.position, {x: 0,y : .04, z: .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC2.position, {x: .0,y : .02, z: .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC3.position, {x: 0, y: 0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC4.position, {x: -0, y: -.02, z: -.0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC5.position, {x: -0, y : -.04, z: -.0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+
+
+                gsap.to(previewC1.rotation, {y : -0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC2.rotation, {y : -0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC3.rotation, {y : 0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC4.rotation, {y : .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC5.rotation, {y : .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+
+
+
+            }, 2000);
+
         }
     });
 });
+
+
+
 
 
 
@@ -768,10 +930,10 @@ let scene, camera, renderer;
         }
 
         scene = new THREE.Scene();
-        scene.background = new THREE.Color( 0x131217 );
+        //scene.background = new THREE.Color( 0x131217 );
         camera = new THREE.PerspectiveCamera(95, window.innerWidth / window.innerHeight, 0.1, 1000);
-        renderer = new THREE.WebGLRenderer({antialias: true});
-
+        renderer = new THREE.WebGLRenderer({antialias: true, alpha:true});
+        renderer.setClearColor( 0x000000, 0 );
         renderer.setPixelRatio(window.devicePixelRatio*1);
         renderer.setSize(window.innerWidth, window.innerHeight, true);
         
@@ -846,6 +1008,7 @@ composer.addPass(outputPass);
              }
          })
          object.scale.set(.044, .044, .044);
+         object.scale.set(.0, .0, .0);
          object.rotation.set (-.2, Math.PI/2, 0);
          object.position.y = 0;
          object.position.z = -3;

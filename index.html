@@ -10,7 +10,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Evolventa&display=swap');
 
-
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;700&display=swap');
 
 
         .slider, .slidervertical {
@@ -411,6 +411,8 @@ overflow: visible;
             margin: 0;
             height: 100%;
             overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #0B0B0F;
             perspective: 600px;;
         }
         #container {
@@ -422,7 +424,7 @@ overflow: visible;
             width:100%;
             height:100%;
             position: absolute;
-            display:block;
+            z-index: 34;
         }
 
         .menu {
@@ -641,7 +643,7 @@ justify-content: space-around;
 }
 
 .header-element{
-    width:20%;
+    width:12vh;
     min-width:120px;
     height:6vh;
     display: flex;
@@ -651,6 +653,7 @@ justify-content: space-around;
     align-items: center;
     vertical-align: middle;
     background-color: #18171c;
+    box-shadow: 0px 0px 10px #cf23b8;
     border-radius: 30px;
     text-align: center;
 }
@@ -693,7 +696,7 @@ justify-content: space-around;
     width:100%;
     height:42vh;
     z-index: 35;
-    background-color: #131217;
+    
 }
 
 .hidden{
@@ -833,18 +836,130 @@ left:6rem;
     border-radius: 2vh 2vh 0px 0px;
     background-color: #18171c;
 }
+
+
+
+#top-cloud{
+    position: absolute;
+    background-image: url( '/resources/cloudTop.svg' );
+    width:60vw;
+    min-width: 400px;
+    height: 60vh;
+    background-size:cover;
+}
+
+#bottom-cloud{
+    position: absolute;
+    background-image: url( '/resources/cloudBottom.svg' );
+    width:60vw;
+    min-width: 400px;
+    right:0;
+    bottom:0;
+    height: 60vh;
+    background-size:cover;
+
+
+
+}
+#main-screen{
+    position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+}
+
+#hello-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    gap:20px;
+    bottom:20px;
+    padding-top: 10px;
+    padding-bottom: 40px;
+    width:calc(100% - 40px);
+    height:20vh;
+    left:20px;
+    z-index: 36;
+    background-color: rgba( 28, 28, 28, 0.3 );
+    backdrop-filter: blur(50px);
+    border-radius: 20px 20px 60px 60px;
+}
+
+
+
+.info-txt{
+    font-size: 2vh;
+    color:#ffffff;
+    font-weight: 400;
+}
+
+#connect-btn {
+            display: block;
+            color: #EBEBEB;
+            display: flex;
+            overflow: hidden;
+            align-items: center;
+            font-weight: 800;
+            font-size: 5vh;
+            justify-content: center;
+            text-align: center;
+            vertical-align: middle;
+            width: calc(100% - 80px);
+            height: 100px;
+            cursor: pointer;
+            background: linear-gradient(225deg, #18C8FF 0%, #933FFE 100%);
+            border-radius: 30px;
+            z-index: 35;
+            position: relative; /* Добавлено для псевдоэлемента */
+        }
+
+        #connect-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 70%; /* Изменено для плавного перехода */
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            animation: glow 2s linear infinite;
+            pointer-events: none; /* Не позволяет псевдоэлементу мешать кликам */
+        }
+
+        @keyframes glow {
+            0% {
+                left: -100%;
+            }
+            50% {
+                left: 100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
         </style>
 
 
 </head>
 <body>
+
+        <div id = "top-cloud"></div>
+        <div id = "bottom-cloud"></div>
+
+    <div id = "hello-container">
+        <div class ="info-txt">@user_name</div>
+        <div class ="info-txt">welcome to the best web3 card slots!</div>
+        <div id = "connect-btn" >connect wallet</div>
+    </div>
+    
+    
     <!-- <div class="profile-container">
         <div class="profile-image">
             <img src="https://via.placeholder.com/100" alt="Profile Image" id="profileImage">
         </div>
         <div class="profile-name" id="profileName">LUDOMAN228</div>
     </div> -->
-    <div id = "header">
+   <!--  <div id = "header">
         <div class = "header-element">
             <div class="circle-container">
             <img src = "resources/stars-logo.jpg" class = "header-icon">
@@ -857,8 +972,8 @@ left:6rem;
         </div>
         </div>
         <div class = "header-element">уровень</div>
-    </div>
-    <div id = "main-nav">
+    </div> -->
+    <div id = "main-nav" style = "display:none">
         <div id = "games-container" >
             <div class ="game-variant"  id = "play-poker-button" onclick ="goToPokerTable()">
                 <div class = "game-info-container">
@@ -896,7 +1011,7 @@ left:6rem;
         </div>
     </div>
     
-    <div id = "footer-menu"></div>
+    <!-- <div id = "footer-menu"></div> -->
     
     <canvas id="c"></canvas>
     <div id = "main-menu">
