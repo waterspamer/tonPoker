@@ -1053,6 +1053,7 @@ left:6rem;
         Telegram.WebApp.expand();
         let startX, startY, moveX, moveY;
 
+
         window.addEventListener("touchstart", (e) => {
             startX = e.touches[0].clientX;
             startY = e.touches[0].clientY;
@@ -1068,7 +1069,7 @@ left:6rem;
                 e.preventDefault();
             }
         }, { passive: false });
-        window.scrollTo(0, 100);
+       //window.scrollTo(0, 100);
         
         // Получение информации о пользователе
         const tg = window.Telegram.WebApp;
