@@ -256,7 +256,8 @@ cardLoader.load('resources/card.fbx', function (object) {
             scene.add(previewC5);
             previewC1.position.y = .1;
             setInterval(()=>{
-                gsap.to(previewC1.position, {x: 1,y : .04, z: .4, duration: 1, repeat: 0,  ease: "power2.inOut" });
+                if (isStartAnim){
+                    gsap.to(previewC1.position, {x: 1,y : .04, z: .4, duration: 1, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(previewC2.position, {x: .5,y : .02, z: .2, duration: 1, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(previewC3.position, {x: 0, y: 0, duration: 1, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(previewC4.position, {x: -.5, y: -.02, z: -.2, duration: 1, repeat: 0,  ease: "power2.inOut" });
@@ -282,17 +283,36 @@ cardLoader.load('resources/card.fbx', function (object) {
                 gsap.to(previewC3.rotation, {y : 0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(previewC4.rotation, {y : .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(previewC5.rotation, {y : .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+                }
+                
 
 
 
             }, 2000);
+
+            document.getElementById("connect-btn").addEventListener("click", ()=>{
+                isStartAnim = false;
+
+                gsap.to(previewC1.scale, {x: 0,y : -.04, z: .0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC2.scale, {x: 0,y : -.02, z: .0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC3.scale, {x: 0, y: -0.02, z: 0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC4.scale, {x: 0, y: -.02, z: -.0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(previewC5.scale, {x: 0, y : -.04, z: -.0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
+
+                gsap.to(pokerTableModel.scale, {x: 0.044,y : 0.044, z: 0.044, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(document.getElementById('hello-container'), {y: 100 + 'vh', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(document.getElementById('footer-menu'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
+                gsap.to(document.getElementById('games-container'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
+
+                //gsap.to(document.getElementById('top-cloud'), {x: 30 + 'vh', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
+            });
 
         }
     });
 });
 
 
-
+let isStartAnim = true;
 
 
 
@@ -494,6 +514,8 @@ function clearChips() {
 
 
 function goToPokerTable(){
+    document.getElementById("games-container").style.bottom = '-50vh';
+    document.getElementById("footer-menu").style.bottom = '-50vh';
     document.getElementById('main-nav').classList.add('hidden');
     rangeSlide(10);
     //document.getElementById("play-poker-button").style.display = 'none';
@@ -563,6 +585,11 @@ function animateBlendShapes(mesh) {
     });
 }
 
+
+var cardD1;
+var cardD2;
+
+
 function makeBet(){
 
 
@@ -575,6 +602,7 @@ function makeBet(){
     document.getElementById("bet-but").style.display = 'none';
     document.getElementById("call-but").style.display = '';
     document.getElementById("call-but").addEventListener('click', ()=> getTurn());
+    document.getElementById("river-but").addEventListener('click', ()=> getReaver());
     document.getElementById("fold-but").style.display = '';
     document.getElementById("plus").style.display = 'none';
     document.getElementById("minus").style.display = 'none';
@@ -650,6 +678,67 @@ function makeBet(){
                     });
     scene.add(cardP2);    
     //#endregion 
+
+    rank = getCardSuitRank(cardsIndexes[7]).rank;
+    suit = getCardSuitRank(cardsIndexes[7]).suit;
+
+
+    cardD1 = loadedCard.clone();
+    
+    cardD1.scale.set(.045, .045, .045);
+    cardD1.rotation.set (Math.PI, 0, 0);
+    cardD1.position.set (3, -.85, 0);
+    gsap.to(cardD1.position, { x: -.3, z: -1.15*2, duration: .3, repeat: 0, ease: "power2.inOut", delay: .75 });
+    gsap.to(cardD1.rotation, { x: Math.PI, y: (0.5 - Math.random()) *.1,  duration: .3, repeat: 0, ease: "power2.inOut" , delay: .5 });
+    
+
+    cardD1.traverse(function (child) {
+                    if (child.isMesh) {
+                        
+                        child.material = new THREE.ShaderMaterial({
+                            uniforms: {
+                                cardTexture: { value: cardTexture },
+                                offsetX: { value: uvXOffset * rank },
+                                offsetY: { value: -uvYOffset * suit },
+                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
+                            },
+                            vertexShader: vertexShader,
+                            fragmentShader: fragmentShader,
+                            side: THREE.DoubleSide
+                        });
+                    }
+                    });
+    scene.add(cardD1);    
+
+    rank = getCardSuitRank(cardsIndexes[8]).rank;
+    suit = getCardSuitRank(cardsIndexes[8]).suit;
+    cardD2 = loadedCard.clone();
+    
+    cardD2.scale.set(.045, .045, .045);
+    cardD2.rotation.set (Math.PI, 0, 0);
+    cardD2.position.set (3, -.85, 0);
+    gsap.to(cardD2.position, { x: .3, z: -1.15*2, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1.25 });
+    gsap.to(cardD2.rotation, { x: Math.PI, y: (0.5 - Math.random()) *.1,  duration: .3, repeat: 0, ease: "power2.inOut" , delay: .5 });
+    
+
+    cardD2.traverse(function (child) {
+                    if (child.isMesh) {
+                        
+                        child.material = new THREE.ShaderMaterial({
+                            uniforms: {
+                                cardTexture: { value: cardTexture },
+                                offsetX: { value: uvXOffset * rank },
+                                offsetY: { value: -uvYOffset * suit },
+                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
+                            },
+                            vertexShader: vertexShader,
+                            fragmentShader: fragmentShader,
+                            side: THREE.DoubleSide
+                        });
+                    }
+                    });
+    scene.add(cardD2);    
+
 
 
 
@@ -769,10 +858,10 @@ function fold(){
 }
 
 function getTurn(){
+    document.getElementById("call-but").style.display = 'none';
+    document.getElementById("river-but").style.display = ''
     setTimeout(()=>{playCardSound()}, 500);
 //#region table 4
-const uvYOffset = 0.1365;
-    const uvXOffset = 0.07225;
     var rank = getCardSuitRank(cardsIndexes[5]).rank;
     var suit = getCardSuitRank(cardsIndexes[5]).suit;
     console.log(rank);
@@ -806,6 +895,43 @@ const uvYOffset = 0.1365;
 }
 
 function getReaver(){
+
+    setTimeout(()=>{playCardSound()}, 500);
+//#region table 5
+    var rank = getCardSuitRank(cardsIndexes[6]).rank;
+    var suit = getCardSuitRank(cardsIndexes[7]).suit;
+    console.log(rank);
+    
+    var cardT5 = loadedCard.clone();
+    
+    cardT5.scale.set(.045, .045, .045);
+    cardT5.rotation.set (Math.PI, 0, 0);
+    cardT5.position.set (3, -.85, -.76);
+    gsap.to(cardT5.position, { x: 1.2, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
+    gsap.to(cardT5.rotation, { x: 0,y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
+
+    cardT5.traverse(function (child) {
+                    if (child.isMesh) {
+                        
+                        child.material = new THREE.ShaderMaterial({
+                            uniforms: {
+                                cardTexture: { value: cardTexture },
+                                offsetX: { value: uvXOffset * rank },
+                                offsetY: { value: -uvYOffset * suit },
+                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
+                            },
+                            vertexShader: vertexShader,
+                            fragmentShader: fragmentShader,
+                            side: THREE.DoubleSide
+                        });
+                    }
+                    });
+    scene.add(cardT5);    
+
+
+    gsap.to(cardD1.rotation, { x: 0, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1.25 });
+    gsap.to(cardD2.rotation, { x: 0, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1.5 });
+
 
 }
 

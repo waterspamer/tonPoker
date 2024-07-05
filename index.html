@@ -291,7 +291,7 @@ user-select: none; /* Standard */
         #betslidercontainer{
             display: none;
             position: absolute;
-            z-index: 21;
+            z-index: 36;
             left:50%;
             bottom:35%;
             transform: translate(-50%, 50%) rotateX(45deg);
@@ -330,7 +330,7 @@ user-select: none; /* Standard */
     width:100px;
     height:50px;
     border-radius: 60px;
-    z-index: 30;
+    z-index: 36;
     display: flex;
     justify-content: space-around;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -344,6 +344,32 @@ user-select: none; /* Standard */
     transform: translate(-50%, -10%);
 }
 
+
+#river-but{
+    -webkit-user-select: none; /* Safari */        
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+/Edge */
+user-select: none; /* Standard */
+    background-color: #21ce3d;
+    position: absolute;
+    width:100px;
+    height:50px;
+    border-radius: 60px;
+    z-index: 36;
+    display: flex;
+    justify-content: space-around;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    align-items: center;
+    cursor: pointer;
+    left:40%;
+    bottom:0%;
+    text-align: center;
+    vertical-align: middle;
+    color:wheat;
+    transform: translate(-50%, -10%);
+}
+
+
 #fold-but{
     -webkit-user-select: none; /* Safari */        
 -moz-user-select: none; /* Firefox */
@@ -354,7 +380,7 @@ user-select: none; /* Standard */
     width:100px;
     height:50px;
     border-radius: 60px;
-    z-index: 30;
+    z-index: 36;
     display: flex;
     justify-content: space-around;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -712,20 +738,26 @@ justify-content: space-around;
 }
 
 #games-container{
-    padding-left: 6vh;
-    padding-right: 6vh;
+    transition: all .5s;
+    position: absolute;
+    width:calc(100% - 40px);
+    bottom:calc(15vh + 40px);
+    z-index: 36;
+    left:20px;
     display: flex;
-    height:50%;
-    gap: 5%;
+    height:40vh;
+    gap: 20px;
     
 }
 
 .game-variant{
     cursor: pointer;
-    transition: all .2s;
-    padding-left: 1vh;
-    padding-top: 2vh;
-    background: linear-gradient(135deg, #24242d, #17171b);
+    
+    padding-left: 20px;
+    padding-top: 20px;
+    z-index: 36;
+    background-color: rgba( 28, 28, 28, 0.3 );
+    backdrop-filter: blur(25px);
     width:50%;
     border-radius: 2vh;
     display: flex;
@@ -742,8 +774,20 @@ justify-content: space-around;
 }
 
 .game-name{
-    font-family: 'Evolventa', Sans-Serif;
+    font-weight: 600;
+    font-size: 4vh;
     color: white;
+}
+
+.game-icon{
+    position: absolute;
+    z-index: 36;
+    width:8em;
+    height:8.5em;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    background-size:cover;
 }
 
 .game-min-bet{
@@ -753,14 +797,14 @@ justify-content: space-around;
 
 .game-online{
     position:relative;
-    color: #8a8a8a;
-    bottom: 1vh;
-    background-color: #111;
+    color: #e0e0e0;
+    bottom: 20px;
+    background-color: rgba(0, 0, 0, 0.3);
     width:fit-content;
     padding: 8px;
     padding-right: 1.5vh;
     font-size: 1.3vh;
-    font-family: 'Evolventa', Sans-Serif;
+    font-weight: 500;
     border-radius: 20px;
     
 }
@@ -828,13 +872,18 @@ left:6rem;
 }
 
 #footer-menu{
+    transition: all .5s;
     position: absolute;
-    width: 100%;
+    left:20px;
+    width: calc(100% - 40px);
     z-index: 35;
-    height:8vh;
-    bottom:0;
-    border-radius: 2vh 2vh 0px 0px;
+    height:15vh;
+    bottom:20px;
+    border-radius: 20px 20px 60px 60px;
     background-color: #18171c;
+    z-index: 36;
+    background-color: rgba( 28, 28, 28, 0.3 );
+    backdrop-filter: blur(50px);
 }
 
 
@@ -851,7 +900,7 @@ left:6rem;
 #bottom-cloud{
     position: absolute;
     background-image: url( 'resources/cloudBottom.svg' );
-    width:60vw;
+    width:100vw;
     min-width: 400px;
     right:0;
     bottom:0;
@@ -869,6 +918,7 @@ left:6rem;
 }
 
 #hello-container{
+    transition: all .5s;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -949,7 +999,22 @@ left:6rem;
     <div id = "hello-container">
         <div class ="info-txt">@user_name</div>
         <div class ="info-txt">welcome to the best web3 card slots!</div>
-        <div id = "connect-btn" >connect wallet</div>
+        <div id = "connect-btn">authorize</div>
+    </div>
+
+
+    <div id = "footer-menu" style = "transform: translateX(100vh);"></div>
+    <div id = "games-container" style = "transform: translateX(100vh);">
+        <div class = 'game-variant' onclick ="goToPokerTable()">
+            <div class = "game-name">holdem</div>
+            <div class="game-icon" style = "background-image: url('resources/pokerLogo.svg')"></div>
+            <div class ="game-online">3221 online<div class ="online-circle"></div></div>
+        </div>
+        <div class = 'game-variant'>
+            <div class = "game-name">blackjack</div>
+            <div class="game-icon" style = "background-image: url('resources/blackjackLogo.svg')"></div>
+            <div class ="game-online">5422 online<div class ="online-circle"></div></div>
+        </div>
     </div>
     
     
@@ -1017,7 +1082,8 @@ left:6rem;
     <div id = "main-menu">
         <!-- <button id = "play-button" onclick ="goToPokerTable()">POKER</button> -->
         
-        <div id = "call-but" style = "display:none">CALL</div>
+        <div id = "call-but" style = "display:none">turn</div>
+        <div id = "river-but" style = "display:none">river</div>
         <div id = "fold-but" style = "display:none">FOLD</div>
     </div>
 
