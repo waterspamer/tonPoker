@@ -26,7 +26,20 @@ const uvYOffset = 0.1186;
 const uvXOffset = 0.07655;
 
 
-
+fetch('http://pokerjack.space/shuffle_deck')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+        // You can handle the data here
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
 
 
 let currentVolume = 0.5;
