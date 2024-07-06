@@ -669,24 +669,23 @@ justify-content: space-around;
 }
 
 .header-element{
-    width:12vh;
+    width:50%;
     min-width:120px;
-    height:6vh;
+    height:calc(14vh - 20px);
     display: flex;
-    
+    flex-direction: row-reverse;
     gap:5px;
     text-align: center;
     align-items: center;
     vertical-align: middle;
-    background-color: #18171c;
-    box-shadow: 0px 0px 10px #cf23b8;
+    
     border-radius: 30px;
     text-align: center;
 }
 .circle-container {
     margin-left: .5vh;
-    width: 5vh; /* Adjust the size as needed */
-    height: 5vh; /* Adjust the size as needed */
+    width: 10vh; /* Adjust the size as needed */
+    height: 10vh; /* Adjust the size as needed */
     border-radius: 50%;
     overflow: hidden;
     display: flex;
@@ -698,21 +697,22 @@ justify-content: space-around;
 
 .vertical-property-value-container{
     display: flex;
+    gap:20px;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-end;
 }
 
 .property-header{
-    font-size: 1vh;
-    font-family: 'Evolventa', Sans-Serif;
-    color:#808080;
+    font-size: 2vh;
+
+    color:#bdbdbd;
 }
 
 .property-value{
-    font-size: 1.5vh;
+    font-size: 2.5vh;
     font-weight: 600;
     color:white;
-    font-family: 'Evolventa', Sans-Serif;
+
 }
 
 #main-nav{
@@ -784,7 +784,7 @@ justify-content: space-around;
     position: absolute;
     z-index: 36;
     width:8em;
-    height:8.5em;
+    height:8em;
     top:50%;
     left:50%;
     transform: translate(-50%, -50%);
@@ -874,12 +874,15 @@ left:6rem;
 
 #footer-menu{
     transition: all .5s;
+    display: flex;
     position: absolute;
     left:20px;
-    width: calc(100% - 40px);
+    width: calc(100% - 60px);
     z-index: 35;
-    height:15vh;
+    height:14vh;
     bottom:20px;
+    padding-top: 20px;
+    padding-left: 20px;
     border-radius: 20px 20px 60px 60px;
     background-color: #18171c;
     z-index: 36;
@@ -887,6 +890,39 @@ left:6rem;
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(50px);
 }
+
+#bank-button{
+    display: block;
+            color: #EBEBEB;
+            display: flex;
+            overflow: hidden;
+            align-items: center;
+            font-weight: 800;
+            font-size: 4vh;
+            justify-content: center;
+            text-align: center;
+
+            vertical-align: middle;
+            width: calc(50% - 20px);
+            height: calc(100% - 20px);
+            cursor: pointer;
+            background: linear-gradient(225deg, #18C8FF 0%, #933FFE 100%);
+            border-radius: 20px 40px 20px 40px;
+            z-index: 35;
+            position: relative; /* Добавлено для псевдоэлемента */
+}
+
+#bank-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 70%; /* Изменено для плавного перехода */
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            animation: glow 2s linear infinite;
+            pointer-events: none; /* Не позволяет псевдоэлементу мешать кликам */
+        }
 
 
 
@@ -1006,7 +1042,20 @@ left:6rem;
     </div>
 
 
-    <div id = "footer-menu" style = "transform: translateX(100vh);"></div>
+    <div id = "footer-menu" style = "transform: translateX(100vh);">
+    <div id = "bank-button">bank</div>
+    <div class = "header-element">
+        <div class="circle-container">
+        <img src = "resources/stars-logo.jpg" class = "header-icon">
+        
+        </img>
+    </div>
+    <div class = "vertical-property-value-container">
+        <div class = "property-header"> @user_name</div>
+        <div class="property-value">122$</div>
+    </div>
+    </div>
+    </div>
     <div id = "games-container" style = "transform: translateX(100vh);">
         <div class = 'game-variant' onclick ="goToPokerTable()">
             <div class = "game-name">holdem</div>

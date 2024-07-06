@@ -255,6 +255,38 @@ cardLoader.load('resources/card.fbx', function (object) {
             scene.add(previewC4);
             scene.add(previewC5);
             previewC1.position.y = .1;
+
+
+            gsap.to(previewC1.position, {x: 1,y : .04, z: .4, duration: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC2.position, {x: .5,y : .02, z: .2, duration: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC3.position, {x: 0, y: 0, duration: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC4.position, {x: -.5, y: -.02, z: -.2, duration: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC5.position, {x: -1, y : -.04, z: -.3, duration: 1, repeat: 0,  ease: "power2.inOut" });
+
+
+            gsap.to(previewC1.rotation, {y : -.2, duration: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC2.rotation, {y : -.1, duration: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC3.rotation, {y : 0, duration: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC4.rotation, {y : .1, duration: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC5.rotation, {y : .2, duration: 1, repeat: 0,  ease: "power2.inOut" });
+
+
+            gsap.to(previewC1.position, {x: 0,y : .04, z: .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC2.position, {x: .0,y : .02, z: .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC3.position, {x: 0, y: 0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC4.position, {x: -0, y: -.02, z: -.0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC5.position, {x: -0, y : -.04, z: -.0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+
+
+            gsap.to(previewC1.rotation, {y : -0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC2.rotation, {y : -0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC3.rotation, {y : 0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC4.rotation, {y : .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+            gsap.to(previewC5.rotation, {y : .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
+
+
+
+
             setInterval(()=>{
                 if (isStartAnim){
                     gsap.to(previewC1.position, {x: 1,y : .04, z: .4, duration: 1, repeat: 0,  ease: "power2.inOut" });
@@ -525,6 +557,8 @@ function goToPokerTable(){
     //gsap.to(pokerTableModel.rotation, { y: pokerTableModel.rotation.y + .3, duration: 1, repeat: 0, ease: "power2.Out" });
     gsap.to(pokerTableModel.rotation, {x: 0, y: -Math.PI/2, duration: 1, repeat: 0, ease: "power2.Out" });
     gsap.to(pokerTableModel.position, { z: -1, y: -1.3, duration: .5, repeat: 0, ease: "power2.inOut" });
+
+    gsap.to(camera.position, { z: 2, y: .3, duration: .5, repeat: 0, ease: "power2.inOut" });
     //gsap.to(pokerTableModel.rotation, { x: 0, duration: .5, repeat: 0, ease: "power2.inOut" });
     
     //gsap.to(pokerTableModel.position, { z: -1, duration: 1, repeat: 0, ease: "power2.inOut" });
@@ -679,8 +713,8 @@ function makeBet(){
     scene.add(cardP2);    
     //#endregion 
 
-    rank = getCardSuitRank(cardsIndexes[7]).rank;
-    suit = getCardSuitRank(cardsIndexes[7]).suit;
+    rank = getCardSuitRank(cardsIndexes[2]).rank;
+    suit = getCardSuitRank(cardsIndexes[2]).suit;
 
 
     cardD1 = loadedCard.clone();
@@ -710,8 +744,8 @@ function makeBet(){
                     });
     scene.add(cardD1);    
 
-    rank = getCardSuitRank(cardsIndexes[8]).rank;
-    suit = getCardSuitRank(cardsIndexes[8]).suit;
+    rank = getCardSuitRank(cardsIndexes[3]).rank;
+    suit = getCardSuitRank(cardsIndexes[3]).suit;
     cardD2 = loadedCard.clone();
     
     cardD2.scale.set(.045, .045, .045);
@@ -744,8 +778,8 @@ function makeBet(){
 
 
     //#region table 1
-    rank = getCardSuitRank(cardsIndexes[2]).rank;
-    suit = getCardSuitRank(cardsIndexes[2]).suit;
+    rank = getCardSuitRank(cardsIndexes[4]).rank;
+    suit = getCardSuitRank(cardsIndexes[4]).suit;
     console.log(rank);
     
     var cardT1 = loadedCard.clone();
@@ -776,8 +810,8 @@ function makeBet(){
     //#endregion 
     
     //#region table 2
-    rank = getCardSuitRank(cardsIndexes[3]).rank;
-    suit = getCardSuitRank(cardsIndexes[3]).suit;
+    rank = getCardSuitRank(cardsIndexes[5]).rank;
+    suit = getCardSuitRank(cardsIndexes[5]).suit;
     console.log(rank);
     
     var cardT2 = loadedCard.clone();
@@ -808,8 +842,8 @@ function makeBet(){
     //#endregion 
 
     //#region table 3
-    rank = getCardSuitRank(cardsIndexes[4]).rank;
-    suit = getCardSuitRank(cardsIndexes[4]).suit;
+    rank = getCardSuitRank(cardsIndexes[6]).rank;
+    suit = getCardSuitRank(cardsIndexes[6]).suit;
     console.log(rank);
     
     var cardT3 = loadedCard.clone();
@@ -862,8 +896,8 @@ function getTurn(){
     document.getElementById("river-but").style.display = ''
     setTimeout(()=>{playCardSound()}, 500);
 //#region table 4
-    var rank = getCardSuitRank(cardsIndexes[5]).rank;
-    var suit = getCardSuitRank(cardsIndexes[5]).suit;
+    var rank = getCardSuitRank(cardsIndexes[7]).rank;
+    var suit = getCardSuitRank(cardsIndexes[7]).suit;
     console.log(rank);
     
     var cardT4 = loadedCard.clone();
@@ -898,8 +932,8 @@ function getReaver(){
 
     setTimeout(()=>{playCardSound()}, 500);
 //#region table 5
-    var rank = getCardSuitRank(cardsIndexes[6]).rank;
-    var suit = getCardSuitRank(cardsIndexes[7]).suit;
+    var rank = getCardSuitRank(cardsIndexes[8]).rank;
+    var suit = getCardSuitRank(cardsIndexes[8]).suit;
     console.log(rank);
     
     var cardT5 = loadedCard.clone();
@@ -1015,7 +1049,16 @@ const fragmentShader = `
     uniform float offsetX;
     uniform float offsetY;
     uniform vec3 colorMultiplier;
+    
     varying vec2 vUv;
+
+
+    vec3 fresnelSchlick(float cosTheta, vec3 F0)
+{
+    return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
+}
+
+
     void main() {
         vec2 uv = vUv;
         if (!gl_FrontFacing) {
@@ -1025,7 +1068,7 @@ const fragmentShader = `
             uv.x = vUv.x + offsetX;
             uv.y = vUv.y + offsetY;
         }
-        gl_FragColor = texture2D(cardTexture, uv) * vec4(colorMultiplier, 1.0);;
+        gl_FragColor = texture2D(cardTexture, uv) * vec4(colorMultiplier, 1.0);
     }
 `;
 
