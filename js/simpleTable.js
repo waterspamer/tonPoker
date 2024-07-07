@@ -1125,13 +1125,13 @@ function getReaver(){
 
     if (result > 0 ) {
         setTimeout(()=>{
-            document.getElementById("game-result").innerHTML = 'win +' + bet*4 + '$';
+            document.getElementById("game-result").innerHTML = 'win +' + bet*5 + '$';
             document.getElementById("game-result").style.opacity = '1';
             setTimeout(()=>{document.getElementById("game-result").style.opacity = '0'}, 1000);
 
 
         }, 1000);
-        balance += bet*4;
+        balance += bet*5;
     document.getElementById('balance-f').innerHTML = balance + '$';
     }
 
