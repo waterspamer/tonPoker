@@ -1127,12 +1127,13 @@ function getReaver(){
         setTimeout(()=>{
             document.getElementById("game-result").innerHTML = 'win +' + bet*5 + '$';
             document.getElementById("game-result").style.opacity = '1';
+            document.getElementById("game-result").style.color = 'green';
             setTimeout(()=>{document.getElementById("game-result").style.opacity = '0'}, 1000);
-
+            balance += bet*5;
+    document.getElementById('balance-f').innerHTML = balance + '$';
 
         }, 1000);
-        balance += bet*5;
-    document.getElementById('balance-f').innerHTML = balance + '$';
+        
     }
 
     if (result === 0 ) {
@@ -1140,6 +1141,7 @@ function getReaver(){
         setTimeout(()=>{
             document.getElementById("game-result").innerHTML = 'draw +' + bet*3 + '$';
             document.getElementById("game-result").style.opacity = '1';
+            document.getElementById("game-result").style.color = 'grey';
             setTimeout(()=>{document.getElementById("game-result").style.opacity = '0'}, 1000);
 
 
@@ -1153,6 +1155,7 @@ function getReaver(){
         setTimeout(()=>{
             document.getElementById("game-result").innerHTML = 'lose -' + bet*3 + '$';
             document.getElementById("game-result").style.opacity = '1';
+            document.getElementById("game-result").style.color = 'red';
             setTimeout(()=>{document.getElementById("game-result").style.opacity = '0'}, 1000);
 
 
