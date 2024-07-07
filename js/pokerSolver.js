@@ -20,7 +20,7 @@ const buildDeck = () => {
 
   const handDisplay = (hand) => {
     const values = "23456789TJQKA";
-    const suits = [`♠︎`, `♦︎`, `♥︎`, `♣︎`];
+    const suits = [`♠︎`, `♥︎`, `♣`, `♦︎`];
     return hand
       .reduce((obj, item) => {
         obj.push(

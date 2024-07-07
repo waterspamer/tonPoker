@@ -1088,29 +1088,36 @@ function getReaver(){
 
      //собираем стол
      var table = [ 
-        convertCard(cardsIndexes[4]),
-        convertCard(cardsIndexes[5]),
-        convertCard(cardsIndexes[6]),
-        convertCard(cardsIndexes[7]),
-        convertCard(cardsIndexes[8])];
+        cardsIndexes[4],
+        cardsIndexes[5],
+        cardsIndexes[6],
+        cardsIndexes[7],
+        cardsIndexes[8]];
 
     //собираем карты игрока
     var player = [
-        convertCard(cardsIndexes[0]),
-        convertCard(cardsIndexes[1])
+        cardsIndexes[0],
+        cardsIndexes[1]
     ];
 
     //собираем карты дилера
     var dealer = [
-        convertCard(cardsIndexes[2]),
-        convertCard(cardsIndexes[3])
+        cardsIndexes[2],
+        cardsIndexes[3]
     ];
+    console.log("player: "+ handDisplay(player));
+    console.log("dealer: "+ handDisplay(dealer));
+    console.log("table: "+ handDisplay(table));
 
     var playerHand = findBestHandTexasHoldEm(player, table);
+    console.log(playerHand);
+
+    
 
             
 
     var dealerHand = findBestHandTexasHoldEm(dealer, table);
+
 
 
 
@@ -1715,6 +1722,8 @@ composer.addPass(outputPass);
 
 
             var playerHand = findBestHandTexasHoldEm(player, table);
+
+            
 
             
 
