@@ -6,7 +6,6 @@ Telegram.WebApp.ready();
 
 
 
-
 let userState = 0;
 
 let pokerTableModel;
@@ -30,6 +29,131 @@ const uvYOffset = 0.1186;
 const uvXOffset = 0.07655;
 
 
+
+
+
+function simulateGames(){
+
+    var simBalance = 500;
+
+
+    var flushes =0;
+    var fHouses =0;
+    var cares =0;
+    var sFlush =0;
+    var rFlush =0;
+    
+
+    for (let j = 0; j < 10000; j++){
+
+
+        var deck = [];
+    for (let i = 0 ; i < 52; i++){
+        deck.push(i);
+    }
+
+    shuffleArray(deck);
+
+    
+
+
+     //собираем стол
+     var table = [ 
+        deck[4],
+        deck[5],
+        deck[6],
+        deck[7],
+        deck[8]];
+
+    //собираем карты игрока
+    var player = [
+        deck[0],
+        deck[1]
+    ];
+
+    //собираем карты дилера
+    var dealer = [
+        deck[2],
+        deck[3]
+    ];
+    console.log(j);
+
+
+    var playerHand = findBestHandTexasHoldEm(player, table);
+    console.log(playerHand);
+
+    
+
+            
+
+    var dealerHand = findBestHandTexasHoldEm(dealer, table);
+
+
+
+
+    var result = playerHand[0].rankValue - dealerHand[0].rankValue;
+
+    if (result < 0 ) {
+        simBalance -= 10;
+        
+    }
+
+    if (result > 0 ) {
+        
+        if (playerHand[0].rankDescription === 'Flush'){
+            simBalance+=60;
+            flushes++;
+        }
+            
+        else if (playerHand[0].rankDescription === 'Full House'){
+            simBalance+=120;
+            fHouses++;
+        }
+            
+        else if (playerHand[0].rankDescription === 'Quads'){
+            simBalance+=210;
+            cares++;
+        }
+            
+        else if (playerHand[0].rankDescription === 'Straight Flush'){
+            simBalance+=270;
+            sFlush++;
+        }
+            
+        else if (playerHand[0].rankDescription === 'Royal Flush'){
+            simBalance+=420;
+            rFlush++;
+        }
+            
+
+        else simBalance += 20;
+    }
+
+    }
+
+    console.log(flushes + ' флешей, '
+        + fHouses + ' фул хаузов, '+ cares + ' каре, '
+        + sFlush + ' стрит флешей, ' + rFlush + ' роял флешей' );
+    console.log('баланс за 10.000 игр при начальной ставке 10: ' + simBalance);
+}
+
+fetch('https://pokerjack.space/shuffle_deck', {
+    mode: 'cors', // Enabling CORS
+})
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+        // Handle the data here
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+//simulateGames();
 
 
 let currentVolume = 0.5;
