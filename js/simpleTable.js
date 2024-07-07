@@ -3,6 +3,10 @@ Telegram.WebApp.ready();
 
 
 
+
+
+
+
 let userState = 0;
 
 let pokerTableModel;
@@ -26,20 +30,6 @@ const uvYOffset = 0.1186;
 const uvXOffset = 0.07655;
 
 
-fetch('http://pokerjack.space/shuffle_deck')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Success:', data);
-        // You can handle the data here
-    })
-    .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-    });
 
 
 let currentVolume = 0.5;
@@ -118,7 +108,7 @@ const shadowMaterial = new THREE.MeshBasicMaterial({
     map: chipShadowTexture,
     transparent: true,
     color: 0x001100,
-    opacity: .8, // Set the desired opacity
+    opacity: .5, // Set the desired opacity
 });
 
 
@@ -506,16 +496,16 @@ function createChips(chips) {
             //plane.rotation.set(1,0,0);
             
             scene.add(plane);
-            var ranX =Math.random()*0.01;
-            var ranZ =Math.random()*0.01;
+            var ranX = Math.random()*0.01;
+            var ranZ = Math.random()*0.01;
             chipShadowsArray.push(plane);
 
 
             chip.scale.set(.055,.055,.055);
 
-            chip.position.set(xPos + ranX, i * 0.05 -1.2, 1.47 + ranZ);
+            chip.position.set(xPos + ranX, i * 0.05 -1.2, 1.5 + ranZ);
             chip.rotation.y = (0.5 - Math.random()) * 0.45;
-            plane.position.set(xPos + ranX, i * 0.05 -1.2, 1.47 + ranZ);
+            plane.position.set(xPos + ranX, i * 0.05 -1.2, 1.5 + ranZ);
             //gsap.to(chip.position, {y: i * 0.05, duration: .1, repeat: 0, delay: ease: "power2.inOut" });
             scene.add(chip);
             chipsArray.push(chip);
@@ -559,19 +549,41 @@ function clearChips() {
 
 
 function goToPokerTable(){
+
+    for (let i = 0; i< cardObjects.length; i++)
+        scene.remove(cardObjects[i]);
+    cardObjects = [];
+     cardsIndexes = [];
+     for(let i =0; i < 52; i++){
+        cardsIndexes.push(i);
+    }
+
+    
+    console.log('p table');
+
+
     document.getElementById("games-container").style.bottom = '-50vh';
-    document.getElementById("footer-menu").style.bottom = '-50vh';
+   /*  document.getElementById("bank-button").classList.remove("action-button-active");
+    document.getElementById("bank-button").classList.add("action-button-inactive");
+    document.getElementById("bet-button").classList.remove("action-button-inactive");
+    document.getElementById("bet-button").classList.add("action-button-active"); */
+    document.getElementById("bank-button").style.display = 'none';
+    document.getElementById("bet-button").style.display = '';
+    document.getElementsByClassName("slidershell")[0].style.display = '';
+    //document.getElementById("footer-menu").style.bottom = '-50vh';
+    document.getElementById("betslidercontainer").style.display = '';
     document.getElementById('main-nav').classList.add('hidden');
-    rangeSlide(10);
+    setValue(bet, 1, false);
     //document.getElementById("play-poker-button").style.display = 'none';
-    document.getElementById("betslidercontainer").style.display = 'block';
+    
     rotationAnim.kill();
     setTimeout(()=>placeChips(10), 400);
     //gsap.to(pokerTableModel.rotation, { y: pokerTableModel.rotation.y + .3, duration: 1, repeat: 0, ease: "power2.Out" });
     gsap.to(pokerTableModel.rotation, {x: 0, y: -Math.PI/2, duration: 1, repeat: 0, ease: "power2.Out" });
     gsap.to(pokerTableModel.position, { z: -1, y: -1.3, duration: .5, repeat: 0, ease: "power2.inOut" });
 
-    gsap.to(camera.position, { z: 2, y: .3, duration: .5, repeat: 0, ease: "power2.inOut" });
+    gsap.to(camera.position, { x: 0, z: 3, y: .7, duration: .5, repeat: 0, ease: "power2.inOut" });
+    //gsap.to(camera.rotation, { x: -1.3, z : -.5, duration: .5, repeat: 0, ease: "power2.inOut" });
     //gsap.to(pokerTableModel.rotation, { x: 0, duration: .5, repeat: 0, ease: "power2.inOut" });
     
     //gsap.to(pokerTableModel.position, { z: -1, duration: 1, repeat: 0, ease: "power2.inOut" });
@@ -636,8 +648,40 @@ function animateBlendShapes(mesh) {
 var cardD1;
 var cardD2;
 
+var balance =500;
+
+var bet = 10;
+
 
 function makeBet(){
+    canFold = true;
+    bet = document.getElementById('slider1').value;
+    console.log(bet);
+    balance -= bet;
+    document.getElementById('balance-f').innerHTML = balance + '$';
+    document.getElementById('fold-button').style.opacity = '.5';
+
+    document.getElementById('fold-button').style.pointerEvents = 'none';
+    setTimeout(()=>{
+        document.getElementById('fold-button').style.pointerEvents = '';
+    }, 3000);
+
+
+
+
+
+   /*  document.getElementById("bet-button").classList.add("action-button-inactive");
+    document.getElementById("bet-button").classList.remove("action-button-active");
+    document.getElementById("turn-button").classList.remove("action-button-inactive");
+    document.getElementById("turn-button").classList.add("action-button-active"); */
+    document.getElementById("bet-button").style.display = 'none';
+    document.getElementById("turn-button").style.display = '';
+
+
+    document.getElementById('turn-button').style.pointerEvents = 'none';
+    setTimeout(()=>{
+        document.getElementById('turn-button').style.pointerEvents = '';
+    }, 3000);
 
 
     setTimeout(()=>{playCardSound()}, 500);
@@ -646,13 +690,13 @@ function makeBet(){
     setTimeout(()=>{playCardSound()}, 2000);
     setTimeout(()=>{playCardSound()}, 2500);
     console.log('flop bet');
-    document.getElementById("bet-but").style.display = 'none';
-    document.getElementById("call-but").style.display = '';
-    document.getElementById("call-but").addEventListener('click', ()=> getTurn());
-    document.getElementById("river-but").addEventListener('click', ()=> getReaver());
-    document.getElementById("fold-but").style.display = '';
-    document.getElementById("plus").style.display = 'none';
-    document.getElementById("minus").style.display = 'none';
+    //document.getElementById("bet-but").style.display = 'none';
+    //document.getElementById("call-but").style.display = '';
+    //document.getElementById("call-but").addEventListener('click', ()=> getTurn());
+    //document.getElementById("river-but").addEventListener('click', ()=> getReaver());
+    //document.getElementById("fold-but").style.display = '';
+    //document.getElementById("plus").style.display = 'none';
+    //document.getElementById("minus").style.display = 'none';
     document.getElementsByClassName("slidershell")[0].style.display = 'none';
     gsap.to(camera.position, { x: 0, y: 2.5, z: 1.09, duration: .3, repeat: 0, ease: "power2.inOut", delay: 0 });
     gsap.to(camera.rotation, { x: -1.3, duration: .3, repeat: 0, ease: "power2.inOut", delay: 0 });
@@ -668,10 +712,10 @@ function makeBet(){
     
     var cardP1 = loadedCard.clone();
     
-    cardP1.scale.set(.045, .045, .045);
+    cardP1.scale.set(.051, .051, .051);
     cardP1.rotation.set (Math.PI, 0, 0);
-    cardP1.position.set (3, -.85, 0);
-    gsap.to(cardP1.position, { x: -.3, z: .78, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
+    cardP1.position.set (3, -1.29, 0);
+    gsap.to(cardP1.position, { x: -.34, z: .73, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
     gsap.to(cardP1.rotation, { x: 0, y: (0.5 - Math.random()) *.1,  duration: .3, repeat: 0, ease: "power2.inOut" , delay: .5 });
     
 
@@ -691,6 +735,8 @@ function makeBet(){
                         });
                     }
                     });
+
+    cardObjects.push(cardP1);
     scene.add(cardP1);    
     //#endregion 
 
@@ -701,10 +747,10 @@ function makeBet(){
     
     var cardP2 = loadedCard.clone();
     
-    cardP2.scale.set(.045, .045, .045);
+    cardP2.scale.set(.051, .051, .051);
     cardP2.rotation.set (Math.PI, 0, 0);
-    cardP2.position.set (3, -.85, 0);
-    gsap.to(cardP2.position, { x: .3,  z: .78, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1 });
+    cardP2.position.set (3, -1.29, 0);
+    gsap.to(cardP2.position, { x: .34,  z: .73, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1 });
     gsap.to(cardP2.rotation, { x: 0, y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1 });
 
     cardP2.traverse(function (child) {
@@ -723,6 +769,8 @@ function makeBet(){
                         });
                     }
                     });
+
+                    cardObjects.push(cardP2);
     scene.add(cardP2);    
     //#endregion 
 
@@ -732,10 +780,10 @@ function makeBet(){
 
     cardD1 = loadedCard.clone();
     
-    cardD1.scale.set(.045, .045, .045);
+    cardD1.scale.set(.051, .051, .051);
     cardD1.rotation.set (Math.PI, 0, 0);
-    cardD1.position.set (3, -.85, 0);
-    gsap.to(cardD1.position, { x: -.3, z: -1.15*2, duration: .3, repeat: 0, ease: "power2.inOut", delay: .75 });
+    cardD1.position.set (3, -1.29, 0);
+    gsap.to(cardD1.position, { x: -.34, z: -1.37*2, duration: .3, repeat: 0, ease: "power2.inOut", delay: .75 });
     gsap.to(cardD1.rotation, { x: Math.PI, y: (0.5 - Math.random()) *.1,  duration: .3, repeat: 0, ease: "power2.inOut" , delay: .5 });
     
 
@@ -755,16 +803,18 @@ function makeBet(){
                         });
                     }
                     });
+
+                    cardObjects.push(cardD1);
     scene.add(cardD1);    
 
     rank = getCardSuitRank(cardsIndexes[3]).rank;
     suit = getCardSuitRank(cardsIndexes[3]).suit;
     cardD2 = loadedCard.clone();
     
-    cardD2.scale.set(.045, .045, .045);
+    cardD2.scale.set(.051, .051, .051);
     cardD2.rotation.set (Math.PI, 0, 0);
-    cardD2.position.set (3, -.85, 0);
-    gsap.to(cardD2.position, { x: .3, z: -1.15*2, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1.25 });
+    cardD2.position.set (3, -1.29, 0);
+    gsap.to(cardD2.position, { x: .34, z: -1.37*2, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1.25 });
     gsap.to(cardD2.rotation, { x: Math.PI, y: (0.5 - Math.random()) *.1,  duration: .3, repeat: 0, ease: "power2.inOut" , delay: .5 });
     
 
@@ -784,6 +834,9 @@ function makeBet(){
                         });
                     }
                     });
+
+
+                    cardObjects.push(cardD2);
     scene.add(cardD2);    
 
 
@@ -797,10 +850,10 @@ function makeBet(){
     
     var cardT1 = loadedCard.clone();
     
-    cardT1.scale.set(.045, .045, .045);
+    cardT1.scale.set(.051, .051, .051);
     cardT1.rotation.set (Math.PI, 0, 0);
-    cardT1.position.set (3, -.85, -.74);
-    gsap.to(cardT1.position, { x: -1.2, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1.5 });
+    cardT1.position.set (3,-1.29, -1);
+    gsap.to(cardT1.position, { x: -1.36, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1.5 });
     gsap.to(cardT1.rotation, { x: 0, y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1.5 });
 
     cardT1.traverse(function (child) {
@@ -819,6 +872,9 @@ function makeBet(){
                         });
                     }
                     });
+
+
+                    cardObjects.push(cardT1);
     scene.add(cardT1);    
     //#endregion 
     
@@ -829,10 +885,10 @@ function makeBet(){
     
     var cardT2 = loadedCard.clone();
     
-    cardT2.scale.set(.045, .045, .045);
+    cardT2.scale.set(.051, .051, .051);
     cardT2.rotation.set (Math.PI, 0, 0);
-    cardT2.position.set (3, -.85, -.74);
-    gsap.to(cardT2.position, { x: -.6, duration: .3, repeat: 0, ease: "power2.inOut", delay: 2 });
+    cardT2.position.set (3, -1.29, -1);
+    gsap.to(cardT2.position, { x: -.7, duration: .3, repeat: 0, ease: "power2.inOut", delay: 2 });
     gsap.to(cardT2.rotation, { x: 0,y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: 2 });
 
     cardT2.traverse(function (child) {
@@ -851,7 +907,9 @@ function makeBet(){
                         });
                     }
                     });
-    scene.add(cardT2);    
+    
+                    cardObjects.push(cardT2);
+                    scene.add(cardT2);    
     //#endregion 
 
     //#region table 3
@@ -861,9 +919,9 @@ function makeBet(){
     
     var cardT3 = loadedCard.clone();
     
-    cardT3.scale.set(.045, .045, .045);
+    cardT3.scale.set(.051, .051, .051);
     cardT3.rotation.set (Math.PI, 0, 0);
-    cardT3.position.set (3, -.85, -.74);
+    cardT3.position.set (3, -1.29, -1);
     gsap.to(cardT3.position, { x: 0, duration: .3, repeat: 0, ease: "power2.inOut", delay: 2.5 });
     gsap.to(cardT3.rotation, { x: 0,y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: 2.5 });
 
@@ -883,6 +941,10 @@ function makeBet(){
                         });
                     }
                     });
+
+
+
+                    cardObjects.push(cardT3);
     scene.add(cardT3);    
     //#endregion 
     
@@ -900,13 +962,26 @@ function getFlop(){
 
 }
 
-function fold(){
 
-}
 
 function getTurn(){
-    document.getElementById("call-but").style.display = 'none';
-    document.getElementById("river-but").style.display = ''
+    canFold = true;
+    balance -= bet;
+    document.getElementById('balance-f').innerHTML = balance + '$';
+    //document.getElementById("turn-but").style.display
+    document.getElementById("turn-button").style.display = 'none';
+    document.getElementById("river-button").style.display = ''
+
+    document.getElementById('river-button').style.pointerEvents = 'none';
+    setTimeout(()=>{
+        document.getElementById('river-button').style.pointerEvents = '';
+    }, 1000);
+
+    document.getElementById('fold-button').style.pointerEvents = 'none';
+    setTimeout(()=>{
+        document.getElementById('fold-button').style.pointerEvents = '';
+    }, 1000);
+
     setTimeout(()=>{playCardSound()}, 500);
 //#region table 4
     var rank = getCardSuitRank(cardsIndexes[7]).rank;
@@ -915,10 +990,10 @@ function getTurn(){
     
     var cardT4 = loadedCard.clone();
     
-    cardT4.scale.set(.045, .045, .045);
+    cardT4.scale.set(.051, .051, .051);
     cardT4.rotation.set (Math.PI, 0, 0);
-    cardT4.position.set (3, -.85, -.76);
-    gsap.to(cardT4.position, { x: 0.6, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
+    cardT4.position.set (3, -1.29, -1);
+    gsap.to(cardT4.position, { x: 0.7, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
     gsap.to(cardT4.rotation, { x: 0,y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
 
     cardT4.traverse(function (child) {
@@ -937,11 +1012,39 @@ function getTurn(){
                         });
                     }
                     });
+
+
+
+                    cardObjects.push(cardT4);
     scene.add(cardT4);    
     //#endregion 
 }
 
+let canFold = false;
+
+function fold(){
+    if (!canFold) return;
+
+
+    goToPokerTable();
+    document.getElementsByClassName("slidershell")[0].style.display = '';
+    canFold = false;
+    document.getElementById('fold-button').style.opacity = '.0';
+    document.getElementById("river-button").style.display = 'none';
+    document.getElementById("turn-button").style.display = 'none';
+    document.getElementById("bet-button").style.display = '';
+    gsap.to(camera.position, { x: 0, z: 3, y: .7, duration: .5, repeat: 0, ease: "power2.inOut" });
+}
+
 function getReaver(){
+    canFold = false;
+    balance -= bet;
+    document.getElementById('balance-f').innerHTML = balance + '$';
+    document.getElementById('fold-button').style.opacity = '.0';
+    document.getElementById("river-button").style.display = 'none';
+    document.getElementById("bet-button").style.display = '';
+    
+    //document.getElementById("turn-button").style.display = '';
 
     setTimeout(()=>{playCardSound()}, 500);
 //#region table 5
@@ -951,10 +1054,10 @@ function getReaver(){
     
     var cardT5 = loadedCard.clone();
     
-    cardT5.scale.set(.045, .045, .045);
+    cardT5.scale.set(.051, .051, .051);
     cardT5.rotation.set (Math.PI, 0, 0);
-    cardT5.position.set (3, -.85, -.76);
-    gsap.to(cardT5.position, { x: 1.2, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
+    cardT5.position.set (3, -1.29, -1);
+    gsap.to(cardT5.position, { x: 1.36, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
     gsap.to(cardT5.rotation, { x: 0,y:(0.5 - Math.random()) *.1, duration: .3, repeat: 0, ease: "power2.inOut", delay: .5 });
 
     cardT5.traverse(function (child) {
@@ -973,12 +1076,90 @@ function getReaver(){
                         });
                     }
                     });
+
+
+
+                    cardObjects.push(cardT5);
     scene.add(cardT5);    
 
 
     gsap.to(cardD1.rotation, { x: 0, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1.25 });
     gsap.to(cardD2.rotation, { x: 0, duration: .3, repeat: 0, ease: "power2.inOut", delay: 1.5 });
 
+     //собираем стол
+     var table = [ 
+        convertCard(cardsIndexes[4]),
+        convertCard(cardsIndexes[5]),
+        convertCard(cardsIndexes[6]),
+        convertCard(cardsIndexes[7]),
+        convertCard(cardsIndexes[8])];
+
+    //собираем карты игрока
+    var player = [
+        convertCard(cardsIndexes[0]),
+        convertCard(cardsIndexes[1])
+    ];
+
+    //собираем карты дилера
+    var dealer = [
+        convertCard(cardsIndexes[2]),
+        convertCard(cardsIndexes[3])
+    ];
+
+    var playerHand = findBestHandTexasHoldEm(player, table);
+
+            
+
+    var dealerHand = findBestHandTexasHoldEm(dealer, table);
+
+
+
+    var result = playerHand[0].rankValue - dealerHand[0].rankValue;
+
+    if (result > 0 ) {
+        setTimeout(()=>{
+            document.getElementById("game-result").innerHTML = 'win +' + bet*4 + '$';
+            document.getElementById("game-result").style.opacity = '1';
+            setTimeout(()=>{document.getElementById("game-result").style.opacity = '0'}, 1000);
+
+
+        }, 1000);
+        balance += bet*4;
+    document.getElementById('balance-f').innerHTML = balance + '$';
+    }
+
+    if (result === 0 ) {
+
+        setTimeout(()=>{
+            document.getElementById("game-result").innerHTML = 'draw +' + bet*3 + '$';
+            document.getElementById("game-result").style.opacity = '1';
+            setTimeout(()=>{document.getElementById("game-result").style.opacity = '0'}, 1000);
+
+
+        }, 1000);
+
+        balance += bet*3;
+    document.getElementById('balance-f').innerHTML = balance + '$';
+    }
+
+    if (result < 0 ) {
+        setTimeout(()=>{
+            document.getElementById("game-result").innerHTML = 'lose -' + bet*3 + '$';
+            document.getElementById("game-result").style.opacity = '1';
+            setTimeout(()=>{document.getElementById("game-result").style.opacity = '0'}, 1000);
+
+
+        }, 1000);
+    }
+
+    setTimeout(()=>{gsap.to(camera.position, { x: 0, z: 3, y: .7, duration: .5, repeat: 0, ease: "power2.inOut" });
+goToPokerTable();}, 4000);
+
+
+document.getElementById('bet-button').style.pointerEvents = 'none';
+setTimeout(()=>{
+    document.getElementById('bet-button').style.pointerEvents = '';
+}, 4000);
 
 }
 
@@ -1088,7 +1269,6 @@ const fragmentShader = `
 let cardObjects = [];
 
 
-let balance = 1000;
 
 let flopEndPoint = 'https://1be7-176-231-182-34.ngrok-free.app/deal_texas_hold_em_solo';
 
