@@ -30,9 +30,7 @@ const uvXOffset = 0.07655;
 
 
 
-
-
-async function simulateGames() {
+async function simulateGamesServer() {
     var simBalance = 500;
 
     var flushes = 0;
@@ -45,18 +43,122 @@ async function simulateGames() {
         let deck = [];
 
         try {
-            const response = await fetch('https://pokerjack.space/shuffle_deck', {
-                mode: 'cors', // Enabling CORS
+            // Initialise the game for the user
+            const initResponse = await fetch(`https://pokerjack.space/initialise_texas_hold_em/?user_id=${j}`, {
+                mode: 'cors',
             });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
+            if (!initResponse.ok) {
+                throw new Error('Network response was not ok: ' + initResponse.statusText);
             }
 
-            const data = await response.json();
-            deck = data; // Assuming the response contains a "deck" property with the shuffled deck array
+            // Get the deck for the user
+            const deckResponse = await fetch(`https://pokerjack.space/deck/?user_id=${j}`, {
+                mode: 'cors',
+            });
 
-            console.log('Success:', data);
+            if (!deckResponse.ok) {
+                throw new Error('Deck response was not ok: ' + deckResponse.statusText);
+            }
+
+            // Parse the deck response
+            const data = await deckResponse.json();
+            deck = JSON.parse(data); // Parse the JSON string to an array
+
+            console.log('Success:', deck);
+
+            // Collect the table cards
+            var table = [
+                deck[4],
+                deck[5],
+                deck[6],
+                deck[7],
+                deck[8]
+            ];
+
+            // Collect player cards
+            var player = [
+                deck[0],
+                deck[1]
+            ];
+
+            // Collect dealer cards
+            var dealer = [
+                deck[2],
+                deck[3]
+            ];
+
+            console.log(j);
+
+            var playerHand = findBestHandTexasHoldEm(player, table);
+            console.log(playerHand);
+
+            var dealerHand = findBestHandTexasHoldEm(dealer, table);
+
+            var result = playerHand[0].rankValue - dealerHand[0].rankValue;
+
+            if (result < 0) {
+                simBalance -= 10;
+            }
+
+            if (result > 0) {
+                switch (playerHand[0].rankDescription) {
+                    case 'Flush':
+                        simBalance += 60;
+                        flushes++;
+                        break;
+                    case 'Full House':
+                        simBalance += 120;
+                        fHouses++;
+                        break;
+                    case 'Quads':
+                        simBalance += 210;
+                        cares++;
+                        break;
+                    case 'Straight Flush':
+                        simBalance += 270;
+                        sFlush++;
+                        break;
+                    case 'Royal Flush':
+                        simBalance += 420;
+                        rFlush++;
+                        break;
+                    default:
+                        simBalance += 20;
+                }
+            }
+
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+            break; // Exit the loop if there's a fetch error
+        }
+    }
+
+    console.log(flushes + ' флешей, ' +
+        fHouses + ' фул хаузов, ' + cares + ' каре, ' +
+        sFlush + ' стрит флешей, ' + rFlush + ' роял флешей');
+    console.log('Баланс за 10.000 игр при начальной ставке 10: ' + simBalance);
+}
+
+
+
+async function simulateGames() {
+    var simBalance = 500;
+
+    var flushes = 0;
+    var fHouses = 0;
+    var cares = 0;
+    var sFlush = 0;
+    var rFlush = 0;
+    var dq = 0;
+
+    for (let j = 0; j < 10000; j++) {
+        let deck = [];
+
+            for (let i = 0; i < 52; i++)
+                deck.push(i);
+            //deck = data; // Assuming the response contains a "deck" property with the shuffled deck array
+            shuffleArray(deck);
 
             // соберем стол
             var table = [
@@ -88,16 +190,36 @@ async function simulateGames() {
 
             var result = playerHand[0].rankValue - dealerHand[0].rankValue;
 
-            if (result < 0) {
-                simBalance -= 10;
-            }
 
-            if (result > 0) {
-                if (playerHand[0].rankDescription === 'Flush') {
+            if (findBestHandTexasHoldEm(player, [deck[4],
+                deck[5],
+                deck[6]])[0].rankValue > 2000100000){
+                    console.log("идем с ")
+                    simBalance-=30;
+                    if (result > 0){
+                        if (dealerHand[0].rankValue > 2000100000){
+                            simBalance+=60;
+                            dq++;                        
+                        }                        
+                        else simBalance+=40;
+                    }
+                }
+            else 
+            {
+                if (dealerHand[0].rankValue > 2000100000){
+                    dq++;                        
+                }  
+                simBalance-=10;      
+            }
+                
+            
+            
+
+                 if (playerHand[0].rankDescription === 'Flush') {
                     simBalance += 60;
                     flushes++;
                 } else if (playerHand[0].rankDescription === 'Full House') {
-                    simBalance += 120;
+                    simBalance += 90;
                     fHouses++;
                 } else if (playerHand[0].rankDescription === 'Quads') {
                     simBalance += 210;
@@ -110,22 +232,23 @@ async function simulateGames() {
                     rFlush++;
                 } else {
                     simBalance += 20;
-                }
-            }
+                } 
+            
 
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-            break; // Exit the loop if there's a fetch error
-        }
+        
     }
+
+
 
     console.log(flushes + ' флешей, ' +
         fHouses + ' фул хаузов, ' + cares + ' каре, ' +
         sFlush + ' стрит флешей, ' + rFlush + ' роял флешей');
+
+        console.log(dq + ' раз у дилера старше чем пара четверок');
     console.log('Баланс за 10.000 игр при начальной ставке 10: ' + simBalance);
 }
 
-simulateGames();
+//simulateGamesServer();
 
 
 
@@ -544,6 +667,13 @@ const colors = {
     5: new THREE.Vector3(.1, .8, .8), // Зеленый для 10
     2: new THREE.Vector3(.2, .35, .7), // Красный для 5
     1: new THREE.Vector3(.8, .8, .8) // Белый для 1
+};
+
+const rimColors = {
+    10: new THREE.Vector3(0, .8, 1),
+    5: new THREE.Vector3(.5, .1, .3), 
+    2: new THREE.Vector3(.2, .35, .7), 
+    1: new THREE.Vector3(.8, .8, .8) 
 };
 
 function createChips(chips) {
