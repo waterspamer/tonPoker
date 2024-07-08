@@ -434,13 +434,18 @@ overflow: visible;
 
         body {
             margin: 0;
-            height: 100%;
-            width:100%;
+            padding:0;
             overflow: hidden;
             font-family: 'Inter', sans-serif;
             background-color: #0B0B0F;
             perspective: 600px;;
         }
+        #main-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* Prevents the container from expanding */
+}
         #container {
             width: 100%;
             height: 100vh;
@@ -1233,7 +1238,9 @@ left:6rem;
 
 </head>
 <body>
-
+    
+    <div id = "main-container">
+        <div id="container"></div>
         <div id = "top-cloud"></div>
         <div id = "bottom-cloud"></div>
         <div id = "game-result"> +100$</div>
@@ -1366,12 +1373,7 @@ left:6rem;
         <Input class="range" type="range" name "" value="10" min="1" max="50" onChange="rangeSlide(this.value)"></Input> -->
         </div>
         
-    <div id="container"></div>
-    <div class="buttons-contatiner">
-    <button id ="bet" style ="display:none" onclick="makeBet()">Поставить</button>
-    <button id ="mult" style ="display:none" onclick="secondBet()">Удвоить</button>
-    <button id ="fold" style ="display:none" onclick="reset()">Фолд</button>
-    </div>
+    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <script>
@@ -1531,5 +1533,7 @@ $("#minus").click(function() {
             placeChips(value);
         }
     </script>
+
+</div>
 </body>
 </html>
