@@ -32,128 +32,101 @@ const uvXOffset = 0.07655;
 
 
 
-function simulateGames(){
-
+async function simulateGames() {
     var simBalance = 500;
 
+    var flushes = 0;
+    var fHouses = 0;
+    var cares = 0;
+    var sFlush = 0;
+    var rFlush = 0;
 
-    var flushes =0;
-    var fHouses =0;
-    var cares =0;
-    var sFlush =0;
-    var rFlush =0;
-    
+    for (let j = 0; j < 10000; j++) {
+        let deck = [];
 
-    for (let j = 0; j < 10000; j++){
+        try {
+            const response = await fetch('https://pokerjack.space/shuffle_deck', {
+                mode: 'cors', // Enabling CORS
+            });
 
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
 
-        var deck = [];
-    for (let i = 0 ; i < 52; i++){
-        deck.push(i);
+            const data = await response.json();
+            deck = data; // Assuming the response contains a "deck" property with the shuffled deck array
+
+            console.log('Success:', data);
+
+            // соберем стол
+            var table = [
+                deck[4],
+                deck[5],
+                deck[6],
+                deck[7],
+                deck[8]
+            ];
+
+            // соберем карты игрока
+            var player = [
+                deck[0],
+                deck[1]
+            ];
+
+            // соберем карты дилера
+            var dealer = [
+                deck[2],
+                deck[3]
+            ];
+
+            console.log(j);
+
+            var playerHand = findBestHandTexasHoldEm(player, table);
+            console.log(playerHand);
+
+            var dealerHand = findBestHandTexasHoldEm(dealer, table);
+
+            var result = playerHand[0].rankValue - dealerHand[0].rankValue;
+
+            if (result < 0) {
+                simBalance -= 10;
+            }
+
+            if (result > 0) {
+                if (playerHand[0].rankDescription === 'Flush') {
+                    simBalance += 60;
+                    flushes++;
+                } else if (playerHand[0].rankDescription === 'Full House') {
+                    simBalance += 120;
+                    fHouses++;
+                } else if (playerHand[0].rankDescription === 'Quads') {
+                    simBalance += 210;
+                    cares++;
+                } else if (playerHand[0].rankDescription === 'Straight Flush') {
+                    simBalance += 270;
+                    sFlush++;
+                } else if (playerHand[0].rankDescription === 'Royal Flush') {
+                    simBalance += 420;
+                    rFlush++;
+                } else {
+                    simBalance += 20;
+                }
+            }
+
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+            break; // Exit the loop if there's a fetch error
+        }
     }
 
-    shuffleArray(deck);
-
-    
-
-
-     //собираем стол
-     var table = [ 
-        deck[4],
-        deck[5],
-        deck[6],
-        deck[7],
-        deck[8]];
-
-    //собираем карты игрока
-    var player = [
-        deck[0],
-        deck[1]
-    ];
-
-    //собираем карты дилера
-    var dealer = [
-        deck[2],
-        deck[3]
-    ];
-    console.log(j);
-
-
-    var playerHand = findBestHandTexasHoldEm(player, table);
-    console.log(playerHand);
-
-    
-
-            
-
-    var dealerHand = findBestHandTexasHoldEm(dealer, table);
-
-
-
-
-    var result = playerHand[0].rankValue - dealerHand[0].rankValue;
-
-    if (result < 0 ) {
-        simBalance -= 10;
-        
-    }
-
-    if (result > 0 ) {
-        
-        if (playerHand[0].rankDescription === 'Flush'){
-            simBalance+=60;
-            flushes++;
-        }
-            
-        else if (playerHand[0].rankDescription === 'Full House'){
-            simBalance+=120;
-            fHouses++;
-        }
-            
-        else if (playerHand[0].rankDescription === 'Quads'){
-            simBalance+=210;
-            cares++;
-        }
-            
-        else if (playerHand[0].rankDescription === 'Straight Flush'){
-            simBalance+=270;
-            sFlush++;
-        }
-            
-        else if (playerHand[0].rankDescription === 'Royal Flush'){
-            simBalance+=420;
-            rFlush++;
-        }
-            
-
-        else simBalance += 20;
-    }
-
-    }
-
-    console.log(flushes + ' флешей, '
-        + fHouses + ' фул хаузов, '+ cares + ' каре, '
-        + sFlush + ' стрит флешей, ' + rFlush + ' роял флешей' );
-    console.log('баланс за 10.000 игр при начальной ставке 10: ' + simBalance);
+    console.log(flushes + ' флешей, ' +
+        fHouses + ' фул хаузов, ' + cares + ' каре, ' +
+        sFlush + ' стрит флешей, ' + rFlush + ' роял флешей');
+    console.log('Баланс за 10.000 игр при начальной ставке 10: ' + simBalance);
 }
 
-fetch('https://pokerjack.space/shuffle_deck', {
-    mode: 'cors', // Enabling CORS
-})
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Success:', data);
-        // Handle the data here
-    })
-    .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-    });
-//simulateGames();
+simulateGames();
+
 
 
 let currentVolume = 0.5;
@@ -701,7 +674,7 @@ function goToPokerTable(){
     //document.getElementById("play-poker-button").style.display = 'none';
     
     rotationAnim.kill();
-    setTimeout(()=>placeChips(10), 400);
+    setTimeout(()=>placeChips(bet), 400);
     //gsap.to(pokerTableModel.rotation, { y: pokerTableModel.rotation.y + .3, duration: 1, repeat: 0, ease: "power2.Out" });
     gsap.to(pokerTableModel.rotation, {x: 0, y: -Math.PI/2, duration: 1, repeat: 0, ease: "power2.Out" });
     gsap.to(pokerTableModel.position, { z: -1, y: -1.3, duration: .5, repeat: 0, ease: "power2.inOut" });
@@ -1366,8 +1339,16 @@ const ColorDistortionShader = {
 
 const vertexShader = `
     varying vec2 vUv;
+    varying vec3 vNormal;
+    varying vec3 vWorldPosition;
+    varying vec3 oNormal;
+    varying vec3 vWorldNormal;
     void main() {
         vUv = uv;
+        vNormal = normalize(mat3(modelMatrix) * normal);
+        oNormal = normal;
+        vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+        vWorldPosition = worldPosition.xyz;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
     }
 `;
@@ -1377,26 +1358,47 @@ const fragmentShader = `
     uniform float offsetX;
     uniform float offsetY;
     uniform vec3 colorMultiplier;
-    
+    //uniform vec3 cameraPosition; // Pass the camera position as a uniform
     varying vec2 vUv;
+    varying vec3 vWorldPosition;
+    varying vec3 vWorldNormal;
+    varying vec3 vNormal;
 
-
-    vec3 fresnelSchlick(float cosTheta, vec3 F0)
-{
-    return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
-}
-
+    vec3 fresnelSchlick(float cosTheta, vec3 F0) {
+        return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
+    }
 
     void main() {
         vec2 uv = vUv;
         if (!gl_FrontFacing) {
-            //uv.x = vUv.x + 0.3825;
             uv.y = vUv.y - 0.47;
         } else {
             uv.x = vUv.x + offsetX;
             uv.y = vUv.y + offsetY;
         }
-        gl_FragColor = texture2D(cardTexture, uv) * vec4(colorMultiplier, 1.0);
+        vec4 textureColor = texture2D(cardTexture, uv);
+        vec4 color = textureColor * vec4(colorMultiplier, 1.0);
+        color.a = textureColor.a; // Use the alpha channel from the texture
+
+        // Normalize the world normal
+        vec3 normal = normalize(vWorldNormal);
+        vec3 mN = vNormal;
+        // Calculate the world view direction
+        vec3 worldViewDir = normalize(cameraPosition - vWorldPosition);
+        if (!gl_FrontFacing) mN *= -1.0;
+        // Simple diffuse lighting
+        vec3 lightDir = normalize(vec3(1.0, 1.0, 0.0)); // Example light direction
+        float diff = max(dot(mN, lightDir), 0.0);
+
+        // Apply diffuse lighting to color
+        color.rgb *= diff * 1.5;
+
+        // Example use of worldViewDir: Fresnel effect
+        float cosTheta = dot(vNormal, worldViewDir);
+        //vec3 fresnel = fresnelSchlick(cosTheta, vec3(1.0, 1.0, 1.0));
+        //color.rgb = mix(color.rgb, fresnel, .5);
+        color.rgb +=  vec3(.7,0,.8) * pow(1.0 - dot(worldViewDir, mN), 3.0);
+        gl_FragColor = color;
     }
 `;
 
