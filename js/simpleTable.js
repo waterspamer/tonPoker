@@ -540,7 +540,7 @@ let prevCount = 0;
 let prevArrayState = chipsArray;
 
 const colors = {
-    10: new THREE.Vector3(.8, .1, .8), // Синий для 25
+    10: new THREE.Vector3(1, .8, 0), // Синий для 25
     5: new THREE.Vector3(.1, .8, .8), // Зеленый для 10
     2: new THREE.Vector3(.2, .35, .7), // Красный для 5
     1: new THREE.Vector3(.8, .8, .8) // Белый для 1
@@ -1380,7 +1380,6 @@ const fragmentShader = `
         vec4 color = textureColor * vec4(colorMultiplier, 1.0);
         color.a = textureColor.a; // Use the alpha channel from the texture
 
-        // Normalize the world normal
         vec3 normal = normalize(vWorldNormal);
         vec3 mN = vNormal;
         // Calculate the world view direction
@@ -1390,7 +1389,6 @@ const fragmentShader = `
         vec3 lightDir = normalize(vec3(1.0, 1.0, 0.0)); // Example light direction
         float diff = max(dot(mN, lightDir), 0.0);
 
-        // Apply diffuse lighting to color
         color.rgb *= diff * 1.5;
 
         // Example use of worldViewDir: Fresnel effect
