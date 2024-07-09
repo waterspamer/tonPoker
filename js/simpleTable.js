@@ -886,7 +886,7 @@ function makeBet(){
     console.log(bet);
     balance -= bet;
     document.getElementById('balance-f').innerHTML = balance + '$';
-    document.getElementById('fold-button').style.opacity = '.5';
+    document.getElementById('fold-button').style.opacity = '1';
 
     document.getElementById('fold-button').style.pointerEvents = 'none';
     setTimeout(()=>{
@@ -1488,6 +1488,7 @@ const fragmentShader = `
     uniform float offsetX;
     uniform float offsetY;
     uniform vec3 colorMultiplier;
+    uniform samplerCube uEnvironmentMap;
     //uniform vec3 cameraPosition; // Pass the camera position as a uniform
     varying vec2 vUv;
     varying vec3 vWorldPosition;
@@ -1520,7 +1521,6 @@ const fragmentShader = `
         float diff = max(dot(mN, lightDir), 0.0);
 
         color.rgb *= diff * 1.5;
-
         // Example use of worldViewDir: Fresnel effect
         float cosTheta = dot(vNormal, worldViewDir);
         //vec3 fresnel = fresnelSchlick(cosTheta, vec3(1.0, 1.0, 1.0));

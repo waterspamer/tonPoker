@@ -153,6 +153,33 @@ const buildDeck = () => {
   };
 
 
+  const findBestHandTexasHoldEmFive = (holeCards, board) => {
+    const hands = [];
+    hands.push(board);
+    for (let c = 0; c < 2; c += 1) {
+      for (let b = 0; b < 3; b += 1) {
+        const newHand = [...board];
+        newHand[b] = holeCards[c];
+        hands.push(newHand);
+      }
+    }
+    for (let b = 0; b < 2; b += 1) {
+      for (let r = b + 1; r < 3; r += 1) {
+        const newHand = [...board];
+        newHand[b] = holeCards[0];
+        newHand[r] = holeCards[1];
+        hands.push(newHand);
+      }
+    }
+    return compareHands(hands);
+  };
+
+
+
+
+
+
+
   const dealRound = ({ numPlayers, holeCards, findBestHand }) => {
     const game = dealCards(numPlayers, holeCards);
     const players = game.table.map((hole, index) => {

@@ -938,6 +938,39 @@ left:6rem;
         }
 
 
+
+        #spin-button{
+    display: block;
+            color: #EBEBEB;
+            display: flex;
+            overflow: hidden;
+            align-items: center;
+            font-weight: 800;
+            font-size: 2vh;
+            width: calc(30% - 20px);
+            justify-content: center;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            background: linear-gradient(225deg, #cdff18 0%, #933FFE 100%);
+            border-radius: 20px 40px 20px 40px;
+            z-index: 35;
+            position: relative; /* Добавлено для псевдоэлемента */
+}
+
+#spin-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 70%; /* Изменено для плавного перехода */
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            animation: glow 2s linear infinite;
+            pointer-events: none; /* Не позволяет псевдоэлементу мешать кликам */
+        }
+
+
         #bet-button{
     display: block;
             color: #EBEBEB;
@@ -945,7 +978,7 @@ left:6rem;
             overflow: hidden;
             align-items: center;
             font-weight: 800;
-            font-size: 3vh;
+            font-size: 2vh;
             width: calc(30% - 20px);
             justify-content: center;
             text-align: center;
@@ -977,15 +1010,15 @@ left:6rem;
             overflow: hidden;
             align-items: center;
             font-weight: 800;
-            font-size: 3vh;
+            font-size: 2vh;
             width: calc(30% - 20px);
             justify-content: center;
             text-align: center;
 
             vertical-align: middle;
             cursor: pointer;
-            background: linear-gradient(225deg, #18C8FF 0%, #933FFE 100%);
-            border-radius: 20px 40px 20px 40px;
+            background: linear-gradient(225deg, #3F8CFE 0%, #18FF59 100%);
+            border-radius: 40px 20px 20px 40px;
             z-index: 35;
             position: relative; /* Добавлено для псевдоэлемента */
 }
@@ -1011,15 +1044,15 @@ left:6rem;
             overflow: hidden;
             align-items: center;
             font-weight: 800;
-            font-size: 3vh;
+            font-size: 2vh;
             width: calc(30% - 20px);
             justify-content: center;
             text-align: center;
 
             vertical-align: middle;
             cursor: pointer;
-            background: linear-gradient(225deg, #18C8FF 0%, #933FFE 100%);
-            border-radius: 20px 40px 20px 40px;
+            background: linear-gradient(225deg, #3F8CFE 0%, #18FF59 100%);
+            border-radius: 40px 20px 20px 40px;
             z-index: 35;
             position: relative; /* Добавлено для псевдоэлемента */
 }
@@ -1045,15 +1078,16 @@ left:6rem;
             overflow: hidden;
             align-items: center;
             font-weight: 800;
-            font-size: 3vh;
+            font-size: 2vh;
+            left:20px;
             width: calc(25% - 20px);
             justify-content: center;
             text-align: center;
-            opacity: .5;
+            opacity: 1;
             vertical-align: middle;
             cursor: pointer;
             background: linear-gradient(225deg, #691383 0%, #fe3f49 100%);
-            border-radius: 20px 40px 20px 40px;
+            border-radius: 20px 40px 40px 20px;
             z-index: 35;
             position: relative; /* Добавлено для псевдоэлемента */
 }
@@ -1231,6 +1265,42 @@ left:6rem;
     color: #10a2c7;
     transition: all .5s;
     transform: translate(-50%, -50%);
+
+
+
+}
+
+#combo-info{
+    position: absolute;
+    display: flex;
+    gap:10px;
+    flex-direction: row;
+    justify-content: space-around;
+    bottom:43vh;
+    left:20px;
+    width: calc(100% - 40px);
+    height:auto;
+    z-index: 40;
+    
+    border-radius: 20px;
+    background-color: rgba( 28, 28, 28, 0.3 );
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+}
+
+.combo-txt{
+    transition: all .5s;
+    display: flex;
+    text-align: center;
+    justify-content: flex-end;
+    font-size: 2.5vh;
+    gap:20px;
+    color:white;
+}
+
+.combo-mult{
+    font-size: 2vh;
+    align-self: flex-end;
 }
         
         </style>
@@ -1240,7 +1310,7 @@ left:6rem;
 <body>
     
     <div id = "main-container">
-        <div id="container"></div>
+<div id="container"></div>
         <div id = "top-cloud"></div>
         <div id = "bottom-cloud"></div>
         <div id = "game-result"> +100$</div>
@@ -1250,9 +1320,24 @@ left:6rem;
         <div id = "connect-btn">authorize</div>
     </div>
 
-    
+    <div id = "combo-info" style = "display: none;">
+        <div>
+        <div id = '1' class="combo-txt">pair<div class = 'combo-mult'>x1.3</div></div>
+        <div id = '2' class="combo-txt">two pairs <div class = 'combo-mult'>x2</div></div>
+        <div id = '3' class="combo-txt">trips <div class = 'combo-mult'>x3</div></div>
+        <div id = '4' class="combo-txt">straight <div class = 'combo-mult'>x5</div></div>
+        <div id = '5' class="combo-txt">flush <div class = 'combo-mult'>x10</div></div>
+        </div>
+        <div>
+        <div id = '6' class="combo-txt">full house <div class = 'combo-mult'>x15</div></div>
+        <div id = '7' class="combo-txt">quads <div class = 'combo-mult'>x50</div></div>
+        <div id = '8' class="combo-txt">straight flush <div class = 'combo-mult'>x200</div></div>
+        <div id = '9' class="combo-txt">royal flush <div class = 'combo-mult'>x500</div></div>
+        </div>
+    </div>
     <div id = "footer-menu" style = "transform: translateX(100vh);">
     <div id = "bank-button" class = "action-button-active">bank</div>
+    <div id = "spin-button"  onclick="playSingleTime()" class = "action-button-active" style="display: none;">spin</div>
     <div id = "bet-button"  onclick="makeBet()" class = "action-button-active" style="display: none;">bet</div>
     <div id = "turn-button" onclick = "getTurn()" class = "action-button-active" style="display: none;">turn</div>
     <div id = "river-button" onclick = "getReaver()" class = "action-button-active" style="display: none;">river</div>
@@ -1270,7 +1355,7 @@ left:6rem;
     </div>
     </div>
     <div id = "games-container" style = "transform: translateX(100vh);">
-        <div class = 'game-variant'>
+        <div class = 'game-variant' onclick = "goToSlots()">
             <div class = "game-name">poker slots</div>
             <div class="game-icon" style = "background-image: url('resources/blackjackLogo.svg')"></div>
             <div class ="game-online">5422 online<div class ="online-circle"></div></div>
@@ -1283,26 +1368,7 @@ left:6rem;
     </div>
     
     
-    <!-- <div class="profile-container">
-        <div class="profile-image">
-            <img src="https://via.placeholder.com/100" alt="Profile Image" id="profileImage">
-        </div>
-        <div class="profile-name" id="profileName">LUDOMAN228</div>
-    </div> -->
-   <!--  <div id = "header">
-        <div class = "header-element">
-            <div class="circle-container">
-            <img src = "resources/stars-logo.jpg" class = "header-icon">
-            
-            </img>
-        </div>
-        <div class = "vertical-property-value-container">
-            <div class = "property-header"> balance:</div>
-            <div class="property-value">23.03₮</div>
-        </div>
-        </div>
-        <div class = "header-element">уровень</div>
-    </div> -->
+    
     <div id = "main-nav" style = "display:none">
         <div id = "games-container" >
             <div class ="game-variant"  id = "play-poker-button" onclick ="goToPokerTable()">
@@ -1344,13 +1410,7 @@ left:6rem;
     <!-- <div id = "footer-menu"></div> -->
     
     <canvas id="c"></canvas>
-    <div id = "main-menu">
-        <!-- <button id = "play-button" onclick ="goToPokerTable()">POKER</button> -->
-        
-        <div id = "call-but" style = "display:none">turn</div>
-        <div id = "river-but" style = "display:none">river</div>
-        <div id = "fold-but" style = "display:none">FOLD</div>
-    </div>
+    
 
 
 <!--     <input type="range" min="1" max="50"> -->
@@ -1443,10 +1503,14 @@ left:6rem;
 
 </head>
 <body>
-    <script src = "js/matrix.js">        </script>
     <script src = "js/pokerSolver.js">        </script>
+    
     <script src = "js/simpleTable.js">        </script>
-    <script type="text/javascript">
+    <script src = "js/pokerSlot.js">        </script>
+    <script type= "text/javascript">
+        
+
+
         
         function showValue(val, slidernum, vertical) {
   /* setup variables for the elements of our slider */
