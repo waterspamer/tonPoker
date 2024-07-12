@@ -69,7 +69,7 @@ async function load() {
 
 async function authorizeUser(user) {
     try {
-        const response = await fetch(`${backend_api_address}/authorize_user`, {
+        const response = await fetch(`${backend_api_address}/authorise_user`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -101,6 +101,7 @@ async function authorizeUser(user) {
         console.error('Error authorizing user:', error);
         alert(data);
     }
+    alert(data);
 }
 
 // Load function is called when the window loads
