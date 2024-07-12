@@ -1302,6 +1302,16 @@ left:6rem;
     font-size: 2vh;
     align-self: flex-end;
 }
+
+#loading-label{
+    font-size: 40px;
+    position: absolute;
+    color:white;
+    bottom:25vh;
+    left:50%;
+    transform: translateX(-50%);
+    z-index: 40;
+}
         
         </style>
 
@@ -1311,10 +1321,12 @@ left:6rem;
     
     <div id = "main-container">
 <div id="container"></div>
+<div id = 'loading-label'>loading.</div>
         <div id = "top-cloud"></div>
         <div id = "bottom-cloud"></div>
         <div id = "game-result"> +100$</div>
-    <div id = "hello-container">
+        
+    <div id = "hello-container" style = 'display: none;'>
         <div class ="info-txt">@user_name</div>
         <div class ="info-txt">welcome to the best web3 card slots!</div>
         <div id = "connect-btn">authorize</div>
@@ -1470,16 +1482,16 @@ left:6rem;
             const profileImageUrl = user.photo_url;
             const profileName = user.id;
 
-            const profileImageElement = document.getElementById('profileImage');
-            profileImageElement.src = profileImageUrl;
+            //const profileImageElement = document.getElementById('profileImage');
+            //profileImageElement.src = profileImageUrl;
 
-            const profileNameElement = document.getElementById('profileName');
-            profileNameElement.textContent = profileName;
-            document.getElementsByClassName("info-txt")[0].innerHTML = '@'+ profileName;
+            //const profileNameElement = document.getElementById('profileName');
+            //profileNameElement.textContent = profileName;
+            document.getElementsByClassName("info-txt")[0].innerText = '@'+ profileName;
         }
 
         // Получение информации о пользователе и обновление виджета
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        if (tg.initDataUnsafe) {
             updateProfileWidget(tg.initDataUnsafe.user);
         }
     </script>
@@ -1503,9 +1515,11 @@ left:6rem;
 
 </head>
 <body>
+    
     <script src = "js/pokerSolver.js">        </script>
     
     <script src = "js/simpleTable.js">        </script>
+    <script src = "js/auth.js">        </script>
     <script src = "js/pokerSlot.js">        </script>
     <script type= "text/javascript">
         

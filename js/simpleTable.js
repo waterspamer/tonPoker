@@ -4,7 +4,7 @@ Telegram.WebApp.ready();
 
 
 
-
+let tableTopMaterial;
 
 let userState = 0;
 
@@ -314,7 +314,7 @@ const audioPath = 'resources/pokerChipSFX.mp3';
 // Load the texture
 const chipTextureLoader = new THREE.TextureLoader();
 const chipTexture = chipTextureLoader.load('resources/ChipTex.jpg', function (texture) {
-    console.log(chipTexture);
+    //console.log(chipTexture);
     chipTexture.wrapS = chipTexture.wrapT = THREE.RepeatWrapping;
 });
 
@@ -1604,7 +1604,7 @@ composer.addPass(outputPass);
 
         const textureLoader = new THREE.TextureLoader();
             const tableTexture = textureLoader.load('resources/TableTex.jpg');
-            const tableTopTexture = textureLoader.load('resources/violetTable.jpg');
+            const tableTopTexture = textureLoader.load('resources/slotTexture.jpg');
 
         const fbxLoader = new THREE.FBXLoader();
         fbxLoader.load(
@@ -1659,6 +1659,7 @@ composer.addPass(outputPass);
                         fragmentShader: fragmentShader,
                         side: THREE.DoubleSide
                     });
+                    tableTopMaterial = child.material;
                  }
              })
              object.scale.set(.205, .205, .205);
