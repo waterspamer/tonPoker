@@ -30,8 +30,10 @@ async function load() {
         
         const response = await fetch(`${backend_api_address}/is_user_authorised?user_id=${tgUser.id}`);
         const data = await response.json();
-
+        alert(data);
         if (data.isUserAuthorised) {
+
+            
             isStartAnim = false;
 
                 gsap.to(previewC1.scale, {x: 0,y : -.04, z: .0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
@@ -92,11 +94,11 @@ async function authorizeUser(user) {
                 gsap.to(document.getElementById('games-container'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
             document.getElementById('loading-label').style.display = 'none';
         } else {
-            alert(data);
+            //alert(data);
         }
     } catch (error) {
         console.error('Error authorizing user:', error);
-        alert(data);
+        //alert(data);
     }
 }
 
