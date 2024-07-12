@@ -76,7 +76,7 @@ async function authorizeUser(user) {
 
         const data = await response.json();
 
-        if (response.ok) {
+        if (data.success) {
             //document.getElementById('hello-container').style.display = 'none';
             isStartAnim = false;
 
@@ -92,11 +92,11 @@ async function authorizeUser(user) {
                 gsap.to(document.getElementById('games-container'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
             document.getElementById('loading-label').style.display = 'none';
         } else {
-            alert('Authorization failed. Please try again.');
+            alert(data);
         }
     } catch (error) {
         console.error('Error authorizing user:', error);
-        alert('Authorization failed. Please try again.');
+        alert(data);
     }
 }
 
