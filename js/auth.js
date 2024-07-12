@@ -1,6 +1,6 @@
 // auth.js
 
-setTimeout(()=>{
+/* setTimeout(()=>{
     document.getElementById('loading-label').innerHTML = 'loading..';
 }, 300);
 setTimeout(()=>{
@@ -15,13 +15,13 @@ setInterval(()=>{
     setTimeout(()=>{
         document.getElementById('loading-label').innerHTML = 'loading...';
     }, 600);
-},900);
+},900); */
 
 const backend_api_address = 'https://pokerjack.space';
 
 window.Telegram.WebApp.disableVerticalSwipes();
 
-async function load() {
+async function login() {
     try {
         const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
         if (!tgUser) {
@@ -104,5 +104,4 @@ async function authorizeUser(user) {
     //alert(data);
 }
 
-// Load function is called when the window loads
-window.onload = load;
+
