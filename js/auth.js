@@ -76,7 +76,7 @@ async function authorizeUser(user) {
 
         const data = await response.json();
 
-        if (data.isUserAuthorised) {
+        if (data.success) {
             //document.getElementById('hello-container').style.display = 'none';
             isStartAnim = false;
 
