@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css2?family=Evolventa&display=swap" rel="stylesheet">
+
     <title>web3 hold'em</title>
     <style>
 
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Evolventa&display=swap');
 
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;700&display=swap');
 
@@ -1479,15 +1478,15 @@ left:6rem;
 
         // Функция для обновления виджета профиля
         function updateProfileWidget(user) {
-            const profileImageUrl = user.photo_url;
-            const profileName = user.id;
+            //const profileImageUrl = user.photo_url;
+            //const profileName = user.id;
 
             //const profileImageElement = document.getElementById('profileImage');
             //profileImageElement.src = profileImageUrl;
 
             //const profileNameElement = document.getElementById('profileName');
             //profileNameElement.textContent = profileName;
-            document.getElementsByClassName("info-txt")[0].innerText = '@'+ profileName;
+            //document.getElementsByClassName("info-txt")[0].innerText = '@'+ profileName;
         }
 
         // Получение информации о пользователе и обновление виджета
@@ -1564,6 +1563,9 @@ left:6rem;
   track.style.width = (vertical ? fillsize : bigval - 4) + "px"; /* adjust for border */
   track.style.left = (vertical ? filloffset + bordersize : 0) + "px";
   track.style.top = (vertical ? 0 : filloffset + bordersize) + "px";
+
+
+  
 
   rangeSlide(val);
 
