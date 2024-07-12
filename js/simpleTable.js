@@ -545,7 +545,7 @@ cardLoader.load('resources/card.fbx', function (object) {
 
             }, 2000);
 
-            document.getElementById("connect-btn").addEventListener("click", ()=>{
+            /* document.getElementById("connect-btn").addEventListener("click", ()=>{
                 isStartAnim = false;
 
                 gsap.to(previewC1.scale, {x: 0,y : -.04, z: .0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
@@ -560,7 +560,7 @@ cardLoader.load('resources/card.fbx', function (object) {
                 gsap.to(document.getElementById('games-container'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
 
                 //gsap.to(document.getElementById('top-cloud'), {x: 30 + 'vh', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
-            });
+            }); */
 
         }
     });
