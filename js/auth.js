@@ -19,6 +19,8 @@ setInterval(()=>{
 
 const backend_api_address = 'https://pokerjack.space';
 
+window.Telegram.WebApp.disableVerticalSwipes();
+
 async function load() {
     try {
         const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
