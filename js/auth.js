@@ -26,7 +26,7 @@ async function load() {
             throw new Error("No user data available from Telegram WebApp");
         }
         
-        const response = await fetch(`${backend_api_address}/get__is_user_authorised?id=${tgUser.id}`);
+        const response = await fetch(`${backend_api_address}/is_user_authorised?id=${tgUser.id}`);
         const data = await response.json();
 
         if (data.isUserAuthorised) {
