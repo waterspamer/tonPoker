@@ -44,8 +44,9 @@ async function load() {
                 gsap.to(document.getElementById('hello-container'), {y: 100 + 'vh', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(document.getElementById('footer-menu'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(document.getElementById('games-container'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
-            document.getElementById('loading-label').style.display = 'none';
+                document.getElementById('loading-label').style.display = 'none';
         } else {
+            document.getElementById('loading-label').style.display = 'none';
             const authorizer = document.getElementById('hello-container');
             authorizer.style.display = '';
             

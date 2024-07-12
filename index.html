@@ -1479,14 +1479,14 @@ left:6rem;
         // Функция для обновления виджета профиля
         function updateProfileWidget(user) {
             //const profileImageUrl = user.photo_url;
-            //const profileName = user.id;
+            const profileName = user.username;
 
             //const profileImageElement = document.getElementById('profileImage');
             //profileImageElement.src = profileImageUrl;
 
             //const profileNameElement = document.getElementById('profileName');
             //profileNameElement.textContent = profileName;
-            //document.getElementsByClassName("info-txt")[0].innerText = '@'+ profileName;
+            document.getElementsByClassName("info-txt")[0].innerText = '@'+ profileName;
         }
 
         // Получение информации о пользователе и обновление виджета
