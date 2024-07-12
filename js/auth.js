@@ -33,7 +33,7 @@ async function load() {
         
         if (data.isUserAuthorised) {
 
-            alert(data);
+            //alert(data);
             isStartAnim = false;
 
                 gsap.to(previewC1.scale, {x: 0,y : -.04, z: .0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
@@ -48,10 +48,10 @@ async function load() {
                 gsap.to(document.getElementById('games-container'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
                 document.getElementById('loading-label').style.display = 'none';
         } else {
-            alert(data);
+            //alert(data);
             document.getElementById('loading-label').style.display = 'none';
             const authorizer = document.getElementById('hello-container');
-            authorizer.style.display = '';
+            //authorizer.style.display = '';
             
             //const authorizeButton = document.createElement('button');
             //authorizeButton.innerText = 'Authorize';
@@ -60,7 +60,7 @@ async function load() {
                 await authorizeUser(tgUser);
             });
 
-            authorizer.appendChild(authorizeButton);
+            //authorizer.appendChild(authorizeButton);
         }
     } catch (error) {
         console.error('Error loading user authorization status:', error);
@@ -95,13 +95,13 @@ async function authorizeUser(user) {
                 gsap.to(document.getElementById('games-container'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
             document.getElementById('loading-label').style.display = 'none';
         } else {
-            alert(data);
+            //alert(data);
         }
     } catch (error) {
         console.error('Error authorizing user:', error);
-        alert(data);
+        alert(error);
     }
-    alert(data);
+    //alert(data);
 }
 
 // Load function is called when the window loads
