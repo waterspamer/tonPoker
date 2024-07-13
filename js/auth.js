@@ -33,7 +33,7 @@ async function login() {
         
         if (data.isUserAuthorised) {
 
-            alert('user found');
+            //alert('user found');
             isStartAnim = false;
                 console.log(previewC1);
                 gsap.to(previewC1.scale, {x: 0,y : -.04, z: .0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
@@ -48,7 +48,7 @@ async function login() {
                 gsap.to(document.getElementById('games-container'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
                 document.getElementById('loading-label').style.display = 'none';
         } else {
-            alert('user not found');
+            //alert('user not found');
             //alert(data);
             document.getElementById('loading-label').style.display = 'none';
             const authorizer = document.getElementById('hello-container');
@@ -82,7 +82,7 @@ async function authorizeUser(user) {
         const data = await response.json();
 
         if (data.success) {
-            alert('user connected');
+            //alert('user connected');
             //document.getElementById('hello-container').style.display = 'none';
             isStartAnim = false;
 
