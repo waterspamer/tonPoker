@@ -35,7 +35,7 @@ async function login() {
 
             //alert(data);
             isStartAnim = false;
-
+                console.log(previewC1);
                 gsap.to(previewC1.scale, {x: 0,y : -.04, z: .0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(previewC2.scale, {x: 0,y : -.02, z: .0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(previewC3.scale, {x: 0, y: -0.02, z: 0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
@@ -88,6 +88,7 @@ async function authorizeUser(user) {
                 gsap.to(previewC3.scale, {x: 0, y: -0.02, z: 0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(previewC4.scale, {x: 0, y: -.02, z: -.0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(previewC5.scale, {x: 0, y : -.04, z: -.0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
+                
 
                 gsap.to(pokerTableModel.scale, {x: 0.044,y : 0.044, z: 0.044, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(document.getElementById('hello-container'), {y: 100 + 'vh', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });

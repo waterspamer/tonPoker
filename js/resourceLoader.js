@@ -69,6 +69,14 @@ const fbxLoader = new THREE.FBXLoader();
 const textureLoader = new THREE.TextureLoader();
 
 let pokerTableModel;
+let loadedCard;
+    const cardLoader = new THREE.FBXLoader();
+    
+let previewC1;
+let previewC2;
+let previewC3;
+let previewC4;
+let previewC5;
 
 
 let chipTexture;
@@ -174,335 +182,207 @@ let scene, camera, renderer;
 
 let rotationAnim;
 
-async function loadAll(){
-    document.getElementById('loading-label').innerHTML = 'creating scene';
+// Load a texture using a Promise
+function loadTexture(url) {
+    return new Promise((resolve, reject) => {
+        textureLoader.load(url, resolve, undefined, reject);
+    });
+}
+
+// Load an FBX model using a Promise
+function loadFBXModel(url) {
+    return new Promise((resolve, reject) => {
+        fbxLoader.load(url, resolve, undefined, reject);
+    });
+}
+
+async function loadAll() {
+    document.getElementById('loading-label').innerHTML = 'Creating scene';
     scene = new THREE.Scene();
 
     camera = new THREE.PerspectiveCamera(95, window.innerWidth / window.innerHeight, 0.1, 1000);
-    renderer = new THREE.WebGLRenderer({antialias: true, alpha:true});
-    renderer.setClearColor( 0x000000, 0 );
-    renderer.setPixelRatio(window.devicePixelRatio*1);
-    renderer.setSize(window.innerWidth, window.innerHeight, true);
-    
-    document.getElementById('container').appendChild(renderer.domElement);
-
-    document.getElementById('loading-label').innerHTML = 'loading textures';
-
-    chipTexture = textureLoader.load('resources/ChipTex.jpg', function (texture) {
-        chipTexture.wrapS = chipTexture.wrapT = THREE.RepeatWrapping;
-    });
-    chipShadowTexture = textureLoader.load('resources/shadowTex.png', function (texture) {
-        console.log(chipTexture);
-        chipTexture.wrapS = chipTexture.wrapT = THREE.RepeatWrapping;
-    });
-    cardTexture = textureLoader.load('resources/customCards.jpg', function (texture) {
-        cardTexture.wrapS = cardTexture.wrapT = THREE.RepeatWrapping;
-    });
-
-    tableTexture = textureLoader.load('resources/TableTex.jpg');
-    tableTopTexture = textureLoader.load('resources/slotTexture.jpg');
-
-
-
-    document.getElementById('loading-label').innerHTML = 'loading table';
-
-    fbxLoader.load(
-        'resources/tableLow.fbx',
-        (object) => {
-         object.traverse(function (child) {
-             if ((child).isMesh) {
-                  (child).material = new THREE.ShaderMaterial({
-                    uniforms: {
-                        cardTexture: { value: tableTexture },
-                        offsetX: { value: 0 },
-                        offsetY: { value: 0 },
-                        colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
-                    },
-                    vertexShader: vertexShader,
-                    fragmentShader: fragmentShader,
-                    side: THREE.DoubleSide
-                });
-                  const uvSetIndex = 2;
-            const uvAttribute = `uv${uvSetIndex}`;
-            if (child.geometry.attributes[uvAttribute]) {
-                child.geometry.attributes.uv = child.geometry.attributes[uvAttribute];
-            }
-             }
-         })
-         object.scale.set(.044, .044, .044);
-         object.scale.set(.0, .0, .0);
-         object.rotation.set (-.2, Math.PI/2, 0);
-         object.position.y = 0;
-         object.position.z = -3;
-         object.position.x = 0;
-         pokerTableModel = object;
-         scene.add(pokerTableModel);
-         document.getElementById('loading-label').innerHTML = 'loading poker skin';
-    fbxLoader.load(
-        'resources/tableTop.fbx',
-        (object) => {
-         object.traverse(function (child) {
-             if ((child).isMesh) {
-                  (child).material = new THREE.ShaderMaterial({
-                    uniforms: {
-                        cardTexture: { value: tableTopTexture },
-                        offsetX: { value: 0 },
-                        offsetY: { value: 0 },
-                        colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
-                    },
-                    vertexShader: vertexShader,
-                    fragmentShader: fragmentShader,
-                    side: THREE.DoubleSide
-                });
-                tableTopMaterial = child.material;
-             }
-         })
-         object.scale.set(.205, .205, .205);
-         object.rotation.set (0, Math.PI/2, 0);
-         object.position.y = 0;
-         object.position.z = 0;
-         object.position.x = 0;
-
-        pokerTableModel.add(object);
-    });
-    });
-
-
-    
-
-
-    
-
     camera.position.z = 3;
         camera.position.y = 4;
 
         camera.rotation.set(-1.2,0,0);
-
-        
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-    //rotationAnim = gsap.to(pokerTableModel.rotation, { y: pokerTableModel.rotation.y + Math.PI * 2, duration: 20, repeat: -1, ease: "linear" });
-
-
-
-
-
-
-
-    let loadedCard;
-    const cardLoader = new THREE.FBXLoader();
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(window.devicePixelRatio * 1);
+    renderer.setSize(window.innerWidth, window.innerHeight, true);
     
-    let previewC1;
-    let previewC2;
-    let previewC3;
-    let previewC4;
-    let previewC5;
-    
-    cardLoader.load('resources/card.fbx', function (object) {
-        loadedCard = object;
-        loadedCard.traverse(function (child) {
+    document.getElementById('container').appendChild(renderer.domElement);
+
+    document.getElementById('loading-label').innerHTML = 'Loading textures';
+
+    try {
+        [chipTexture, chipShadowTexture, cardTexture, tableTexture, tableTopTexture] = await Promise.all([
+            loadTexture('resources/ChipTex.jpg'),
+            loadTexture('resources/shadowTex.png'),
+            loadTexture('resources/customCards.jpg'),
+            loadTexture('resources/TableTex.jpg'),
+            loadTexture('resources/slotTexture.jpg')
+        ]);
+
+        chipTexture.wrapS = chipTexture.wrapT = THREE.RepeatWrapping;
+        chipShadowTexture.wrapS = chipShadowTexture.wrapT = THREE.RepeatWrapping;
+        cardTexture.wrapS = cardTexture.wrapT = THREE.RepeatWrapping;
+
+        document.getElementById('loading-label').innerHTML = 'Loading table';
+
+        pokerTableModel = await loadFBXModel('resources/tableLow.fbx');
+        processTableModel(pokerTableModel);
+
+        document.getElementById('loading-label').innerHTML = 'Loading poker skin';
+
+        const tableTopModel = await loadFBXModel('resources/tableTop.fbx');
+        processTableTopModel(tableTopModel, tableTopTexture);
+
+        loadedCard = await loadFBXModel('resources/card.fbx');
+        processCardModel(loadedCard);
+
+        animate();
+        login(); // Call login after everything is loaded
+
+    } catch (error) {
+        console.error('Error loading resources:', error);
+    }
+}
+
+function processTableModel(object) {
+    object.traverse(function (child) {
+        if (child.isMesh) {
+            child.material = new THREE.ShaderMaterial({
+                uniforms: {
+                    cardTexture: { value: tableTexture },
+                    offsetX: { value: 0 },
+                    offsetY: { value: 0 },
+                    colorMultiplier: { value: new THREE.Vector3(1, 1, 1) }
+                },
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader,
+                side: THREE.DoubleSide
+            });
+            const uvSetIndex = 2;
+            const uvAttribute = `uv${uvSetIndex}`;
+            if (child.geometry.attributes[uvAttribute]) {
+                child.geometry.attributes.uv = child.geometry.attributes[uvAttribute];
+            }
+        }
+    });
+    object.scale.set(.0, .0, .0);
+    object.position.set(0, 0, -3);
+    rotationAnim = gsap.to(pokerTableModel.rotation, { y: pokerTableModel.rotation.y + Math.PI * 2, duration: 20, repeat: -1, ease: "linear" });
+    scene.add(object);
+}
+
+function processTableTopModel(object, texture) {
+    object.traverse(function (child) {
+        if (child.isMesh) {
+            child.material = new THREE.ShaderMaterial({
+                uniforms: {
+                    cardTexture: { value: texture },
+                    offsetX: { value: 0 },
+                    offsetY: { value: 0 },
+                    colorMultiplier: { value: new THREE.Vector3(1, 1, 1) }
+                },
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader,
+                side: THREE.DoubleSide
+            });
+            tableTopMaterial = child.material;
+        }
+    });
+    object.scale.set(.205, .205, .205);
+    object.rotation.set(0, Math.PI / 2, 0);
+    object.position.set(0, 0, 0);
+    pokerTableModel.add(object);
+}
+
+function processCardModel(object) {
+    object.traverse(function (child) {
+        if (child.isMesh) {
+            // Process blend shapes and create preview cards
+            createPreviewCards(child);
+        }
+    });
+}
+
+function createPreviewCards(mesh) {
+    const blendShapeCount = mesh.morphTargetInfluences.length;
+    for (let i = 0; i < blendShapeCount; i++) {
+        gsap.to(mesh.morphTargetInfluences, { duration: 0.5, [i]: 1 });
+    }
+
+    [previewC1, previewC2, previewC3, previewC4, previewC5] = Array(5).fill().map(() => loadedCard.clone());
+
+    [previewC1, previewC2, previewC3, previewC4, previewC5].forEach((preview, index) => {
+        preview.traverse(function (child) {
             if (child.isMesh) {
-                const blendShapeCount = child.morphTargetInfluences.length;
-                for (let i = 0; i < blendShapeCount; i++) {
-                    gsap.to(child.morphTargetInfluences, { duration: 0.5, [i]: 1 });
-                }
-    
-    
-                previewC1 = loadedCard.clone();
-                previewC2 = loadedCard.clone();
-                previewC3 = loadedCard.clone();
-                previewC4 = loadedCard.clone();
-                previewC5 = loadedCard.clone();
-    
-    
-                previewC1.traverse(function (child) {
-                    if (child.isMesh) {
-                        
-                        child.material = new THREE.ShaderMaterial({
-                            uniforms: {
-                                cardTexture: { value: cardTexture },
-                                offsetX: { value: uvXOffset * 12 },
-                                offsetY: { value: -uvYOffset * 1 },
-                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
-                            },
-                            vertexShader: vertexShader,
-                            fragmentShader: fragmentShader,
-                            side: THREE.DoubleSide
-                        });
-                    }
-                    });
-    
-    
-                previewC2.traverse(function (child) {
-                    if (child.isMesh) {
-                        
-                        child.material = new THREE.ShaderMaterial({
-                            uniforms: {
-                                cardTexture: { value: cardTexture },
-                                offsetX: { value: uvXOffset * 11 },
-                                offsetY: { value: -uvYOffset * 1 },
-                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
-                            },
-                            vertexShader: vertexShader,
-                            fragmentShader: fragmentShader,
-                            side: THREE.DoubleSide
-                        });
-                    }
-                    });
-    
-    
-    
-                previewC3.traverse(function (child) {
-                    if (child.isMesh) {
-                        
-                        child.material = new THREE.ShaderMaterial({
-                            uniforms: {
-                                cardTexture: { value: cardTexture },
-                                offsetX: { value: uvXOffset * 10 },
-                                offsetY: { value: -uvYOffset * 1 },
-                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
-                            },
-                            vertexShader: vertexShader,
-                            fragmentShader: fragmentShader,
-                            side: THREE.DoubleSide
-                        });
-                    }
-                    });
-    
-    
-    
-    
-                previewC4.traverse(function (child) {
-                    if (child.isMesh) {
-                        
-                        child.material = new THREE.ShaderMaterial({
-                            uniforms: {
-                                cardTexture: { value: cardTexture },
-                                offsetX: { value: uvXOffset * 9 },
-                                offsetY: { value: -uvYOffset * 1 },
-                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
-                            },
-                            vertexShader: vertexShader,
-                            fragmentShader: fragmentShader,
-                            side: THREE.DoubleSide
-                        });
-                    }
-                    });
-    
-    
-    
-    
-                previewC5.traverse(function (child) {
-                    if (child.isMesh) {
-                        
-                        child.material = new THREE.ShaderMaterial({
-                            uniforms: {
-                                cardTexture: { value: cardTexture },
-                                offsetX: { value: uvXOffset * 8 },
-                                offsetY: { value: -uvYOffset * 1 },
-                                colorMultiplier: {value: new THREE.Vector3(1, 1, 1)}
-                            },
-                            vertexShader: vertexShader,
-                            fragmentShader: fragmentShader,
-                            side: THREE.DoubleSide
-                        });
-                    }
-                    });
-    
-    
-                previewC1.scale.set(.1,.1,.1);            
-                previewC2.scale.set(.1,.1,.1);
-                previewC3.scale.set(.1,.1,.1);
-                previewC4.scale.set(.1,.1,.1);
-                previewC5.scale.set(.1,.1,.1);
-                previewC1.rotation.set(.4,0,0);
-                previewC2.rotation.set(.4,0,0);
-                previewC3.rotation.set(.4,0,0);
-                previewC4.rotation.set(.4,0,0);
-                previewC5.rotation.set(.4,0,0);
-                scene.add(previewC1);
-                scene.add(previewC2);
-                scene.add(previewC3);
-                scene.add(previewC4);
-                scene.add(previewC5);
-                previewC1.position.y = .1;
-    
-    
-                gsap.to(previewC1.position, {x: 1,y : .04, z: .4, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC2.position, {x: .5,y : .02, z: .2, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC3.position, {x: 0, y: 0, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC4.position, {x: -.5, y: -.02, z: -.2, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC5.position, {x: -1, y : -.04, z: -.3, duration: 1, repeat: 0,  ease: "power2.inOut" });
-    
-    
-                gsap.to(previewC1.rotation, {y : -.2, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC2.rotation, {y : -.1, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC3.rotation, {y : 0, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC4.rotation, {y : .1, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC5.rotation, {y : .2, duration: 1, repeat: 0,  ease: "power2.inOut" });
-    
-    
-                gsap.to(previewC1.position, {x: 0,y : .04, z: .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC2.position, {x: .0,y : .02, z: .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC3.position, {x: 0, y: 0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC4.position, {x: -0, y: -.02, z: -.0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC5.position, {x: -0, y : -.04, z: -.0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-    
-    
-                gsap.to(previewC1.rotation, {y : -0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC2.rotation, {y : -0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC3.rotation, {y : 0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC4.rotation, {y : .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                gsap.to(previewC5.rotation, {y : .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-    
-    
-    
-    
-                setInterval(()=>{
-                    if (isStartAnim){
-                        gsap.to(previewC1.position, {x: 1,y : .04, z: .4, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC2.position, {x: .5,y : .02, z: .2, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC3.position, {x: 0, y: 0, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC4.position, {x: -.5, y: -.02, z: -.2, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC5.position, {x: -1, y : -.04, z: -.3, duration: 1, repeat: 0,  ease: "power2.inOut" });
-    
-    
-                    gsap.to(previewC1.rotation, {y : -.2, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC2.rotation, {y : -.1, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC3.rotation, {y : 0, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC4.rotation, {y : .1, duration: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC5.rotation, {y : .2, duration: 1, repeat: 0,  ease: "power2.inOut" });
-    
-    
-                    gsap.to(previewC1.position, {x: 0,y : .04, z: .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC2.position, {x: .0,y : .02, z: .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC3.position, {x: 0, y: 0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC4.position, {x: -0, y: -.02, z: -.0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC5.position, {x: -0, y : -.04, z: -.0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-    
-    
-                    gsap.to(previewC1.rotation, {y : -0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC2.rotation, {y : -0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC3.rotation, {y : 0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC4.rotation, {y : .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                    gsap.to(previewC5.rotation, {y : .0, duration: 1, delay: 1, repeat: 0,  ease: "power2.inOut" });
-                    }
-                    
-    
-    
-    
-                }, 2000);
-    
+                child.material = new THREE.ShaderMaterial({
+                    uniforms: {
+                        cardTexture: { value: cardTexture },
+                        offsetX: { value: uvXOffset * (12 - index) },
+                        offsetY: { value: -uvYOffset * 1 },
+                        colorMultiplier: { value: new THREE.Vector3(1, 1, 1) }
+                    },
+                    vertexShader: vertexShader,
+                    fragmentShader: fragmentShader,
+                    side: THREE.DoubleSide
+                });
             }
         });
+        preview.scale.set(.1, .1, .1);
+        preview.rotation.set(.4, 0, 0);
+        scene.add(preview);
     });
-    animate();
-    login();
+
+    setPreviewCardsPosition([previewC1, previewC2, previewC3, previewC4, previewC5]);
+
+    setInterval(() => {
+        if (isStartAnim) {
+            animatePreviewCards([previewC1, previewC2, previewC3, previewC4, previewC5]);
+        }
+    }, 2000);
 }
+
+function setPreviewCardsPosition(previews) {
+    const positions = [
+        { x: 1, y: .04, z: .4 },
+        { x: .5, y: .02, z: .2 },
+        { x: 0, y: 0, z: 0 },
+        { x: -.5, y: -.02, z: -.2 },
+        { x: -1, y: -.04, z: -.3 }
+    ];
+    previews.forEach((preview, index) => {
+        gsap.to(preview.position, { ...positions[index], duration: 1, ease: "power2.inOut" });
+        gsap.to(preview.rotation, { y: -.2 + .1 * index, duration: 1, ease: "power2.inOut" });
+    });
+    gsap.delayedCall(1, resetPreviewCardsPosition, [previews]);
+}
+
+function resetPreviewCardsPosition(previews) {
+    previews.forEach((preview) => {
+        gsap.to(preview.position, { x: 0, y: .04, z: 0, duration: 1, ease: "power2.inOut" });
+        gsap.to(preview.rotation, { y: 0, duration: 1, ease: "power2.inOut" });
+    });
+}
+
+function animatePreviewCards(previews) {
+    setPreviewCardsPosition(previews);
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+window.onload = loadAll;
 
 
 window.onload = loadAll;
