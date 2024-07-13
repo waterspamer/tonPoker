@@ -33,7 +33,7 @@ async function login() {
         
         if (data.isUserAuthorised) {
 
-            //alert(data);
+            alert('user found');
             isStartAnim = false;
                 console.log(previewC1);
                 gsap.to(previewC1.scale, {x: 0,y : -.04, z: .0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
@@ -48,6 +48,7 @@ async function login() {
                 gsap.to(document.getElementById('games-container'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
                 document.getElementById('loading-label').style.display = 'none';
         } else {
+            alert('user not found');
             //alert(data);
             document.getElementById('loading-label').style.display = 'none';
             const authorizer = document.getElementById('hello-container');
@@ -63,6 +64,7 @@ async function login() {
             //authorizer.appendChild(authorizeButton);
         }
     } catch (error) {
+        alert(error);
         console.error('Error loading user authorization status:', error);
     }
 }
@@ -80,6 +82,7 @@ async function authorizeUser(user) {
         const data = await response.json();
 
         if (data.success) {
+            alert('user connected');
             //document.getElementById('hello-container').style.display = 'none';
             isStartAnim = false;
 
@@ -88,7 +91,7 @@ async function authorizeUser(user) {
                 gsap.to(previewC3.scale, {x: 0, y: -0.02, z: 0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(previewC4.scale, {x: 0, y: -.02, z: -.0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(previewC5.scale, {x: 0, y : -.04, z: -.0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
-                
+
 
                 gsap.to(pokerTableModel.scale, {x: 0.044,y : 0.044, z: 0.044, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
                 gsap.to(document.getElementById('hello-container'), {y: 100 + 'vh', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
@@ -96,7 +99,8 @@ async function authorizeUser(user) {
                 gsap.to(document.getElementById('games-container'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
             document.getElementById('loading-label').style.display = 'none';
         } else {
-            //alert(data);
+            alert('user not connected');
+            alert(data);
         }
     } catch (error) {
         console.error('Error authorizing user:', error);
