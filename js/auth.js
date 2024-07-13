@@ -52,7 +52,7 @@ async function login() {
             //alert(data);
             document.getElementById('loading-label').style.display = 'none';
             const authorizer = document.getElementById('hello-container');
-            //authorizer.style.display = '';
+            authorizer.style.display = '';
             
             //const authorizeButton = document.createElement('button');
             //authorizeButton.innerText = 'Authorize';
@@ -99,8 +99,8 @@ async function authorizeUser(user) {
                 gsap.to(document.getElementById('games-container'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
             document.getElementById('loading-label').style.display = 'none';
         } else {
-            alert('user not connected');
-            alert(data);
+            //alert('user not connected');
+            //alert(data);
         }
     } catch (error) {
         console.error('Error authorizing user:', error);
