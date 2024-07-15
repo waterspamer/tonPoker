@@ -23,17 +23,23 @@ window.Telegram.WebApp.disableVerticalSwipes();
 
 async function login() {
     try {
-        const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
-        if (!tgUser) {
-            throw new Error("No user data available from Telegram WebApp");
-        }
+        //const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
+        //if (!tgUser) {
+          //  throw new Error("No user data available from Telegram WebApp");
+        //}//${tgUser.id}
         
-        const response = await fetch(`${backend_api_address}/is_user_authorised?user_id=${tgUser.id}`);
-        const data = await response.json();
+        //const response = await fetch(`${backend_api_address}/is_user_authorised?user_id=621446797`);
+        const response = await fetch(`https://pokerjack.space/is_user_authorised?user_id=621446797`);
+        const text = await response.text();
+        
+        // Parse the stringified JSON
+        //const data = JSON.parse(text.replace(/\\/g, ''));
+        const data =  ( JSON.parse(JSON.parse(text)));
+        console.log(data); // To check the structure of the data
         
         if (data.isUserAuthorised === 1) {
 
-            alert('user found');
+            //alert('user found');
             isStartAnim = false;
                 console.log(previewC1);
                 gsap.to(previewC1.scale, {x: 0,y : -.04, z: .0, duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
@@ -48,7 +54,7 @@ async function login() {
                 gsap.to(document.getElementById('games-container'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
                 document.getElementById('loading-label').style.display = 'none';
         } else {
-            alert('user not found');
+            //alert('user not found');
             //alert(data);
             document.getElementById('loading-label').style.display = 'none';
             const authorizer = document.getElementById('hello-container');
@@ -64,7 +70,7 @@ async function login() {
             //authorizer.appendChild(authorizeButton);
         }
     } catch (error) {
-        alert(error);
+        //alert(error);
         console.error('Error loading user authorization status:', error);
     }
 }
@@ -79,7 +85,8 @@ async function authorizeUser(user) {
             body: JSON.stringify(user)
         });
 
-        const data = await response.json();
+        const text = await response.text();
+        const data = ( JSON.parse(JSON.parse(text)));
 
         if (data.isUserAuthorised === 1) {
             //alert('user connected');
@@ -99,12 +106,12 @@ async function authorizeUser(user) {
                 gsap.to(document.getElementById('games-container'), {x: 0 + 'px', duration: .5, delay: 0, repeat: 0,  ease: "power2.inOut" });
             document.getElementById('loading-label').style.display = 'none';
         } else {
-            alert('user not connected');
+            //alert('user not connected');
             //alert(data);
         }
     } catch (error) {
         console.error('Error authorizing user:', error);
-        alert(error);
+        //alert(error);
     }
     //alert(data);
 }
