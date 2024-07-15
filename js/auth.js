@@ -23,13 +23,13 @@ window.Telegram.WebApp.disableVerticalSwipes();
 
 async function login() {
     try {
-        //const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
-        //if (!tgUser) {
-          //  throw new Error("No user data available from Telegram WebApp");
-        //}//${tgUser.id}
+        const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
+        if (!tgUser) {
+            throw new Error("No user data available from Telegram WebApp");
+        }
         
         //const response = await fetch(`${backend_api_address}/is_user_authorised?user_id=621446797`);
-        const response = await fetch(`https://pokerjack.space/is_user_authorised?user_id=621446797`);
+        const response = await fetch(`https://pokerjack.space/is_user_authorised?user_id=${tgUser.id}`);
         const text = await response.text();
         
         // Parse the stringified JSON
