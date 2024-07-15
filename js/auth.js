@@ -38,7 +38,7 @@ async function login() {
         console.log(data); // To check the structure of the data
         
         if (data.isUserAuthorised === 1) {
-
+            document.getElementById('menu-name').innerText ='@'+ tgUser.username;
             //alert('user found');
             isStartAnim = false;
                 console.log(previewC1);
@@ -89,6 +89,7 @@ async function authorizeUser(user) {
         const data = ( JSON.parse(JSON.parse(text)));
 
         if (data.isUserAuthorised === 1) {
+            document.getElementById('menu-name').innerText ='@'+ user.username;
             //alert('user connected');
             //document.getElementById('hello-container').style.display = 'none';
             isStartAnim = false;
