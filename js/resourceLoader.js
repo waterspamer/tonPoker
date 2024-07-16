@@ -197,7 +197,7 @@ function loadFBXModel(url) {
 }
 
 async function loadAll() {
-    document.getElementById('loading-label').innerHTML = 'Creating scene';
+    document.getElementById('loading-label').innerHTML = 'loading scene';
     scene = new THREE.Scene();
 
     camera = new THREE.PerspectiveCamera(95, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -212,7 +212,7 @@ async function loadAll() {
     
     document.getElementById('container').appendChild(renderer.domElement);
 
-    document.getElementById('loading-label').innerHTML = 'Loading textures';
+    document.getElementById('loading-label').innerHTML = 'loading textures';
 
     try {
         [chipTexture, chipShadowTexture, cardTexture, tableTexture, tableTopTexture] = await Promise.all([
@@ -227,12 +227,12 @@ async function loadAll() {
         chipShadowTexture.wrapS = chipShadowTexture.wrapT = THREE.RepeatWrapping;
         cardTexture.wrapS = cardTexture.wrapT = THREE.RepeatWrapping;
 
-        document.getElementById('loading-label').innerHTML = 'Loading table';
+        document.getElementById('loading-label').innerHTML = 'loading table';
 
         pokerTableModel = await loadFBXModel('resources/tableLow.fbx');
         processTableModel(pokerTableModel);
 
-        document.getElementById('loading-label').innerHTML = 'Loading poker skin';
+        document.getElementById('loading-label').innerHTML = 'loading poker skin';
 
         const tableTopModel = await loadFBXModel('resources/tableTop.fbx');
         processTableTopModel(tableTopModel, tableTopTexture);
@@ -361,8 +361,9 @@ function setPreviewCardsPosition(previews) {
 }
 
 function resetPreviewCardsPosition(previews) {
-    previews.forEach((preview) => {
-        gsap.to(preview.position, { x: 0, y: .04, z: 0, duration: 1, ease: "power2.inOut" });
+    console.log('pizda');
+    previews.forEach((preview, index) => {
+        gsap.to(preview.position, { x: 0, y: .04, z: (index - 2) * -0.01, duration: 1, ease: "power2.inOut" });
         gsap.to(preview.rotation, { y: 0, duration: 1, ease: "power2.inOut" });
     });
 }

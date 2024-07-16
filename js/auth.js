@@ -21,6 +21,9 @@ const backend_api_address = 'https://pokerjack.space';
 
 window.Telegram.WebApp.disableVerticalSwipes();
 
+
+
+
 async function login() {
     try {
         const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
