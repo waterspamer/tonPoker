@@ -361,7 +361,6 @@ function setPreviewCardsPosition(previews) {
 }
 
 function resetPreviewCardsPosition(previews) {
-    console.log('pizda');
     previews.forEach((preview, index) => {
         gsap.to(preview.position, { x: 0, y: .04, z: (index - 2) * -0.01, duration: 1, ease: "power2.inOut" });
         gsap.to(preview.rotation, { y: 0, duration: 1, ease: "power2.inOut" });

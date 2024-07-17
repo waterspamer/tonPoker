@@ -1311,6 +1311,19 @@ left:6rem;
     transform: translateX(-50%);
     z-index: 40;
 }
+
+#test-connect-button{
+    position: absolute;
+    top:10%;
+    left:10%;
+    width:300px;
+    height:100px;
+    color: white;
+    font-size: 30px;
+    background-color: #18C8FF;
+    z-index: 40;
+
+}
         
         </style>
 
@@ -1320,6 +1333,7 @@ left:6rem;
     
     <div id = "main-container">
 <div id="container"></div>
+    <div id = "test-connect-button">connect wallet</div>
 <div id = 'loading-label'>loading.</div>
         <div id = "top-cloud"></div>
         <div id = "bottom-cloud"></div>
@@ -1514,7 +1528,8 @@ left:6rem;
 
 </head>
 <body>
-    
+    <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
+    <script src = "js/tonConnect.js">        </script>
     <script src = "js/pokerSolver.js">        </script>
     <script src = "js/resourceLoader.js">        </script>
     <script src = "js/simpleTable.js">        </script>
