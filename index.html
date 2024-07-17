@@ -1324,6 +1324,30 @@ left:6rem;
     z-index: 40;
 
 }
+
+#log-container {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 25%;
+            height: 40%;
+            overflow-y: scroll;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            font-size: 12px;
+            z-index: 1000;
+        }
+        #log-container .log {
+            margin: 2px 0;
+        }
+        #log-container .error {
+            color: red;
+        }
+        #log-container .warn {
+            color: yellow;
+        }
+
         
         </style>
 
@@ -1333,6 +1357,8 @@ left:6rem;
     
     <div id = "main-container">
 <div id="container"></div>
+<div id="log-container"></div>
+    <script src="js/logOverride.js"></script>
     <div id = "test-connect-button">connect wallet</div>
 <div id = 'loading-label'>loading.</div>
         <div id = "top-cloud"></div>
